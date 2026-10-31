@@ -641,6 +641,37 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
  .bottle .bn{font-size:12px}
 }
 @media (min-width:761px) and (max-height:820px){.shead{padding-top:12px;padding-bottom:6px}.shead img{width:44px;height:44px}}
+/* 층 쌓기 작업대 (정리판) */
+.lst{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+@media (min-width:761px){.lst{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);align-items:start}.lst #warn{grid-column:1/-1;order:-1}}
+.cupbar{padding:12px 14px;gap:8px}
+.cupbar .taste{max-height:38vh;overflow:auto}
+.cuprow{display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px;align-items:center}
+.cupbar .tcup{max-width:78px}
+.cupside{display:flex;flex-direction:column;gap:6px;min-width:0}
+.cuph{display:flex;justify-content:space-between;align-items:baseline}.cuph b{font-size:13.5px;color:var(--navy)}.cuph small{font-size:11.5px;color:var(--muted)}
+.cupbar .seq{min-height:26px;font-size:12px;gap:4px}
+.cupbar .seq .s{padding:1px 8px;gap:4px}
+.linkbtn{align-self:flex-start;border:0;background:none;padding:0;font-size:12.5px;color:#8A6E3C;cursor:pointer}
+.cupbar .taste{font-size:13px;line-height:1.5}.cupbar .taste:has(.empty) {font-size:12.5px}
+.shelf{padding:12px 12px 10px;gap:10px}.shelf h3{font-size:16px}
+.shelf .bottles{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.shelf .bottle{position:relative;padding:6px 3px 5px;border-radius:12px;gap:0;min-width:0}
+.shelf .bottle .bimg{height:40px;margin-bottom:1px}
+.shelf .bottle .bn{font-size:12px;line-height:1.25;word-break:keep-all}
+.shelf .bottle .bm{font-size:9.5px;letter-spacing:-.03em;white-space:nowrap}
+.shelf .bottle .bm.mk{color:#8A6E3C;font-family:var(--body)}
+.shelf .bottle .bst{font-size:9.5px;color:#8E8676;margin-top:1px;border:0;padding:0;background:none}
+.shelf .bottle .bst.low{color:var(--rose)}
+.shelf .bottle .bph{height:40px;display:grid;place-items:center;font-size:20px;color:var(--brass)}
+.shelf .bottle.prep-un{background:#FFF9EE}
+.remake{position:absolute;top:3px;right:4px;font-size:13px;color:#8A6E3C;width:20px;height:20px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.8)}
+.shelf .toggle{font-size:12px}
+.prepov{position:absolute;inset:0;z-index:5;background:rgba(20,30,50,.4);display:flex;align-items:flex-end;justify-content:center;padding:0}
+.prepov[hidden]{display:none}
+.prepov #prep{width:min(560px,100%)}
+.prepov .prep{border-radius:20px 20px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -12px 30px rgba(20,30,50,.3);max-height:80vh;overflow:auto}
+.prepact{gap:8px}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -1212,24 +1243,23 @@ let vols={},made={},prepOpen=null;
 function openLayer(m){
   seq=[];layers=null;made={};prepOpen=null;const V=[20,25,30,40,60,75,80];vols={};m.shelf.forEach(l=>{vols[l.id]=V[Math.floor(Math.random()*V.length)]});
   setSheet(ticket(),`
-  <div class="station">
-    <div class="panel"><h3>재료 선반 <small>병마다 잰 부피와 질량이 달라요. 밀도를 구해 보세요</small></h3>
-      <div id="warn"></div>
-      ${m.shelf.some(l=>l.prep)?`<div class="tools"><b>직접 만들기</b><div class="row" id="tools">${m.shelf.filter(l=>l.prep).map(l=>`<button class="tool-btn" data-prep="${l.id}">${D.PREP[l.id].title}</button>`).join('')}</div></div><div id="prep"></div>`:''}
+  <div class="lst">
+    <div class="panel cupbar">
+      <div class="cuprow"><img id="lcup" class="tcup ghost" src="a/m/${pad(m.no)}.webp" alt="${m.name} 목표 모습">
+        <div class="cupside"><div class="cuph"><b>컵 (바닥부터)</b><small id="ptries">맛보기 0회</small></div><div class="seq" id="seq"></div><button class="linkbtn" id="clear">↺ 비우기</button></div></div>
+      <div class="taste" id="lnote"><p class="empty">주문서의 재료만 골라, 섞이지 않도록 붓는 순서를 정해 보세요.</p></div>
+    </div>
+    <div id="warn"></div>
+    <div class="panel shelf"><h3>재료 선반 <small>병마다 잰 부피와 질량이 달라요</small></h3>
       <div class="bottles" id="bottles"></div>
       <label class="toggle"><input type="checkbox" id="showD" ${S.showD?'checked':''}> 밀도 보기 (선생님 확인용)</label>
-      <div><div style="font-size:13px;font-weight:600;margin-bottom:4px">붓는 순서 (컵 바닥부터)</div><div class="seq" id="seq"></div></div>
-      <div class="row"><button class="btn" id="clear">비우기</button></div>
-    </div>
-    <div class="panel"><h3>완성된 음료 <small id="ptries">맛보기 0회</small></h3>
-      <div class="result"><img id="lcup" class="tcup ghost" src="a/m/${pad(m.no)}.webp" alt="${m.name} 목표 모습"><div class="taste" id="lnote"><p class="empty">왼쪽이 손님이 주문한 모습이에요. 주문서의 재료만 골라, 섞이지 않도록 붓는 순서를 정해 보세요.</p></div></div>
     </div>
   </div>
+  <div class="prepov" id="prepov" hidden><div id="prep"></div></div>
   <div class="sticky-act"><button class="btn go big" id="pour" disabled>컵에 붓기</button><button class="btn brass big" id="serveL" disabled>손님께 드리기</button></div>`);
   renderBottles(m);renderSeq(m);drawLayer(m);
   $('showD').addEventListener('change',e=>{S.showD=e.target.checked;save();renderBottles(m);if(layers)noteLayer(m)});
-  if($('tools'))$('tools').addEventListener('click',e=>{const b=e.target.closest('[data-prep]');if(b)openPrep(m,b.dataset.prep)});
-  $('bottles').addEventListener('click',e=>{const b=e.target.closest('.bottle');if(!b)return;const sh=m.shelf.find(x=>x.id===b.dataset.id);
+  $('bottles').addEventListener('click',e=>{const rm=e.target.closest('.remake');if(rm){openPrep(m,rm.dataset.id);return}const b=e.target.closest('.bottle');if(!b)return;const sh=m.shelf.find(x=>x.id===b.dataset.id);
     if(sh.prep&&!made[sh.id]){openPrep(m,sh.id);return}
     if(seq.length>=m.max)return;seq.push(b.dataset.id);
     const lq=L(m,b.dataset.id);if($('bScale'))$('bScale').textContent=`${(lq.d*50).toFixed(1)} g`;layers=null;renderSeq(m);drawLayer(m);$('serveL').disabled=true});
@@ -1238,28 +1268,27 @@ function openLayer(m){
   $('serveL').addEventListener('click',()=>serveL(m));
 }
 const L=(m,id)=>{const l=m.shelf.find(x=>x.id===id);return l.prep&&made[id]?{...l,...made[id]}:l};
-function openPrep(m,id){const P=D.PREP[id];prepOpen=id;
+function openPrep(m,id){const P=D.PREP[id];prepOpen=id;$('prepov').hidden=false;
   $('prep').innerHTML=`<div class="prep pop"><div class="row" style="justify-content:space-between"><b class="pt">${P.title}</b><button class="btn" id="prepX" style="padding:4px 12px">닫기</button></div>
     <p class="pn">${P.note}</p>
     ${P.sliders.map(sl=>`<div class="ctl"><label for="p-${sl.id}">${sl.label}</label><output id="po-${sl.id}">${sl.fmt(sl.val)}</output>
       <input type="range" id="p-${sl.id}" min="${sl.min}" max="${sl.max}" step="${sl.step}" value="${(made[id]&&made[id].p)?made[id].p[sl.id]:sl.val}"><div class="ends"><span>${sl.ends[0]}</span><span>${sl.ends[1]}</span></div></div>`).join('')}
-    <div class="row"><button class="btn go" id="prepGo">${made[id]?'다시 만들기':'만들기'}</button></div><div id="prepRes"></div></div>`;
+    <div id="prepRes"></div><div class="row prepact"><button class="btn go" id="prepGo">${made[id]?'다시 만들기':'만들기'}</button><button class="btn" id="prepOk" ${made[id]?'':'hidden'}>선반에 두기</button></div></div>`;
   P.sliders.forEach(sl=>{const e=$('p-'+sl.id);$('po-'+sl.id).textContent=sl.fmt(+e.value);e.addEventListener('input',()=>{$('po-'+sl.id).textContent=sl.fmt(+e.value)})});
   if(made[id])prepShow(m,id);
-  $('prepX').addEventListener('click',()=>{$('prep').innerHTML='';prepOpen=null});
+  $('prepX').addEventListener('click',()=>{$('prep').innerHTML='';prepOpen=null;$('prepov').hidden=true});$('prepov').onclick=e=>{if(e.target.id==='prepov')$('prepX').click()};
   $('prepGo').addEventListener('click',()=>{if(!has([RAW(id)],NEED)){noStock([RAW(id)],NEED);return}useStock([RAW(id)],1);clearWarn();const p={};P.sliders.forEach(sl=>p[sl.id]=+$('p-'+sl.id).value);const r=P.model(p);
     const vol=typeof P.vol==='function'?P.vol(p):P.vol;made[id]={...r,p,vol};vols[id]=vol;
     if(seq.includes(id)){layers=null;drawLayer(m);$('serveL').disabled=true}
-    $('prepGo').textContent='다시 만들기';prepShow(m,id);renderBottles(m)});
-  $('prep').scrollIntoView({behavior:RM?'auto':'smooth',block:'nearest'});
+    $('prepGo').textContent='다시 만들기';$('prepOk').hidden=false;prepShow(m,id);renderBottles(m)});
+  $('prepOk').addEventListener('click',()=>$('prepX').click());
 }
 function prepShow(m,id){const r=made[id];
   $('prepRes').innerHTML=`<div class="note pop" style="border-left-color:${r.ok?'#2E7D5B':'var(--rose)'}"><b>${r.state}</b> · ${r.info}<br>${r.desc}<br><span class="num" style="font-size:12.5px">잰 값: ${r.vol} mL = ${(r.d*r.vol).toFixed(1)} g${S.showD?` · ${r.d.toFixed(3)} g/mL`:''}</span><br><span style="font-size:12.5px;color:var(--muted)">선반에 올려 두었어요. 병을 눌러 컵에 담을 수 있어요.</span></div>`}
 function renderBottles(m){const sd=S.showD;
-  $('bottles').innerHTML=m.shelf.map(l0=>{const l=L(m,l0.id),un=l0.prep&&!made[l0.id];
-    if(un)return `<button class="bottle prep-un" data-id="${l.id}"><svg width="30" height="46" viewBox="0 0 30 46" aria-hidden="true"><path d="M11 2h8v8l5 6v26a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V16l5-6z" fill="none" stroke="#9C7A3E" stroke-width="1.4" stroke-dasharray="3 2"/></svg><span class="bn">${l.nm}</span><span class="bm">직접 만들어야 해요</span><span class="bst ${(S.stock[RAW(l0.id)]||0)<5?'low':''}">${ING(RAW(l0.id)).nm} ${J(S.stock[RAW(l0.id)]||0)}</span></button>`;
-    return `<button class="bottle${l0.prep?' prep-ok':''}" data-id="${l.id}"><img class="bimg" src="a/b/${l.id}.webp" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'bsw',style:'background:${l.hex}'}))">
-    <span class="bn">${l.nm}</span><span class="bm">${vols[l.id]} mL = ${(l.d*vols[l.id]).toFixed(1)} g</span>${l.sugar!==undefined?`<span class="bm">설탕 ${l.sugar}%</span>`:''}${l0.prep?`<span class="bm" style="color:${l.ok?'#2E7D5B':'var(--rose)'}">직접 만듦 · ${l.state}</span>`:''}<span class="bst ${(S.stock[RAW(l0.id)]||0)<5?'low':''}">재고 ${J(S.stock[RAW(l0.id)]||0)}</span>${sd?`<span class="bd">${l.d.toFixed(2)} g/mL</span>`:''}</button>`}).join('')}
+  $('bottles').innerHTML=m.shelf.map(l0=>{const l=L(m,l0.id),un=l0.prep&&!made[l0.id],sk=S.stock[RAW(l0.id)]||0;
+    if(un)return `<button class="bottle prep-un" data-id="${l.id}"><span class="bph" aria-hidden="true">＋</span><span class="bn">${l.nm}</span><span class="bm mk">눌러서 만들기</span><span class="bst ${sk<5?'low':''}">${J(sk)}</span></button>`;
+    return `<button class="bottle${l0.prep?' prep-ok':''}" data-id="${l.id}"><img class="bimg" src="a/b/${l.id}.webp" alt=""><span class="bn">${l.nm}</span><span class="bm">${vols[l.id]}mL · ${(l.d*vols[l.id]).toFixed(1)}g</span>${sd?`<span class="bd">${l.d.toFixed(2)} g/mL</span>`:''}${l0.prep?`<span class="bm" style="color:${l.ok?'#2E7D5B':'var(--rose)'}">${l.state}</span><span class="remake" data-id="${l.id}" role="button" aria-label="${l.nm} 다시 만들기">↻</span>`:''}<span class="bst ${sk<5?'low':''}">${J(sk)}</span></button>`}).join('')}
 function renderSeq(m){$('seq').innerHTML=seq.length?seq.map((id,i)=>`<span class="s"><span class="num">${i+1}</span><span class="dot" style="background:${L(m,id).hex}"></span>${L(m,id).nm}</span>`).join('<span aria-hidden="true">→</span>'):`<span style="color:var(--muted)">병을 눌러 담아 주세요 (최대 ${m.max}개)</span>`;$('pour').disabled=!seq.length}
 function mix(a,b){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),A=p(a),B=p(b);return '#'+A.map((x,i)=>Math.round((x+B[i])/2).toString(16).padStart(2,'0')).join('')}
 function simulate(m){const st=[],ev=[];
