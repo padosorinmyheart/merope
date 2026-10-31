@@ -612,6 +612,9 @@ span.sc{cursor:default}
 .dbody>*{flex-shrink:0}
 .dlg:has(.choices:not(:empty)) .line{font-size:15px;line-height:1.5}
 .dlg .choice{padding:5px 12px;line-height:1.35}
+*{-webkit-tap-highlight-color:transparent}
+.dlg,.dlg *,button{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.dlg:focus,.dlg *:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
