@@ -580,12 +580,12 @@ span.sc{cursor:default}
 .mbstage.ch2 .btitle{left:25%;right:25%;top:9.6%;height:4.4%}
 .mbstage.ch2 .mbtabs{top:16%}.mbstage.ch2 .bsub{top:19.2%}.mbstage.ch2 .blist{top:22.4%;left:7.6%;right:7.6%;bottom:6%}
 .menus[hidden]{display:none}
-.mcard .nm{margin-top:4px;word-break:keep-all;padding:0 4px}
-.mcard.off .nm{color:#9A8E78}
+.mcard .nm{word-break:keep-all;padding:0 4px}
 .mcard.off img{filter:brightness(0) opacity(.18)!important}
 .mcard.sp.off img{filter:brightness(0) invert(.9) sepia(.4) opacity(.28)!important}
 .mcard.sp.off .nm{color:#C7AB75}
 .dlg{cursor:pointer}
+.mcard.sp .cc{color:#B9C3D6}.mcard.sp .st.on{background:#C7AB75;color:#1E3050}.mcard.sp .st.off{background:rgba(255,255,255,.1);color:#B9C3D6}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -1320,9 +1320,11 @@ function renderMenus(){
   const sold=D.BOOK.filter(b=>b.play&&S.menuServed[b.play]>0).length,spn=Object.keys(S.special||{}).length;
   $('menuSum').textContent=mch===1?`판매해서 연 메뉴 ${sold}/40`:`보름달 밤의 손님이 남긴 특별 음료 ${spn}/${D.SPECIAL.length}`;
   $('menus').innerHTML=D.BOOK.map(b=>{const n=b.play?S.menuServed[b.play]||0:0,open=n>0;
-    return `<div class="mcard ${open?'':'off'}" ${open?`data-no="${b.no}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/m/${pad(b.no)}.webp" alt="${open?b.name:b.name+', 아직 열리지 않은 메뉴'}"><span class="nm">${b.name}</span></div>`}).join('');
+    return `<div class="mcard ${open?'':'off'}" ${open?`data-no="${b.no}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/m/${pad(b.no)}.webp" alt="${open?b.name:b.name+', 아직 열리지 않은 메뉴'}"><span class="cc num">${pad(b.no)}</span><span class="nm">${b.name}</span><span class="cc">${b.concept}</span>
+    <span class="st ${open?'on':'off'}">${open?`${n}잔 판매`:b.play?'팔면 열려요':'곧 오픈'}</span></div>`}).join('');
   const SPOPEN=S.special||{};
-  $('spmenus').innerHTML=D.SPECIAL.map(s=>{const v=SPOPEN[s.id]||0;const who=sciDone(30+ +s.id)?s.who:'보름달 손님';return `<div class="mcard sp ${v?'':'off'}" ${v?`data-sp="${s.id}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/sp/${s.id}_${v>=2?2:1}.webp" alt="${v?s.name:s.name+', 아직 열리지 않은 특별 음료'}"><span class="nm">${s.name}</span></div>`}).join('');
+  $('spmenus').innerHTML=D.SPECIAL.map(s=>{const v=SPOPEN[s.id]||0;const who=sciDone(30+ +s.id)?s.who:'보름달 손님';return `<div class="mcard sp ${v?'':'off'}" ${v?`data-sp="${s.id}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/sp/${s.id}_${v>=2?2:1}.webp" alt="${v?s.name:s.name+', 아직 열리지 않은 특별 음료'}"><span class="cc num">${s.id}</span><span class="nm">${s.name}</span><span class="cc">${v?who:'보름달 손님'}</span>
+    <span class="st ${v?'on':'off'}">${v>=2?'두 번째 방문':v?'첫 번째 방문':'보름달 밤에 열려요'}</span></div>`}).join('');
   $('spmenus').querySelectorAll('.mcard[data-sp]').forEach(el=>el.addEventListener('click',()=>openSpDet(el.dataset.sp)));
   $('menus').querySelectorAll('.mcard[data-no]').forEach(el=>{const go=()=>openMdet(+el.dataset.no);el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 }
