@@ -619,7 +619,10 @@ span.sc{cursor:default}
 input[type=range]{pointer-events:none;touch-action:pan-y}
 input[type=range]::-webkit-slider-thumb{pointer-events:auto;cursor:grab}
 input[type=range]::-moz-range-thumb{pointer-events:auto;cursor:grab}
-@media (pointer:coarse){input[type=range]{height:32px}input[type=range]::-webkit-slider-thumb{width:28px;height:28px;margin-top:-11px}input[type=range]::-moz-range-thumb{width:22px;height:22px}}
+input[type=range]::-webkit-slider-thumb{width:22px!important;height:22px!important;margin-top:-8px!important;border:0!important;border-radius:50%;box-shadow:none!important;background:url(a/u/ic_moon.webp) center/contain no-repeat!important;filter:drop-shadow(0 1px 2px rgba(60,40,20,.45))}
+input[type=range]::-moz-range-thumb{width:22px!important;height:22px!important;border:0!important;box-shadow:none!important;background:url(a/u/ic_moon.webp) center/contain no-repeat!important}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
+@media (pointer:coarse){input[type=range]{height:30px}input[type=range]::-webkit-slider-thumb{width:26px!important;height:26px!important;margin-top:-10px!important}}
 /* 데스크톱: 작업대가 한 화면에 들어오게 */
 @media (min-width:761px){
  .sheet{height:96%}
