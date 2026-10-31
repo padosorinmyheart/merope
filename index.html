@@ -619,10 +619,14 @@ span.sc{cursor:default}
 input[type=range]{pointer-events:none;touch-action:pan-y}
 input[type=range]::-webkit-slider-thumb{pointer-events:auto;cursor:grab}
 input[type=range]::-moz-range-thumb{pointer-events:auto;cursor:grab}
-input[type=range]::-webkit-slider-thumb{width:22px!important;height:22px!important;margin-top:-8px!important;border:0!important;border-radius:50%;box-shadow:none!important;background:url(a/u/ic_moon.webp) center/contain no-repeat!important;filter:drop-shadow(0 1px 2px rgba(60,40,20,.45))}
-input[type=range]::-moz-range-thumb{width:22px!important;height:22px!important;border:0!important;box-shadow:none!important;background:url(a/u/ic_moon.webp) center/contain no-repeat!important}
-input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
-@media (pointer:coarse){input[type=range]{height:30px}input[type=range]::-webkit-slider-thumb{width:26px!important;height:26px!important;margin-top:-10px!important}}
+input[type=range]{height:18px!important;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:4px!important}
+input[type=range]::-moz-range-track{height:4px!important}
+input[type=range]::-webkit-slider-thumb{width:16px!important;height:16px!important;margin-top:-6px!important;border:0!important;box-shadow:0 0 0 2px #FFFCF4,0 0 0 3.5px #C7AB75,0 2px 4px rgba(35,61,98,.35)!important;background:#1E3557!important;border-radius:3px!important;transform:rotate(45deg)}
+input[type=range]::-moz-range-thumb{width:13px!important;height:13px!important;border:0!important;box-shadow:0 0 0 2px #FFFCF4,0 0 0 3.5px #C7AB75!important;background:#1E3557!important;border-radius:3px!important;transform:rotate(45deg)}
+input[type=range]:active::-webkit-slider-thumb{transform:rotate(45deg) scale(1.2)}
+@media (pointer:coarse){input[type=range]{height:24px!important}input[type=range]::-webkit-slider-thumb{width:18px!important;height:18px!important;margin-top:-7px!important}}
+.ctl{gap:0 10px!important}.ctl .ends{margin-top:-1px}
 /* 데스크톱: 작업대가 한 화면에 들어오게 */
 @media (min-width:761px){
  .sheet{height:96%}
