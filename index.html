@@ -869,6 +869,7 @@ function pickNext(){
   const pool=C.filter(c=>!c.sci&&S.enabled[c.menu]&&(!c.hidden||S.appeared.includes(c.no))&&(!c.after||S.met.includes(c.after))&&c!==cur
     &&!((S.visits[c.no]||0)===1&&c.ep2After&&!S.met.includes(c.ep2After)&&S.enabled[byNo(c.ep2After).menu]));
   if(!pool.length)return null;
+  {const fresh=pool.filter(c=>!S.today.some(t=>t.no===c.no));if(fresh.length){pool.length=0;pool.push(...fresh)}}
   const unmet=pool.filter(c=>!S.met.includes(c.no));
   const src=unmet.length&&Math.random()<.8?unmet:pool;
   return src[Math.floor(Math.random()*src.length)];
