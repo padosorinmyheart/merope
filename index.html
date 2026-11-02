@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102204351">
+<meta name="merope-ver" content="20261102215323">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -784,7 +784,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .shtabs button{flex:1;min-height:38px;border-radius:999px;border:1px solid #D9C59A;background:#FFFCF5;color:var(--navy);font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer}
 .shtabs button[aria-selected=true]{background:linear-gradient(180deg,#2B4A74,#1B3253);color:#FBF4E4;border-color:#C9A365}
 .shprev{flex:none}
-.shroom,.shgift{position:relative;height:clamp(170px,28vh,270px);border-radius:16px;overflow:hidden;background:#1E2A3D;box-shadow:inset 0 0 0 1.5px #C9A365,0 6px 16px -10px rgba(30,40,60,.6)}
+.shroom,.shgift{position:relative;height:clamp(150px,26vh,250px);border-radius:16px;overflow:hidden;background:#1E2A3D;box-shadow:inset 0 0 0 1.5px #C9A365,0 6px 16px -10px rgba(30,40,60,.6)}
 .shroom::before{content:"";position:absolute;inset:-20px;background:var(--rb) center/cover;filter:blur(14px) brightness(.85)}
 .shimg{position:absolute;left:50%;top:0;height:calc(100% / .78);aspect-ratio:1064/1394;transform:translateX(-50%);background:center/cover no-repeat}
 .shimg.zoom{transform:translateX(-50%) scale(var(--sz,1.7));transform-origin:var(--sx) var(--sy)}
@@ -821,6 +821,17 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .shact{display:flex;flex-direction:column;gap:6px}
 .shbuy{min-height:50px;border-radius:999px;border:1.5px solid #C9A365;background:linear-gradient(180deg,#2B4A74,#1B3253);color:#FBF4E4;font-family:var(--display);font-weight:700;font-size:16.5px;letter-spacing:.06em;cursor:pointer;box-shadow:0 8px 18px -10px rgba(20,35,60,.8)}
 .shbuy.ghost{background:#FFFCF5;color:var(--navy)}
+/* 상점 목록 정리: 탭은 한 줄로 밀어 보기, 물건은 3열 카드 */
+.shsel{padding:5px 10px}.shsel>img{width:40px;height:40px}
+.shsel span{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.shgrid{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:max-content;gap:8px;min-height:150px}
+.shgrid .shcard{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:3px;padding:8px 4px 9px;min-height:0;height:auto}
+.shgrid .shcard>img{width:48px;height:48px;object-fit:contain;grid-row:auto}
+.shgrid .shcard b{font-size:12.5px;line-height:1.3}
+.shgrid .shcard .pr{font-size:12px;justify-content:center}
+.shgrid .shcard .own{font-size:11px}
+.shgh{margin-top:4px}
+.shbuy{min-height:46px}
 .shbuy:disabled{background:#E8E1D2;color:#8A8270;border-color:#D9CDB2;box-shadow:none;cursor:default}
 .shback{min-height:40px;border-radius:999px;border:1px solid #D9C59A;background:#FFFCF5;color:var(--navy);font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer}
 .shopv .stx{top:max(14px,env(safe-area-inset-top,0px));right:max(12px,calc(50% - 248px))}
@@ -874,7 +885,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 /* 나의 메로페 방 미리보기 */
 .shtabs{display:grid!important;grid-template-columns:repeat(4,1fr);gap:5px!important}
 .shtabs button{min-height:32px!important;font-size:13px!important}
-.shroom2{position:relative;height:clamp(210px,34vh,330px);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 45%,#2A3E62,#14213A 75%);box-shadow:inset 0 0 0 1.5px #C9A365,0 6px 16px -10px rgba(30,40,60,.6)}
+.shroom2{position:relative;height:clamp(150px,26vh,250px);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 45%,#2A3E62,#14213A 75%);box-shadow:inset 0 0 0 1.5px #C9A365,0 6px 16px -10px rgba(30,40,60,.6)}
 .shroom2 .rbox{position:absolute;left:50%;top:50%;height:104%;aspect-ratio:1;transform:translate(-50%,-50%);transition:transform .45s ease}
 .shroom2 .rbox.zoom{transform:translate(-50%,-50%) scale(2.1);transform-origin:var(--zx) var(--zy)}
 .shroom2 .rbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
@@ -1033,7 +1044,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
       <div class="shprev" id="shPrev"></div>
       <div class="shsel" id="shSel"></div>
       <div class="shgrid" id="shGrid"></div>
-      <div class="shact"><button class="shbuy" id="shBuy"></button><button class="shback" data-v="cafe">카페로 돌아가기</button></div>
+      <div class="shact"><button class="shbuy" id="shBuy"></button></div>
     </div>
     <button class="xbtn stx" data-v="cafe" aria-label="룬 상점 닫기">✕</button>
   </section>
@@ -1104,8 +1115,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102204351"></script>
-<script src="quiz.js?v=20261102204351"></script>
+<script src="data.js?v=20261102215323"></script>
+<script src="quiz.js?v=20261102215323"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2209,7 +2220,7 @@ function renderShop(){
   const card=x=>{const m=!x.who||S.met.includes(x.who),st=stOf(x);
     return `<button class="shcard${x.id===shSel?' sel':''}${st?' own':''}${m?'':' lock'}" data-id="${x.id}"><img src="${icon(x)}" alt="" loading="lazy"><b>${m?x.nm:'???'}</b>${st?`<span class="own">✓ ${st}</span>`:`<span class="pr"><img src="a/u/ic_coin.webp" alt="">${x.price} 룬</span>`}</button>`};
   let html='';
-  if(shT==='gift'){[...new Set(GIFTS.map(g=>g.who))].forEach(w=>{const c=byNo(w),m=S.met.includes(w);html+=`<div class="shgh"><img src="${sprite(w,'n')}" alt="" class="${m?'':'lock'}">${m?c.name:'???'}<small>${m?c.role:'아직 만나지 못한 손님'}</small></div>`+GIFTS.filter(g=>g.who===w).map(card).join('')})}
+  if(shT==='gift'){[...new Set(GIFTS.map(g=>g.who))].sort((a,b)=>S.met.includes(b)-S.met.includes(a)).forEach(w=>{const c=byNo(w),m=S.met.includes(w);html+=`<div class="shgh"><img src="${sprite(w,'n')}" alt="" class="${m?'':'lock'}">${m?c.name:'???'}<small>${m?c.role:'아직 만나지 못한 손님'}</small></div>`+GIFTS.filter(g=>g.who===w).map(card).join('')})}
   else html=list.map(card).join('');
   const tot=shT==='prop'?`<p class="shcount">모은 소품 ${RITEMS.filter(x=>x.cat==='prop'&&roomOwned(x.id)).length} / ${RPROPS.length}</p>`:shT==='gift'?`<p class="shcount">건넨 선물 ${GIFTS.filter(g=>S.given.includes(g.id)).length} / ${GIFTS.length}</p>`:ROOM_OPT[shT]?`<p class="shcount">${ROOM_OPT[shT].nm} ${ROOM_OPT[shT].it.filter(([k])=>roomOwned(shT+':'+k)).length} / 3</p>`:'';
   $('shGrid').innerHTML=tot+html;
