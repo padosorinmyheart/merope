@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102230444">
+<meta name="merope-ver" content="20261102231351">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -492,6 +492,44 @@ td.k{font-family:var(--body)}
 .hks li.stp{color:#A99B80}.hks li.stp em,.rcp li.stp em{font-style:normal;font-size:11.5px;color:#8A6A2E;background:#F3EAD7;border-radius:999px;padding:1px 8px;white-space:nowrap}
 .hknext{background:#EEF4EC;border-radius:14px;padding:10px 14px;margin:0 0 12px;box-shadow:inset 0 0 0 1px #BFD3BF;font-size:13.5px;color:#2F4A37}
 .hknext b{font-family:var(--display);margin-right:8px}.hknext ol{margin:6px 0 0;padding-left:1.3em;line-height:1.5;color:#2A2216}
+
+/* 손 시뮬레이션 */
+.sim{position:relative;height:210px;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#FFFDF7,#F1E7D3);box-shadow:inset 0 0 0 1px #E3D3B3;touch-action:none;user-select:none;-webkit-user-select:none}
+.sim.ok{box-shadow:inset 0 0 0 2px #7FA987}
+.simcv{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.simcup{position:absolute;left:58%;top:57%;width:42%;height:70%;transform:translate(-50%,-50%);display:grid;place-items:center;transition:transform .2s}
+.simcup img,.simcup svg{width:100%;height:100%;object-fit:contain;pointer-events:none}
+.simcup img{opacity:.7;filter:saturate(.7);transition:opacity .5s,filter .5s}.sim.ok .simcup img{opacity:1;filter:none}
+.simcup.bump{animation:hkbump .25s ease}
+.simcup .swirl{position:absolute;inset:22% 22% 30%;border-radius:50%;border:2px dashed rgba(201,163,101,.0);pointer-events:none}
+.k-stir .simcup .swirl,.k-tie .simcup .swirl{border-color:rgba(201,163,101,.55)}
+.k-draw .simcup::after{content:"";position:absolute;inset:20% 22% 42%;border-radius:50%;border:2px dashed rgba(255,255,255,.8);pointer-events:none}
+.simit{position:absolute;left:6%;top:18%;width:72px;display:none;flex-direction:column;align-items:center;gap:2px;z-index:4;cursor:grab;touch-action:none;transition:transform .25s,opacity .25s}
+.simit.on{display:flex}.simit.drag{transition:none;cursor:grabbing;filter:drop-shadow(0 8px 10px rgba(60,40,20,.3))}
+.simit img{width:64px;height:64px;object-fit:contain;pointer-events:none}.simit span{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#FBF4E4;box-shadow:0 0 0 1.5px #C9A365;color:#C9A365;font-size:24px}
+.simit small{font-size:11px;color:#8A6A2E;white-space:nowrap;pointer-events:none}
+.simit.gone{opacity:0;transform:scale(.4)!important}
+.simit.big{left:8%;top:22%;width:96px}.simit.big img{width:90px;height:90px}
+.simit.bump{animation:hkbump .2s ease}
+.k-shake .simit{left:44%;top:4%}
+.k-slice .simcup,.k-grind .simcup{opacity:.35}
+.simhint{position:absolute;left:10px;right:40px;top:8px;margin:0;text-align:center;font-size:12px;color:#6B5A3A;z-index:5;pointer-events:none}
+.simdots{position:absolute;top:8px;right:10px;display:flex;gap:4px;z-index:5}.simdots i{width:8px;height:8px;border-radius:50%;background:#E3D3B3}.simdots i.on{background:#C9A365}
+.simbar{position:absolute;left:10px;right:10px;bottom:6px;height:5px;border-radius:9px;background:rgba(201,163,101,.18);z-index:5}.simbar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,#9BB5D3,#C9A365);transition:width .15s}
+.simp{position:absolute;width:5px;height:5px;border-radius:50%;z-index:4;pointer-events:none;animation:simfall .7s ease-in forwards}
+@keyframes simfall{to{transform:translateY(var(--dy));opacity:0}}
+.simalt{display:block;margin:6px auto 0;border:0;background:none;color:#8A8270;font-size:12px;text-decoration:underline;cursor:pointer}
+.k-pour .simbar,.k-heat .simbar,.k-steep .simbar{display:none}
+.simband{position:absolute;left:10px;right:10px;bottom:30px;height:10px;border-radius:999px;background:#EFE6D4;z-index:5;overflow:hidden}
+.simband b{position:absolute;top:0;bottom:0;background:rgba(78,122,90,.3);box-shadow:inset 0 0 0 1.5px rgba(78,122,90,.75);z-index:1}.simband i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#9BB5D3,#C9A365)}
+.simv{position:absolute;left:12px;right:12px;top:8px;display:flex;justify-content:space-between;font-size:12.5px;color:#6B6F78;z-index:5}.simv .num{font-weight:700;color:var(--navy);font-size:16px}.simm.bad{color:var(--rose)}
+.k-pour .simhint,.k-heat .simhint,.k-steep .simhint{top:30px}
+.simcup.pouring::before{content:"";position:absolute;left:46%;top:-30%;width:6%;height:60%;background:linear-gradient(#C9A365,rgba(201,163,101,.6));border-radius:4px;animation:pourflow .3s linear infinite}
+@keyframes pourflow{50%{opacity:.7}}
+.k-heat .simcup::after{content:"♨";position:absolute;top:-8%;left:50%;transform:translateX(-50%);font-size:34px;color:#C9A365;opacity:var(--steam,0);transition:opacity .2s}
+.sim.clock .simcup::after{content:"🕰";position:absolute;top:-6%;right:-6%;font-size:30px}.sim.clock.run .simcup::after{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sim.clock{cursor:pointer}
 .sheet .rcp{background:#FFFCF5;border-radius:14px;padding:8px 14px;box-shadow:inset 0 0 0 1px #E3D3B3;margin:0 0 10px}
 .mdc p{margin:0;font-size:max(13px,1.6cqh);line-height:1.5;color:#3E3326;word-break:keep-all}
 .mdc .tag{font-size:max(11.5px,1.4cqh);color:var(--muted);border:1px solid #E2CFA6;border-radius:999px;padding:1px 10px}
@@ -1174,9 +1212,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102230444"></script>
-<script src="quiz.js?v=20261102230444"></script>
-<script src="recipes.js?v=20261102230444"></script>
+<script src="data.js?v=20261102231351"></script>
+<script src="quiz.js?v=20261102231351"></script>
+<script src="recipes.js?v=20261102231351"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2226,7 +2264,7 @@ function hkDraw(m,st){const el=$('hk');if(!el)return;const ph=cur.hk.ph,list=st.
     ${ph==='B'?'<p class="hksub">그림처럼 예쁘게 꾸며서 내 볼까요?</p>':''}
     <ol class="hks" start="${list[0].k+1}">${list.map((x,k)=>`<li value="${x.k+1}" class="${k<i?'ok':k===i?'now':''}"><span>${x.t}</span>${k===i?'<div class="hka" id="hka"></div>':''}</li>`).join('')}</ol>`;
   if($('hkSkip'))$('hkSkip').addEventListener('click',()=>hkPhaseDone(m));
-  hkAct(m,list[i].a,()=>{cur.hk.i++;hkDraw(m,st)})}
+  hkAct(m,list[i].a,()=>{cur.hk.i++;hkDraw(m,st)},list[i].t,ph)}
 function hkPhaseDone(m){if(cur.hk.ph==='A'){toast(`이제 ${stLabel(m)}에서 해요`);hkStation(m)}
   else{cur.hkPh='done';S.hkSeen=[...new Set([...(S.hkSeen||[]),cur.menu])];save();$('sheet').classList.remove('finishing');
     document.querySelectorAll('#sheetBody .hk').forEach(e=>e.remove());const b=$(cur.hkServe);cur.hkServe=null;if(b)b.click()}}
@@ -2234,30 +2272,100 @@ function hkPhaseDone(m){if(cur.hk.ph==='A'){toast(`이제 ${stLabel(m)}에서 �
 document.addEventListener('click',e=>{const b=e.target.closest('#serveX,#serveL');if(!b||b.disabled||!cur||!cur.hkSt||cur.hkPh!=='S')return;
   if(!cur.hkSt.some(x=>x.ph==='B'))return;e.stopPropagation();e.preventDefault();cur.hkServe=b.id;cur.hkPh='B';const m=MENUS[cur.menu];
   $('sheet').classList.add('finishing');hkPanel(m,'B')},true);
-function hkAct(m,code,next){const box=$('hka'),[type,a1,a2,a3]=code.split(':'),done=()=>{box.classList.add('fin');setTimeout(next,RM?0:380)};
-  const say=(t,bad)=>{const n=box.querySelector('.hkm');if(n){n.textContent=t;n.classList.toggle('bad',!!bad)}};
-  if(type==='tap'||type==='whisk'){const n=+a1||1,lb=type==='whisk'?'휘휘 젓기':(a2||'넣기');let k=0;
-    box.innerHTML=`<div class="hkg"><i style="width:0%"></i></div><button class="btn go hkb">${lb}${n>1?` <small>0/${n}</small>`:''}</button>`;
-    const b=box.querySelector('.hkb'),g=box.querySelector('.hkg i');
-    b.addEventListener('click',()=>{k++;g.style.width=Math.min(100,k/n*100)+'%';if(n>1)b.querySelector('small').textContent=`${k}/${n}`;b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');if(k>=n){b.disabled=true;done()}});return}
-  if(type==='wait'){box.innerHTML=`<div class="hkg"><i style="width:0%"></i></div><button class="btn go hkb">${a1||'기다리기'}</button>`;
-    const b=box.querySelector('.hkb'),g=box.querySelector('.hkg i');b.addEventListener('click',()=>{b.disabled=true;b.textContent='시간이 흐르는 중…';g.style.transition='width 1.4s linear';g.style.width='100%';setTimeout(done,RM?0:1450)});return}
+/* ---------- 손으로 하는 시뮬레이션 ----------
+   재료를 끌어 넣고, 원을 그려 젓고, 흔들어 뿌리고, 쓱 그어 썰고, 손가락으로 라테아트를 그려요 */
+const SIMIC=[[/레몬/,'lemon'],[/딸기/,'strawberry'],[/꿀/,'honey'],[/민트|허브|로즈메리|잎|라벤더/,'herb'],[/크림|휘핑|거품/,'whipped_cream'],[/초콜릿|코코아|칩/,'cocoa'],
+  [/카라멜|캐러멜/,'caramel'],[/시럽|청/,'vanilla'],[/얼음/,'ice'],[/우유/,'milk'],[/달고나/,'dalgona'],[/젤라틴|젤리/,'gelatin'],[/오렌지|금귤|자몽|유자|살구/,'orange_juice'],
+  [/헤이즐넛|견과|피스타치오|밤/,'hazelnut'],[/원두|커피/,'coffee_beans'],[/홍차|찻잎|녹차|차를/,'black_tea'],[/말차/,'matcha'],[/키위|청포도/,'kiwi_juice'],[/망고|바나나|단호박/,'mango_puree'],
+  [/블루베리|보라/,'purple_syrup'],[/석류|체리|히비스커스/,'pomegranate_syrup'],[/귀리/,'oat_milk']];
+const simIcon=t=>{const h=SIMIC.find(([r])=>r.test(t));return h?`a/i/${h[1]}.webp`:null};
+function simKind(type,lb,t){if(type==='whisk')return 'stir';if(type!=='tap')return type;const s=(lb||'')+' '+t;
+  if(/뿌리|흔들|체 치/.test(lb))return 'shake';if(/썰|자르|저미|깎|깍둑/.test(lb))return 'slice';if(/갈기|으깨|비비|두드리|볶|뒤적/.test(lb))return 'grind';
+  if(/그리기|물결|꼬리|소용돌이|고리/.test(lb))return 'draw';if(/묶|매기|매듭|감싸|풀기/.test(lb))return 'tie';return 'place'}
+function hkAct(m,code,next,text,ph){const box=$('hka'),[type,a1,a2,a3]=code.split(':'),lb=type==='tap'?(a2||'넣기'):'',kind=simKind(type,lb,text||'');let fin=false;
+  const done=()=>{if(fin)return;fin=true;box.classList.add('fin');sim.classList.add('ok');setTimeout(next,RM?0:650)};
+  const n=Math.max(1,+a1||1),cupImg=ph==='B'?drinkImg(m):null,ic=simIcon(text||'')||simIcon(lb);
+  const HINT={place:n>1?`재료를 컵으로 끌어다 놓아요 (${n}번)`:'재료를 컵으로 끌어다 놓아요',stir:'컵 위에서 손가락으로 빙글빙글 원을 그려요',grind:'재료 위에서 동그랗게 문질러 갈아요',
+    shake:'통을 컵 위에서 좌우로 흔들어 뿌려요',slice:`재료를 위에서 아래로 쓱 그어 썰어요 (${n}번)`,draw:'컵 위에 손가락으로 그려요',tie:'컵 둘레를 따라 한 바퀴 감아요',
+    pour:'꾹 누르고 있다가 초록 칸에서 손을 떼요',heat:'꾹 누르면 데워져요. 초록 칸에서 손을 떼요',steep:'눌러서 우리기 시작, 초록 칸에서 한 번 더 눌러 건져요',wait:'눌러서 시간을 흘려보내요'}[kind];
+  box.innerHTML=`<div class="sim k-${kind}" id="sim"><canvas class="simcv"></canvas>
+     <div class="simcup">${cupImg?`<img src="${cupImg}" alt="">`:`<svg viewBox="0 0 100 110" class="glass"><defs><clipPath id="gcl"><path d="M14 8 L86 8 L78 104 Q50 110 22 104 Z"/></clipPath></defs><g clip-path="url(#gcl)"><rect id="gliq" x="0" y="110" width="100" height="110" fill="#C9A365" opacity=".85"/></g><path d="M14 8 L86 8 L78 104 Q50 110 22 104 Z" fill="none" stroke="#9AA9BC" stroke-width="2.5"/><path d="M22 14 L20 90" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/></svg>`}<div class="swirl"></div></div>
+     <div class="simit">${ic?`<img src="${ic}" alt="">`:'<span>✦</span>'}<small>${lb||''}</small></div>
+     <p class="simhint">${HINT}</p><div class="simdots">${kind==='place'||kind==='slice'?Array.from({length:n},()=>'<i></i>').join(''):''}</div><div class="simbar"><i></i></div></div>
+     <button class="simalt" type="button">버튼으로 하기</button>`;
+  const sim=box.querySelector('.sim'),cv=box.querySelector('.simcv'),cup=box.querySelector('.simcup'),it=box.querySelector('.simit'),bar=box.querySelector('.simbar i'),hint=box.querySelector('.simhint'),alt=box.querySelector('.simalt'),liq=box.querySelector('#gliq');
+  const R=()=>sim.getBoundingClientRect(),C=()=>{const r=cup.getBoundingClientRect(),o=R();return {x:r.left-o.left+r.width/2,y:r.top-o.top+r.height/2,w:r.width,h:r.height}};
+  const fit=()=>{const r=R();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;cv.getContext('2d').setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};requestAnimationFrame(fit);
+  const ctx=()=>cv.getContext('2d');const prog=f=>{bar.style.width=Math.min(100,f*100)+'%'};
+  const dot=k=>{const d=box.querySelectorAll('.simdots i');if(d[k])d[k].classList.add('on')};
+  const pt=e=>{const o=R();return {x:e.clientX-o.left,y:e.clientY-o.top}};
+  const base=cur.simLv||0,level=f=>{if(liq){const v=Math.max(base,Math.min(1,f));cur.simLv=v;liq.setAttribute('y',String(110-100*v))}};requestAnimationFrame(()=>level(base));
+  const particles=(x,y,col,k=6)=>{for(let q=0;q<k;q++){const d=document.createElement('i');d.className='simp';d.style.left=x+(Math.random()*24-12)+'px';d.style.top=y+'px';d.style.background=col;d.style.setProperty('--dy',(30+Math.random()*40)+'px');sim.appendChild(d);setTimeout(()=>d.remove(),700)}};
+  let cnt=0;
+  if(kind==='place'||kind==='shake'||kind==='slice'||kind==='grind'){it.classList.add('on')}
+  if(kind==='place'){let drag=null,home=null;
+    const reset=()=>{it.style.transform='';it.classList.remove('drag')};
+    const hit=p=>{const c=C();return Math.abs(p.x-c.x)<c.w*.55&&Math.abs(p.y-c.y)<c.h*.6};
+    const drop=()=>{cnt++;dot(cnt-1);prog(cnt/n);const c=C();particles(c.x,c.y-c.h*.25,'#E7C77A',5);level(cnt/n*.8);cup.classList.remove('bump');void cup.offsetWidth;cup.classList.add('bump');
+      it.classList.add('gone');setTimeout(()=>{it.classList.remove('gone');reset()},RM?0:260);if(cnt>=n)done()};
+    it.addEventListener('pointerdown',e=>{if(fin)return;e.preventDefault();it.setPointerCapture(e.pointerId);drag=pt(e);it.classList.add('drag')});
+    it.addEventListener('pointermove',e=>{if(!drag)return;const p=pt(e);it.style.transform=`translate(${p.x-drag.x}px,${p.y-drag.y}px) scale(1.08)`});
+    it.addEventListener('pointerup',e=>{if(!drag)return;const p=pt(e);drag=null;if(hit(p))drop();else{reset();hint.textContent='컵 위에서 손을 떼야 들어가요'}});
+    it.addEventListener('pointercancel',()=>{drag=null;reset()});alt.onclick=()=>{if(!fin)drop()};return}
+  if(kind==='stir'||kind==='grind'||kind==='tie'){const rounds=kind==='stir'?Math.max(2,Math.round(n/5)):kind==='grind'?Math.max(2,Math.ceil(n/2)):1;let acc=0,prev=null,down=false,last=null;
+    const centre=()=>kind==='grind'?(()=>{const r=it.getBoundingClientRect(),o=R();return {x:r.left-o.left+r.width/2,y:r.top-o.top+r.height/2}})():C();
+    hint.textContent=kind==='tie'?'컵 둘레를 따라 한 바퀴 빙 둘러 감아요':kind==='grind'?`재료 위에서 동그랗게 ${rounds}바퀴 문질러요`:`컵 위에서 빙글빙글 ${rounds}바퀴 저어요`;
+    const add=da=>{acc+=Math.abs(da);const f=acc/(rounds*2*Math.PI);prog(f);box.querySelector('.swirl').style.transform=`rotate(${acc*57.3}deg)`;
+      if(kind==='grind'){it.style.transform=`scale(${1-.25*Math.min(1,f)}) rotate(${acc*20}deg)`}if(kind==='stir')cup.style.filter=`saturate(${1-.3*Math.min(1,f)}) brightness(${1+.08*Math.min(1,f)})`;if(f>=1)done()};
+    sim.addEventListener('pointerdown',e=>{if(fin)return;e.preventDefault();sim.setPointerCapture(e.pointerId);down=true;const c=centre(),p=pt(e);prev=Math.atan2(p.y-c.y,p.x-c.x);last=p;sim.classList.add('act')});
+    sim.addEventListener('pointermove',e=>{if(!down)return;const c=centre(),p=pt(e),a=Math.atan2(p.y-c.y,p.x-c.x);let d=a-prev;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;prev=a;
+      const g=ctx();g.strokeStyle=kind==='tie'?'rgba(170,40,50,.85)':'rgba(255,255,255,.7)';g.lineWidth=kind==='tie'?5:3;g.lineCap='round';g.beginPath();g.moveTo(last.x,last.y);g.lineTo(p.x,p.y);g.stroke();last=p;
+      if(Math.hypot(p.x-c.x,p.y-c.y)>12)add(d)});
+    const up=()=>{down=false;sim.classList.remove('act');setTimeout(()=>{if(!down&&!fin){const g=ctx();g.clearRect(0,0,cv.width,cv.height)}},500)};sim.addEventListener('pointerup',up);sim.addEventListener('pointercancel',up);
+    alt.onclick=()=>add(Math.PI/2);return}
+  if(kind==='shake'){const need=n*3;let down=false,lastX=null,dir=0;it.classList.add('shaker');
+    const hitCup=p=>{const c=C();return Math.abs(p.x-c.x)<c.w*.7};
+    const shake=()=>{cnt++;prog(cnt/need);const r=it.getBoundingClientRect(),o=R();particles(r.left-o.left+r.width/2,r.bottom-o.top,/코코아|초콜릿|흑임자|시나몬/.test(text)?'#6B4630':/가루|설탕|별/.test(text)?'#F3E2B0':'#E9D7A8',7);if(cnt>=need)done()};
+    it.addEventListener('pointerdown',e=>{if(fin)return;e.preventDefault();it.setPointerCapture(e.pointerId);down=true;lastX=pt(e).x;it.classList.add('drag')});
+    it.addEventListener('pointermove',e=>{if(!down)return;const p=pt(e),o=R();it.style.left=Math.max(0,Math.min(o.width-it.offsetWidth,p.x-it.offsetWidth/2))+'px';it.style.top=Math.max(0,Math.min(o.height*.45,p.y-it.offsetHeight/2))+'px';
+      const dx=p.x-lastX;if(Math.abs(dx)>14){const d=Math.sign(dx);if(d!==dir&&hitCup(p))shake();dir=d;lastX=p.x}});
+    const up=()=>{down=false;it.classList.remove('drag')};it.addEventListener('pointerup',up);it.addEventListener('pointercancel',up);alt.onclick=()=>{if(!fin)shake()};return}
+  if(kind==='slice'){let start=null;it.classList.add('big');
+    sim.addEventListener('pointerdown',e=>{if(fin)return;e.preventDefault();sim.setPointerCapture(e.pointerId);start=pt(e)});
+    sim.addEventListener('pointerup',e=>{if(!start)return;const p=pt(e),r=it.getBoundingClientRect(),o=R(),ix=r.left-o.left,iy=r.top-o.top;
+      const crosses=Math.abs(p.y-start.y)>r.height*.6&&Math.min(start.x,p.x)<ix+r.width&&Math.max(start.x,p.x)>ix;start=null;
+      if(!crosses){hint.textContent='재료를 위에서 아래로 길게 그어요';return}cut()});
+    const cut=()=>{cnt++;dot(cnt-1);prog(cnt/n);const g=ctx(),r=it.getBoundingClientRect(),o=R(),x=r.left-o.left+r.width*(cnt/(n+1));g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=3;g.beginPath();g.moveTo(x,r.top-o.top+4);g.lineTo(x-6,r.bottom-o.top-4);g.stroke();
+      it.classList.remove('bump');void it.offsetWidth;it.classList.add('bump');if(cnt>=n)done()};alt.onclick=()=>{if(!fin)cut()};return}
+  if(kind==='draw'){let down=false,last=null,len=0;const need=()=>C().w*2.2;
+    const stroke=(p)=>{const c=C();if(Math.abs(p.x-c.x)>c.w*.5||Math.abs(p.y-c.y)>c.h*.5){last=p;return}const g=ctx();g.strokeStyle=/코코아|초콜릿|체리|시럽/.test(text)?'rgba(110,60,40,.85)':'rgba(255,250,240,.95)';g.lineWidth=4;g.lineCap='round';
+      if(last){g.beginPath();g.moveTo(last.x,last.y);g.lineTo(p.x,p.y);g.stroke();len+=Math.hypot(p.x-last.x,p.y-last.y)}last=p;prog(len/need());if(len>=need())done()};
+    sim.addEventListener('pointerdown',e=>{if(fin)return;e.preventDefault();sim.setPointerCapture(e.pointerId);down=true;last=null;stroke(pt(e))});
+    sim.addEventListener('pointermove',e=>{if(down)stroke(pt(e))});const up=()=>{down=false};sim.addEventListener('pointerup',up);sim.addEventListener('pointercancel',up);
+    alt.onclick=()=>{const c=C();for(let q=0;q<12;q++){const a=q/12*6.28;stroke({x:c.x+Math.cos(a)*c.w*.25,y:c.y+Math.sin(a)*c.h*.18})}last=null};return}
+  if(kind==='wait'){alt.remove();hint.textContent=`${a1||'기다리기'} · 눌러서 시간을 흘려보내요`;sim.classList.add('clock');
+    sim.addEventListener('click',()=>{if(sim.dataset.go)return;sim.dataset.go=1;sim.classList.add('run');let f=0;const t=setInterval(()=>{f+=.05;prog(f);level(f*.7);if(f>=1){clearInterval(t);done()}},RM?1:70)},{once:false});return}
   /* 붓기·데우기·우리기: 범위 안에서 멈추기 */
-  let lo,hi,min=0,max,unit,fmt,hold=type!=='steep',target;
-  if(type==='pour'){target=+a1;[lo,hi]=a2.split('-').map(Number);unit=a3||'mL';max=target*1.5;fmt=v=>`${Math.round(v)}${unit}`}
-  else if(type==='heat'){[lo,hi]=a1.split('-').map(Number);min=20;max=100;fmt=v=>`${Math.round(v)}°C`}
+  alt.remove();let lo,hi,min=0,max,fmt,hold=kind!=='steep';
+  if(kind==='pour'){const target=+a1;[lo,hi]=a2.split('-').map(Number);max=target*1.5;fmt=v=>`${Math.round(v)}${a3||'mL'}`}
+  else if(kind==='heat'){[lo,hi]=a1.split('-').map(Number);min=20;max=100;fmt=v=>`${Math.round(v)}°C`}
   else{[lo,hi]=a1.split('-').map(Number);max=hi*1.45;fmt=fmtS}
-  const span=max-min,dur=type==='steep'?3600:3200;
-  box.innerHTML=`<div class="hkg band"><b style="left:${(lo-min)/span*100}%;width:${(hi-lo)/span*100}%"></b><i style="width:0%"></i></div>
-    <div class="hkv"><span class="num" id="hkv">${fmt(min)}</span><span class="hkm">${type==='pour'?`${fmt(lo)}~${fmt(hi)}에서 손을 떼요`:type==='heat'?`${lo}~${hi}°C에서 손을 떼요`:`${fmtS(lo)}~${fmtS(hi)} 사이에 멈춰요`}</span></div>
-    <button class="btn go hkb">${type==='pour'?'꾹 눌러 붓기':type==='heat'?'꾹 눌러 데우기':'우리기 시작'}</button>`;
-  const b=box.querySelector('.hkb'),g=box.querySelector('.hkg i'),vv=$('hkv');let v=min,t0=0,raf=0,on=false;
-  const tick=ts=>{if(!t0)t0=ts;v=Math.min(max,min+span*(ts-t0)/dur);g.style.width=((v-min)/span*100)+'%';vv.textContent=fmt(v);if(v>=max){stop();return}raf=requestAnimationFrame(tick)};
-  const start=()=>{if(on||b.disabled)return;on=true;t0=0;v=min;b.classList.add('on');if(type==='steep')b.textContent='건져내기';raf=requestAnimationFrame(tick)};
-  const stop=()=>{if(!on)return;on=false;cancelAnimationFrame(raf);b.classList.remove('on');
-    if(v>=lo&&v<=hi){b.disabled=true;say(`좋아요! ${fmt(v)}`);done();return}
-    say(v<lo?`${fmt(v)} · 조금 모자라요. 다시 해 봐요`:`${fmt(v)} · 너무 지나쳤어요. 다시 해 봐요`,true);
-    setTimeout(()=>{if(b.disabled)return;g.style.width='0%';vv.textContent=fmt(min);if(type==='steep')b.textContent='우리기 시작'},RM?0:700)};
+  const span=max-min,dur=kind==='steep'?3600:3200;
+  sim.insertAdjacentHTML('beforeend',`<div class="simband"><b style="left:${(lo-min)/span*100}%;width:${(hi-lo)/span*100}%"></b><i></i></div><div class="simv"><span class="num">${fmt(min)}</span><span class="simm">${kind==='pour'?`${fmt(lo)}~${fmt(hi)}`:kind==='heat'?`${lo}~${hi}°C`:`${fmtS(lo)}~${fmtS(hi)}`}</span></div>`);
+  const bi=sim.querySelector('.simband i'),vv=sim.querySelector('.simv .num'),mm=sim.querySelector('.simm');
+  if(kind==='heat'&&liq)liq.setAttribute('y','40');if(kind==='steep'&&liq){liq.setAttribute('y','30');liq.setAttribute('fill','#F3E8D2')}
+  const b=document.createElement('button');b.className='btn go hkb';b.textContent=kind==='pour'?'꾹 눌러 붓기':kind==='heat'?'꾹 눌러 데우기':'우리기 시작';box.appendChild(b);
+  let v=min,t0=0,raf=0,on=false;const tea=['#F3E8D2','#E8C27A','#C77F3A','#8A4A22'];
+  const paint=()=>{const f=(v-min)/span;bi.style.width=f*100+'%';vv.textContent=fmt(v);
+    if(kind==='pour'){level(f*.9);cup.classList.toggle('pouring',on)}
+    if(kind==='heat'){sim.style.setProperty('--steam',Math.max(0,(v-45)/55));cup.querySelector('svg')&&(liq.setAttribute('fill',`hsl(${30-20*f},${40+40*f}%,${70-15*f}%)`))}
+    if(kind==='steep'&&liq){const k=Math.min(tea.length-1,f*(tea.length-1)),a=Math.floor(k);liq.setAttribute('fill',tea[Math.min(tea.length-1,a+(k-a>.5?1:0))])}};
+  const tick=ts=>{if(!t0)t0=ts;v=Math.min(max,min+span*(ts-t0)/dur);paint();if(v>=max){stop();return}raf=requestAnimationFrame(tick)};
+  const start=()=>{if(on||b.disabled)return;on=true;t0=0;v=min;b.classList.add('on');sim.classList.add('act');if(kind==='steep')b.textContent='건져내기';raf=requestAnimationFrame(tick)};
+  const stop=()=>{if(!on)return;on=false;cancelAnimationFrame(raf);b.classList.remove('on');sim.classList.remove('act');cup.classList.remove('pouring');
+    if(v>=lo&&v<=hi){b.disabled=true;mm.textContent=`좋아요! ${fmt(v)}`;done();return}
+    mm.textContent=v<lo?`${fmt(v)} · 조금 모자라요`:`${fmt(v)} · 너무 지나쳤어요`;mm.classList.add('bad');
+    setTimeout(()=>{if(b.disabled)return;v=min;paint();mm.classList.remove('bad');if(kind==='steep')b.textContent='우리기 시작'},RM?0:900)};
   if(hold){b.addEventListener('pointerdown',e=>{e.preventDefault();start()});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,stop));
     b.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();start()}});b.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter')stop()})}
   else b.addEventListener('click',()=>{on?stop():start()})}
