@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102222010">
+<meta name="merope-ver" content="20261102223041">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -454,13 +454,21 @@ td.k{font-family:var(--body)}
 .menus{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;justify-content:center}
 .mdet{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:rgba(40,28,14,.28);border-radius:2%}
 .mdet[hidden]{display:none}
-.mdc{position:relative;width:74%;background:#FBF6EA;border:1px solid #E2CFA6;border-radius:18px;padding:3.2cqh 6% 2.8cqh;text-align:center;box-shadow:0 0 0 4px rgba(251,246,234,.9),0 0 0 5px #D9BC80,0 14px 30px rgba(60,40,20,.25);display:flex;flex-direction:column;align-items:center;gap:.7cqh}
-.mdc img{width:52%;aspect-ratio:1;filter:drop-shadow(0 8px 10px rgba(60,40,20,.18))}
+.mdc{position:relative;width:80%;max-height:94%;overflow:auto;scrollbar-width:none;background:#FBF6EA;border:1px solid #E2CFA6;border-radius:18px;padding:3.2cqh 6% 2.8cqh;text-align:center;box-shadow:0 0 0 4px rgba(251,246,234,.9),0 0 0 5px #D9BC80,0 14px 30px rgba(60,40,20,.25);display:flex;flex-direction:column;align-items:center;gap:.7cqh}
+.mdc img{width:82%;margin:-1cqh 0 -1.4cqh;aspect-ratio:1;filter:drop-shadow(0 8px 10px rgba(60,40,20,.18))}
 .mdc .num{font-family:'Cormorant Garamond',serif;font-style:italic;color:#A88A55;font-size:max(12px,1.5cqh);letter-spacing:.06em}
 .mdc h3{margin:0;font-family:var(--display);color:var(--navy);font-size:max(17px,2.5cqh)}
 .mdc .orn{width:40%;height:1px;background:linear-gradient(90deg,transparent,#C9A867,transparent);margin:.3cqh 0}
-.mdc .ing{font-size:max(12.5px,1.55cqh);color:#8A7350}
-.mdc p{margin:.4cqh 0 .6cqh;font-size:max(14px,1.85cqh);line-height:1.6;color:#3E3326;word-break:keep-all}
+.mdc .ing{font-size:max(11.5px,1.4cqh);color:#8A7350}
+.rcp{width:100%;text-align:left;font-size:max(12.5px,1.5cqh);color:#3E3326}
+.rcp summary{cursor:pointer;text-align:center;list-style:none;font-family:var(--display);font-weight:700;color:#8A6A2E;padding:2px 0}
+.rcp summary::-webkit-details-marker{display:none}
+.rcp summary::after{content:" ▾"}.rcp[open] summary::after{content:" ▴"}
+.rcp ol{margin:4px 0 0;padding-left:1.4em;line-height:1.55;word-break:keep-all}
+.rcp li{margin:2px 0}
+.mdc.sp .rcp{color:#F3E8CF}.mdc.sp .rcp summary{color:#E7C77A}
+.sheet .rcp{background:#FFFCF5;border-radius:14px;padding:8px 14px;box-shadow:inset 0 0 0 1px #E3D3B3;margin:0 0 10px}
+.mdc p{margin:0;font-size:max(13px,1.6cqh);line-height:1.5;color:#3E3326;word-break:keep-all}
 .mdc .tag{font-size:max(11.5px,1.4cqh);color:var(--muted);border:1px solid #E2CFA6;border-radius:999px;padding:1px 10px}
 .mdx{position:absolute;top:8px;right:10px;border:0;background:none;font-size:18px;color:#A88A55;cursor:pointer;padding:4px 8px}
 .mcard[data-no]{cursor:pointer}
@@ -568,7 +576,7 @@ span.sc{cursor:default}
 .mdc .spsw{width:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .mdc .spsw::-webkit-scrollbar{display:none}
 .mdc .sps{flex:0 0 100%;scroll-snap-align:center;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px}
-.mdc .sps img{width:52%}
+.mdc .sps img{width:82%}
 .mdc .sps.lock img{filter:brightness(0) opacity(.35)}
 .mdc .spv{font-size:max(11.5px,1.4cqh);color:#E7D5A3;letter-spacing:.06em}
 .mdc .spl{position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:max(12px,1.5cqh);color:#F3E8CF;background:rgba(10,16,30,.6);padding:3px 10px;border-radius:999px;white-space:nowrap}
@@ -1138,8 +1146,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102222010"></script>
-<script src="quiz.js?v=20261102222010"></script>
+<script src="data.js?v=20261102223041"></script>
+<script src="quiz.js?v=20261102223041"></script>
+<script src="recipes.js?v=20261102223041"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -1765,7 +1774,9 @@ function ticket(){const m=MENUS[cur.menu];
   else pills=[...cur.items].sort(()=>Math.random()-.5).map(id=>{const l=m.shelf.find(x=>x.id===id);return `<span class="pill"><span class="dot" style="background:${l.hex}"></span>${l.nm}</span>`}).join('');
   return `<img src="${drinkImg(m)}" alt=""><div><div class="lbl">ORDER · ${cur.name}</div><div class="what">${m.name}</div><div class="pills">${pills}</div></div>${cur.practice?'<button class="btn" id="pQuit">연습 끝내기</button>':'<button class="btn" id="sheetToggle">손님 보기</button>'}`;
 }
-function openStation(){const m=MENUS[cur.menu];if(m.station==='extract')openExtract(m);else if(m.station==='lab')openLab(m);else openLayer(m);sheet('open');
+function openStation(){const m=MENUS[cur.menu];if(m.station==='extract')openExtract(m);else if(m.station==='lab')openLab(m);else openLayer(m);
+  {const L=m.special?(window.CAFE_SPRECIPE||{})[cur.menu.slice(2)]:(window.CAFE_RECIPE||{})[m.no||(D.BOOK.find(b=>b.play===cur.menu)||{}).no];if(L)$('sheetBody').insertAdjacentHTML('afterbegin',recipeHTML(L))}
+  sheet('open');
   const raws=RAWS(cur.menu);if(!has(raws,NEED))noStock(raws,NEED)}
 const BENCH={
   drip:{tools:[['kettle',2,22],['dripper_server',24,19],['scale',45,27],['thermometer',74,21]],hand:['pour',13,30,40]},
@@ -2156,9 +2167,10 @@ function renderMenus(){
   $('spmenus').querySelectorAll('.mcard[data-sp]').forEach(el=>el.addEventListener('click',()=>openSpDet(el.dataset.sp)));
   $('menus').querySelectorAll('.mcard[data-no]').forEach(el=>{const go=()=>openMdet(+el.dataset.no);el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 }
+const recipeHTML=(L,open)=>L?`<details class="rcp"${open?' open':''}><summary>만드는 순서 · ${L.length}단계</summary><ol>${L.map(t=>`<li>${t}</li>`).join('')}</ol></details>`:'';
 function openSpDet(id){const s=D.SPECIAL.find(x=>x.id===id),v=(S.special||{})[id]||1,m=$('mdet'),done=sciDone(30+ +id);
   const slide=n=>{const own=v>=n;return `<div class="sps${own?'':' lock'}"><img src="a/sp/${id}_${n}.webp" alt="${own?s.name+(n===2?' (두 번째 방문)':' (첫 번째 방문)'):'아직 받지 못한 두 번째 잔'}"><span class="spv">${n===1?'첫 번째 방문':'두 번째 방문'}${own?' · 소장':''}</span>${own?'':'<span class="spl">두 번째 방문 때 열려요</span>'}</div>`};
-  m.innerHTML=`<div class="mdc sp pop"><button class="mdx" aria-label="설명 닫기">✕</button><div class="spsw" id="spSw">${slide(1)}${slide(2)}</div><div class="spdots"><i class="on"></i><i></i></div><span class="num">보름달의 기록 · ${id} · 소장 ${Math.min(v,2)}/2</span><h3>${s.name}</h3><div class="orn"></div><div class="ing">${s.ing}</div><p>${s.line}</p><span class="tag">${LABK['sp'+id].st} 작업대 · ${done?s.who:'이야기가 끝나면 손님 이름이 새겨져요'}</span><button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
+  m.innerHTML=`<div class="mdc sp pop"><button class="mdx" aria-label="설명 닫기">✕</button><div class="spsw" id="spSw">${slide(1)}${slide(2)}</div><div class="spdots"><i class="on"></i><i></i></div><span class="num">보름달의 기록 · ${id} · 소장 ${Math.min(v,2)}/2 · ${done?s.who:'보름달 손님'}</span><h3>${s.name}</h3><p>${s.line}</p><div class="ing">${s.ing}</div>${recipeHTML((window.CAFE_SPRECIPE||{})[id])}<button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
   const sw=$('spSw'),dots=m.querySelectorAll('.spdots i');
   sw.addEventListener('scroll',()=>{const k=Math.round(sw.scrollLeft/sw.clientWidth);dots.forEach((d,i)=>d.classList.toggle('on',i===k))},{passive:true});
   dots.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation();sw.scrollTo({left:i*sw.clientWidth,behavior:'smooth'})}));
@@ -2167,7 +2179,7 @@ function openSpDet(id){const s=D.SPECIAL.find(x=>x.id===id),v=(S.special||{})[id
   m.hidden=false;m.onclick=e=>{if(e.target===m||e.target.closest('.mdx'))m.hidden=true};}
 function openMdet(no){
   const b=D.BOOK.find(x=>x.no===no),m=$('mdet');
-  m.innerHTML=`<div class="mdc pop"><button class="mdx" aria-label="설명 닫기">✕</button><img src="a/m/${pad(b.no)}.webp" alt="${b.name}"><span class="num">No. ${pad(b.no)}</span><h3>${b.name}</h3><div class="orn"></div><div class="ing">${b.ing}</div><p>${b.line}</p><span class="tag">${stName(MENUS[b.play])} 작업대 · ${b.concept}</span><button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
+  m.innerHTML=`<div class="mdc pop"><button class="mdx" aria-label="설명 닫기">✕</button><img src="a/m/${pad(b.no)}.webp" alt="${b.name}"><span class="num">No. ${pad(b.no)} · ${stName(MENUS[b.play])} 작업대</span><h3>${b.name}</h3><p>${b.line}</p><div class="ing">${b.ing}</div>${recipeHTML((window.CAFE_RECIPE||{})[b.no])}<button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
   $('mTry').addEventListener('click',e=>{e.stopPropagation();practice(b.play)});
   m.hidden=false;
   const close=()=>{m.hidden=true};
