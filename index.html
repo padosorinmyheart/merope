@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102221417">
+<meta name="merope-ver" content="20261102222010">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -565,6 +565,16 @@ span.sc{cursor:default}
 .spc h3{margin:0;font-family:var(--display);font-size:21px;color:#F6E2AE}
 .spc .ing{font-size:12.5px;color:#B9C3D6}.spc p{margin:2px 0 4px;font-size:14.5px;line-height:1.6;word-break:keep-all}
 .spc .eng{font-size:12.5px;color:#C7AB75;display:flex;flex-direction:column;gap:2px;margin-bottom:4px}.spc .eng b{font-family:var(--display);font-size:17px;color:#fff}
+.mdc .spsw{width:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.mdc .spsw::-webkit-scrollbar{display:none}
+.mdc .sps{flex:0 0 100%;scroll-snap-align:center;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px}
+.mdc .sps img{width:52%}
+.mdc .sps.lock img{filter:brightness(0) opacity(.35)}
+.mdc .spv{font-size:max(11.5px,1.4cqh);color:#E7D5A3;letter-spacing:.06em}
+.mdc .spl{position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:max(12px,1.5cqh);color:#F3E8CF;background:rgba(10,16,30,.6);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.mdc .spdots{display:flex;gap:6px;justify-content:center;margin:2px 0}
+.mdc .spdots i{width:7px;height:7px;border-radius:50%;background:rgba(231,213,163,.35);cursor:pointer}
+.mdc .spdots i.on{background:#E7C77A}
 .mdc.sp{background:linear-gradient(180deg,#1E3050,#16243D)}.mdc.sp h3{color:#F6E2AE}.mdc.sp p{color:#F3E8CF}.mdc.sp .ing{color:#B9C3D6}
 .gtabs{position:absolute;left:8%;right:8%;top:11.3%;display:flex;align-items:center;justify-content:center;gap:4%}
 .gtabs button{border:0;background:none;padding:.3cqh 0 .5cqh;font-family:var(--display);font-weight:700;font-size:max(13px,1.6cqh);color:#A8987A;cursor:pointer;white-space:nowrap;position:relative;display:flex;align-items:baseline;gap:.4em;transition:color .2s}
@@ -1128,8 +1138,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102221417"></script>
-<script src="quiz.js?v=20261102221417"></script>
+<script src="data.js?v=20261102222010"></script>
+<script src="quiz.js?v=20261102222010"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -1137,10 +1147,29 @@ const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ---------- 새 작업대 6종 (녹이기·섞기·탄산·색·빛·거르기·굳히기) ---------- */
 /* 새 재료 */
 [['cocoa','코코아 가루',35,'라떼'],['vanilla','바닐라 시럽',30,'라떼'],['honey','꿀',30,'라떼'],['oat','귀리 우유',30,'라떼'],['hazelnut','헤이즐넛 시럽',30,'라떼'],
- ['herb','티 블렌드',30,'커피·차'],['lemon','레몬즙',20,'에이드'],['ice','얼음',10,'스무디·디저트'],['gelatin','젤라틴',25,'스무디·디저트']]
- .forEach(([id,nm,price,cat])=>{if(!D.INGS.some(i=>i.id===id))D.INGS.push({id,nm,price,cat})});
+ ['lemon','레몬즙',20,'에이드'],['ice','얼음',10,'스무디·디저트'],['gelatin','젤라틴',25,'스무디·디저트'],
+ /* 실제 레시피에 가깝게 더한 재료 (그림은 그 재료가 들어간 음료로 대신) */
+ ['hibiscus','히비스커스',30,'커피·차','m/24'],['chamomile','캐모마일',30,'커피·차','m/25'],['mint','민트 잎',25,'커피·차','m/26'],['rooibos','루이보스',30,'커피·차','m/27'],
+ ['lavender','라벤더',30,'커피·차','m/28'],['butterfly','버터플라이피',35,'커피·차','m/21'],['barley','볶은 보리',20,'커피·차','m/30'],['ginger','생강',20,'커피·차','m/29'],
+ ['sesame','흑임자 가루',35,'라떼','m/06'],['mintsyrup','민트 시럽',30,'라떼','m/08'],['marshmallow','마시멜로',25,'라떼','m/09'],['cinnamon','시나몬',20,'라떼','m/23'],
+ ['grapefruit','자몽청',35,'에이드','m/12'],['lemonjam','레몬청',30,'에이드','m/13'],['greengrape','청포도청',35,'에이드','m/14'],['lime','라임',25,'에이드','m/15'],
+ ['applecin','사과 시나몬청',35,'에이드','m/20'],['yuzujam','유자청',30,'에이드','m/29'],
+ ['sweetpotato','자색고구마',35,'스무디·디저트','m/33'],['pumpkin','단호박',35,'스무디·디저트','m/34'],['banana','바나나',25,'스무디·디저트','m/35'],['blueberry','블루베리',40,'스무디·디저트','m/37'],
+ /* 보름달 특별 음료 재료 */
+ ['whitegrape','백포도',60,'보름달 재료','sp/01','01'],['elderflower','엘더플라워',60,'보름달 재료','sp/01','01'],
+ ['pear','배 콩포트',60,'보름달 재료','sp/02','02'],['whitechoc','화이트초콜릿',60,'보름달 재료','sp/02','02'],
+ ['malt','몰트',60,'보름달 재료','sp/03','03'],['toffee','토피',60,'보름달 재료','sp/03','03'],
+ ['jujube','대추',60,'보름달 재료','sp/04','04'],['brownrice','볶은 현미',60,'보름달 재료','sp/04','04'],
+ ['apricot','구운 살구',60,'보름달 재료','sp/05','05'],['oolong','우롱차',60,'보름달 재료','sp/05','05'],['rosemary','로즈메리',60,'보름달 재료','sp/05','05'],
+ ['pistachio','피스타치오',60,'보름달 재료','sp/06','06'],['cherry','체리',60,'보름달 재료','sp/06','06'],
+ ['lychee','리치',60,'보름달 재료','sp/07','07'],['jasmine','자스민차',60,'보름달 재료','sp/07','07'],
+ ['chestnut','구운 밤',60,'보름달 재료','sp/08','08'],['perilla','들깨',60,'보름달 재료','sp/08','08'],
+ ['kumquat','금귤',60,'보름달 재료','sp/09','09'],['tonic','토닉워터',60,'보름달 재료','sp/09','09'],
+ ['blackcurrant','블랙커런트',60,'보름달 재료','sp/10','10'],['earlgrey','베르가모트 홍차',60,'보름달 재료','sp/10','10'],
+ ['hojicha','호지차',60,'보름달 재료','sp/11','11'],['coconut','구운 코코넛',60,'보름달 재료','sp/11','11']]
+ .forEach(([id,nm,price,cat,img,sp])=>{if(!D.INGS.some(i=>i.id===id))D.INGS.push({id,nm,price,cat,img,sp})});
 /* 추출 작업대에 더하는 차 3종 (녹차 모델을 그대로 씀) */
-[['hibiscus',24,'히비스커스 루비티',[[196,92,104],[128,20,44]],['herb']],['mintdew',26,'민트 이슬티',[[214,226,170],[120,150,70]],['herb']],['lavender',28,'라벤더 레몬티',[[226,206,150],[150,110,60]],['herb','lemon']]]
+[['hibiscus',24,'히비스커스 루비티',[[196,92,104],[128,20,44]],['hibiscus']],['mintdew',26,'민트 이슬티',[[214,226,170],[120,150,70]],['mint']],['lavender',28,'라벤더 레몬티',[[226,206,150],[150,110,60]],['lavender','lemon']]]
  .forEach(([k,no,name,color,raw])=>{D.EXTRACT[k]={...D.EXTRACT.greentea,no,name,color};D.TASTE[k]={bright:'가볍고 향긋하게',balanced:'은은하게',bold:'진하고 깊게'};D.EXTRACT_RAW[k]=raw});
 const LABK={
  dissolve:{st:'녹이기',sl:d=>[['temp',`${d.base} 온도`,20,90,5,50,'°C',['미지근하게','뜨겁게']],['stir','젓는 횟수',0,30,2,8,'번',['안 저음','많이']],['amt',`${d.add} 양`,5,35,1,15,'g',['조금','많이']]],
@@ -1206,27 +1235,27 @@ const LABK={
 D.LAB={};
 [[2,'mix',{base:'거품 우유',add:'에스프레소',cb:30,visc:0.4,raw:['milk','beans']}],
  [4,'dissolve',{base:'우유',add:'바닐라 설탕',raw:['beans','milk','vanilla']}],
- [6,'filter',{add:'흑임자',raw:['milk']}],
+ [6,'filter',{add:'흑임자',raw:['milk','sesame']}],
  [7,'mix',{base:'귀리 우유',add:'헤이즐넛 시럽',cb:32,visc:0.8,raw:['oat','hazelnut']}],
- [8,'dissolve',{base:'우유',add:'민트 초콜릿',raw:['milk','cocoa']}],
- [9,'dissolve',{base:'우유',add:'코코아 가루',raw:['milk','cocoa']}],
- [12,'carb',{add:'자몽청',raw:['soda','orange']}],
- [13,'mix',{base:'탄산수',add:'레몬청',cb:45,visc:0.3,raw:['soda','lemon']}],
- [14,'carb',{add:'청포도청',raw:['soda','green']}],
- [15,'mix',{base:'탄산수',add:'딸기 라임청',cb:45,visc:0.5,raw:['soda','straw']}],
- [19,'indicator',{T:['blue','purple'],raw:['blue','lemon','soda']}],
- [20,'carb',{add:'사과 시나몬청',raw:['soda','honey']}],
- [21,'indicator',{T:['blue','purple','pink'],raw:['herb','lemon']}],
- [23,'scatter',{raw:['blacktea','milk']}],
- [25,'dissolve',{base:'캐모마일 차',add:'꿀',raw:['herb','honey']}],
- [27,'mix',{base:'루이보스 차',add:'오렌지 껍질청',cb:35,visc:0.3,raw:['herb','orange']}],
- [29,'filter',{add:'생강',raw:['yuzu','honey']}],
- [30,'filter',{add:'볶은 보리',raw:['herb']}],
- [33,'mix',{base:'우유',add:'자색고구마 퓨레',cb:30,visc:1.25,raw:['milk','violet']}],
- [34,'cool',{raw:['milk','condensed']}],
- [35,'mix',{base:'귀리 우유',add:'바나나',cb:28,visc:1.25,raw:['oat','milk']}],
+ [8,'dissolve',{base:'우유',add:'민트 초콜릿',raw:['milk','cocoa','mintsyrup']}],
+ [9,'dissolve',{base:'우유',add:'코코아 가루',raw:['milk','cocoa','marshmallow']}],
+ [12,'carb',{add:'자몽청',raw:['soda','grapefruit']}],
+ [13,'mix',{base:'탄산수',add:'레몬청',cb:45,visc:0.3,raw:['soda','lemonjam']}],
+ [14,'carb',{add:'청포도청',raw:['soda','greengrape']}],
+ [15,'mix',{base:'탄산수',add:'딸기 라임청',cb:45,visc:0.5,raw:['soda','straw','lime']}],
+ [19,'indicator',{T:['blue','purple'],raw:['blue','lemon','mint']}],
+ [20,'carb',{add:'사과 시나몬청',raw:['soda','applecin']}],
+ [21,'indicator',{T:['blue','purple','pink'],raw:['butterfly','lemon']}],
+ [23,'scatter',{raw:['blacktea','milk','cinnamon']}],
+ [25,'dissolve',{base:'캐모마일 차',add:'꿀',raw:['chamomile','honey']}],
+ [27,'mix',{base:'루이보스 차',add:'오렌지 껍질청',cb:35,visc:0.3,raw:['rooibos','orange']}],
+ [29,'filter',{add:'생강',raw:['yuzujam','ginger']}],
+ [30,'filter',{add:'볶은 보리',raw:['barley']}],
+ [33,'mix',{base:'우유',add:'자색고구마 퓨레',cb:30,visc:1.25,raw:['milk','sweetpotato']}],
+ [34,'cool',{raw:['milk','pumpkin','cinnamon']}],
+ [35,'mix',{base:'귀리 우유',add:'바나나',cb:28,visc:1.25,raw:['oat','banana','milk']}],
  [36,'mix',{base:'얼음물',add:'망고 퓨레',cb:28,visc:1.25,raw:['yellow','ice']}],
- [37,'indicator',{T:['purple','pink'],raw:['violet','milk']}],
+ [37,'indicator',{T:['purple','pink'],raw:['blueberry','milk']}],
  [38,'freeze',{raw:['green','ice']}],
  [39,'gel',{raw:['milk','gelatin']}],
  [40,'thick',{raw:['red','gelatin']}]]
@@ -1307,7 +1336,7 @@ Object.assign(LABK,{
   tip:{xlo:d=>'아직 미지근해요. 크림을 반으로 나눠 보세요.',xhi:d=>'너무 뜨거워요. 덜 나누거나 덩이를 작게 해 보세요.',yhi:d=>'너무 많이 쪼갰어요. 반으로만 나눠 주세요.'},
   sci:'무거운 원자핵이 둘로 쪼개지면 조각들의 질량을 합한 값이 처음보다 아주 조금 줄고, 그만큼이 에너지가 돼요(핵분열, E = mc²). 여기서는 크게 부풀려 보여 줬어요.'}});
 D.SPM={};D.SPECIAL.forEach(s=>{D.SPM['sp'+s.id]={no:0,name:s.name,station:'lab',kind:'sp'+s.id,special:1,img:`a/sp/${s.id}_1.webp`,
-  raw:{'01':['soda','straw'],'02':['milk'],'03':['beans','milk','caramel'],'04':['herb','honey'],'05':['blacktea'],'06':['milk','red'],'07':['herb'],'08':['milk'],'09':['beans','soda'],'10':['blacktea','soda'],'11':['herb','milk']}[s.id]}});
+  raw:{'01':['whitegrape','elderflower','soda'],'02':['pear','whitechoc','milk'],'03':['beans','malt','toffee','milk'],'04':['jujube','brownrice','honey'],'05':['apricot','oolong','rosemary'],'06':['pistachio','cherry','cream'],'07':['lychee','jasmine','gelatin'],'08':['chestnut','perilla','milk'],'09':['beans','kumquat','tonic'],'10':['blackcurrant','earlgrey'],'11':['hojicha','coconut','milk']}[s.id]}});
 const MENUS={...D.EXTRACT,...D.LAYER,...D.LAB,...D.SPM};
 const C=D.CUSTOMERS, byNo=n=>C.find(c=>c.no===n);
 /* 과학자 주문과 반응: 전용 음료에 맞춘 대사 (이야기 장면은 data.js 그대로) */
@@ -1448,11 +1477,7 @@ const has=(list,n)=>(cur&&cur.practice)||list.every(r=>(S.stock[r]||0)>=n);
 const J=n=>n<=0?'0잔':n%5===0?n/5+'잔':n<5?'1잔 미만':'약 '+Math.round(n/5)+'잔';
 function useStock(list,n){if(cur&&cur.practice)return;[...new Set(list)].forEach(r=>{S.stock[r]=Math.max(0,(S.stock[r]||0)-n)});save();refreshStock()}
 function refreshStock(){if($('stockBar')&&cur&&MENUS[cur.menu]&&MENUS[cur.menu].station!=='layer')$('stockBar').innerHTML=stockChips(RAWS(cur.menu));if($('bottles')&&cur&&MENUS[cur.menu].station==='layer')renderBottles(MENUS[cur.menu])}
-/* 보름달 특별 음료의 고유 재료: 손님이 가져온 '보름달 선반' 재료라 창고에서 줄지 않아요 */
-const SPEX={'01':['백포도','엘더플라워'],'02':['배 콩포트','화이트초콜릿'],'03':['몰트','토피'],'04':['대추','볶은 현미'],'05':['구운 살구','로즈메리'],'06':['피스타치오','체리'],'07':['리치','자스민차','리치 젤리'],'08':['구운 밤','들깨'],'09':['금귤','토닉워터'],'10':['블랙커런트','베르가모트'],'11':['호지차','구운 코코넛']};
-function stockChips(list){const sp=cur&&MENUS[cur.menu]&&MENUS[cur.menu].special?SPEX[cur.menu.slice(2)]:null;
-  return '<span class="sb-l">재료 창고</span>'+list.map(r=>{const n=S.stock[r]||0;return `<span class="sb ${n<5?'low':''}">${ING(r).nm} <b class="num">${J(n)}</b></span>`}).join('')
-    +(sp?'<span class="sb-l moon">☾ 보름달 선반</span>'+sp.map(x=>`<span class="sb moon">${x}</span>`).join(''):'')}
+function stockChips(list){return '<span class="sb-l">재료 창고</span>'+list.map(r=>{const n=S.stock[r]||0;return `<span class="sb ${n<5?'low':''}">${ING(r).nm} <b class="num">${J(n)}</b></span>`}).join('')}
 const NEED=5;
 function noStock(list,n){const lack=[...new Set(list)].filter(r=>(S.stock[r]||0)<n);
   document.querySelectorAll('#brew,#pour,#prepGo').forEach(b=>b.disabled=true);
@@ -1531,9 +1556,11 @@ function renderMarket(){stats();$('tabBuy').setAttribute('aria-selected',mTab===
 $('tabBuy').addEventListener('click',()=>{mTab='buy';renderMarket()});$('tabQuiz').addEventListener('click',()=>{mTab='quiz';renderMarket()});
 $('mOpen').addEventListener('click',()=>show('cafe'));
 const INGIC={cocoa:'cocoa',vanilla:'vanilla',honey:'honey',oat:'oat_milk',hazelnut:'hazelnut',herb:'herb',lemon:'lemon',ice:'ice',gelatin:'gelatin',beans:'coffee_beans',blacktea:'black_tea',greentea:'green_tea',matchap:'matcha',dalgonamix:'dalgona',milk:'milk',cream:'whipped_cream',condensed:'condensed_milk',caramel:'caramel',straw:'strawberry',red:'pomegranate_syrup',blue:'blue_syrup',yellow:'mango_puree',green:'kiwi_juice',violet:'purple_syrup',orange:'orange_juice',yuzu:'yuzu_soda',soda:'sparkling_water'};
-function renderBuy(){const cats=[...new Set(D.INGS.map(i=>i.cat))];
-  $('mBuy').innerHTML=cats.map(c=>`<div class="mcat"><h3><img class="mci" src="a/m/${({'커피·차':'01','라떼':'02','에이드':'12','스무디·디저트':'36'})[c]||'01'}.webp" alt="">${c}</h3>${D.INGS.filter(i=>i.cat===c).map(i=>{const n=S.stock[i.id]||0,full=n+20>CAP,poor=S.coins<i.price;
-    return `<div class="mrow"><img class="mi" src="a/i/${INGIC[i.id]}.webp" alt="" loading="lazy"><div class="mn"><b>${i.nm}</b><div class="gauge" role="img" aria-label="${J(n)} / ${J(CAP)}"><span style="width:${n/CAP*100}%" class="${n<5?'low':''}"></span></div><span class="num mc">${J(n)} / ${J(CAP)}</span></div>
+const ingIcon=i=>i.img?`a/${i.img}${i.img.startsWith('sp/')?'_1':''}.webp`:`a/i/${INGIC[i.id]}.webp`;
+const ingShow=i=>!i.sp||S.met.includes(30+ +i.sp);
+function renderBuy(){const cats=[...new Set(D.INGS.filter(ingShow).map(i=>i.cat))];
+  $('mBuy').innerHTML=cats.map(c=>`<div class="mcat"><h3><img class="mci" src="a/${({'커피·차':'m/01','라떼':'m/02','에이드':'m/12','스무디·디저트':'m/36','보름달 재료':'sp/02_1'})[c]||'m/01'}.webp" alt="">${c}</h3>${D.INGS.filter(i=>i.cat===c&&ingShow(i)).map(i=>{const n=S.stock[i.id]||0,full=n+20>CAP,poor=S.coins<i.price;
+    return `<div class="mrow"><img class="mi" src="${ingIcon(i)}" alt="" loading="lazy"><div class="mn"><b>${i.nm}</b><div class="gauge" role="img" aria-label="${J(n)} / ${J(CAP)}"><span style="width:${n/CAP*100}%" class="${n<5?'low':''}"></span></div><span class="num mc">${J(n)} / ${J(CAP)}</span></div>
       <button class="btn ${full||poor?'':'go'}" data-buy="${i.id}" ${full||poor?'disabled':''}>${full?'가득':`+4잔 · ${i.price}룬`}</button></div>`}).join('')}</div>`).join('')
     +`<p class="foot">룬이 모자라면 과학 퀴즈로 벌 수 있어요. 손님께 음료를 팔아도 룬이 들어와요.</p>`;
   $('mBuy').querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>{const i=ING(b.dataset.buy);if(S.coins<i.price)return;S.coins-=i.price;S.stock[i.id]=Math.min(CAP,(S.stock[i.id]||0)+20);stats();renderBuy();refreshStock();clearWarn()}));}
@@ -2130,7 +2157,12 @@ function renderMenus(){
   $('menus').querySelectorAll('.mcard[data-no]').forEach(el=>{const go=()=>openMdet(+el.dataset.no);el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 }
 function openSpDet(id){const s=D.SPECIAL.find(x=>x.id===id),v=(S.special||{})[id]||1,m=$('mdet'),done=sciDone(30+ +id);
-  m.innerHTML=`<div class="mdc sp pop"><button class="mdx" aria-label="설명 닫기">✕</button><img src="a/sp/${id}_${v>=2?2:1}.webp" alt="${s.name}"><span class="num">보름달의 기록 · ${id}</span><h3>${s.name}</h3><div class="orn"></div><div class="ing">${s.ing}</div><p>${s.line}</p><span class="tag">${LABK['sp'+id].st} 작업대 · ${done?s.who:'이야기가 끝나면 손님 이름이 새겨져요'}</span><button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
+  const slide=n=>{const own=v>=n;return `<div class="sps${own?'':' lock'}"><img src="a/sp/${id}_${n}.webp" alt="${own?s.name+(n===2?' (두 번째 방문)':' (첫 번째 방문)'):'아직 받지 못한 두 번째 잔'}"><span class="spv">${n===1?'첫 번째 방문':'두 번째 방문'}${own?' · 소장':''}</span>${own?'':'<span class="spl">두 번째 방문 때 열려요</span>'}</div>`};
+  m.innerHTML=`<div class="mdc sp pop"><button class="mdx" aria-label="설명 닫기">✕</button><div class="spsw" id="spSw">${slide(1)}${slide(2)}</div><div class="spdots"><i class="on"></i><i></i></div><span class="num">보름달의 기록 · ${id} · 소장 ${Math.min(v,2)}/2</span><h3>${s.name}</h3><div class="orn"></div><div class="ing">${s.ing}</div><p>${s.line}</p><span class="tag">${LABK['sp'+id].st} 작업대 · ${done?s.who:'이야기가 끝나면 손님 이름이 새겨져요'}</span><button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
+  const sw=$('spSw'),dots=m.querySelectorAll('.spdots i');
+  sw.addEventListener('scroll',()=>{const k=Math.round(sw.scrollLeft/sw.clientWidth);dots.forEach((d,i)=>d.classList.toggle('on',i===k))},{passive:true});
+  dots.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation();sw.scrollTo({left:i*sw.clientWidth,behavior:'smooth'})}));
+  if(v>=2)requestAnimationFrame(()=>{sw.scrollLeft=sw.clientWidth});
   $('mTry').addEventListener('click',e=>{e.stopPropagation();practice('sp'+id)});
   m.hidden=false;m.onclick=e=>{if(e.target===m||e.target.closest('.mdx'))m.hidden=true};}
 function openMdet(no){
