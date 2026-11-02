@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102223041">
+<meta name="merope-ver" content="20261102224035">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -467,6 +467,26 @@ td.k{font-family:var(--body)}
 .rcp ol{margin:4px 0 0;padding-left:1.4em;line-height:1.55;word-break:keep-all}
 .rcp li{margin:2px 0}
 .mdc.sp .rcp{color:#F3E8CF}.mdc.sp .rcp summary{color:#E7C77A}
+.sheet.prepping .sbody>*:not(.hk){opacity:.35;pointer-events:none;filter:grayscale(.35)}
+.hk{background:#FFFCF5;border-radius:16px;padding:12px 14px 14px;box-shadow:inset 0 0 0 1.5px #C9A365,0 6px 16px -10px rgba(120,90,30,.5);margin:0 0 12px}
+.hkh{display:flex;align-items:center;gap:8px;margin-bottom:6px}.hkh b{font-family:var(--display);color:var(--navy);font-size:16px}.hkh .num{color:#A9813E;font-size:13px}
+.hkskip{margin-left:auto;border:0;background:none;color:#8A8270;font-size:12px;text-decoration:underline;cursor:pointer}
+.hks{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.5;color:#9A9080;word-break:keep-all}
+.hks li.ok{color:#4E7A5A}.hks li.ok span::after{content:" ✓"}
+.hks li.now{color:#2A2216;font-weight:600}
+.hka{margin-top:8px;display:flex;flex-direction:column;gap:8px;font-weight:400}
+.hka.fin{opacity:.6;transition:opacity .3s}
+.hkg{position:relative;height:12px;border-radius:999px;background:#EFE6D4;overflow:hidden}
+.hkg i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#9BB5D3,#C9A365);border-radius:999px;transition:width .12s}
+.hkg.band b{position:absolute;top:0;bottom:0;background:rgba(78,122,90,.28);box-shadow:inset 0 0 0 1.5px rgba(78,122,90,.7);border-radius:3px;z-index:1}
+.hkv{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:#6B6F78}.hkv .num{font-weight:700;color:var(--navy);font-size:15px}
+.hkm.bad{color:var(--rose)}
+.hkb{align-self:stretch;min-height:44px;font-size:15.5px;touch-action:none;user-select:none;-webkit-user-select:none}
+.hkb small{opacity:.75;margin-left:4px}
+.hkb.on{transform:scale(.97);filter:brightness(1.15)}
+.hkb.bump{animation:hkbump .18s ease}
+@keyframes hkbump{50%{transform:scale(.95)}}
+.sheet .rcp.hkdone summary{color:#4E7A5A}
 .sheet .rcp{background:#FFFCF5;border-radius:14px;padding:8px 14px;box-shadow:inset 0 0 0 1px #E3D3B3;margin:0 0 10px}
 .mdc p{margin:0;font-size:max(13px,1.6cqh);line-height:1.5;color:#3E3326;word-break:keep-all}
 .mdc .tag{font-size:max(11.5px,1.4cqh);color:var(--muted);border:1px solid #E2CFA6;border-radius:999px;padding:1px 10px}
@@ -1146,9 +1166,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102223041"></script>
-<script src="quiz.js?v=20261102223041"></script>
-<script src="recipes.js?v=20261102223041"></script>
+<script src="data.js?v=20261102224035"></script>
+<script src="quiz.js?v=20261102224035"></script>
+<script src="recipes.js?v=20261102224035"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -1775,7 +1795,7 @@ function ticket(){const m=MENUS[cur.menu];
   return `<img src="${drinkImg(m)}" alt=""><div><div class="lbl">ORDER · ${cur.name}</div><div class="what">${m.name}</div><div class="pills">${pills}</div></div>${cur.practice?'<button class="btn" id="pQuit">연습 끝내기</button>':'<button class="btn" id="sheetToggle">손님 보기</button>'}`;
 }
 function openStation(){const m=MENUS[cur.menu];if(m.station==='extract')openExtract(m);else if(m.station==='lab')openLab(m);else openLayer(m);
-  {const L=m.special?(window.CAFE_SPRECIPE||{})[cur.menu.slice(2)]:(window.CAFE_RECIPE||{})[m.no||(D.BOOK.find(b=>b.play===cur.menu)||{}).no];if(L)$('sheetBody').insertAdjacentHTML('afterbegin',recipeHTML(L))}
+  hkStart(m);
   sheet('open');
   const raws=RAWS(cur.menu);if(!has(raws,NEED))noStock(raws,NEED)}
 const BENCH={
@@ -2167,6 +2187,49 @@ function renderMenus(){
   $('spmenus').querySelectorAll('.mcard[data-sp]').forEach(el=>el.addEventListener('click',()=>openSpDet(el.dataset.sp)));
   $('menus').querySelectorAll('.mcard[data-no]').forEach(el=>{const go=()=>openMdet(+el.dataset.no);el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 }
+/* ---------- 직접 만들기: 레시피 순서를 손으로 하나씩 ---------- */
+function hkSteps(m){const no=m.special?cur.menu.slice(2):(m.no||(D.BOOK.find(b=>b.play===cur.menu)||{}).no),L=(m.special?window.CAFE_SPRECIPE:window.CAFE_RECIPE)||{},A=(m.special?window.CAFE_SPRACT:window.CAFE_RACT)||{};
+  return L[no]&&A[no]?L[no].map((t,i)=>({t,a:A[no][i]})):null}
+function hkStart(m){const st=hkSteps(m),sh=$('sheet');if(!st||cur.hkDone){sh.classList.remove('prepping');return}
+  cur.hk=cur.hk||{i:0};sh.classList.add('prepping');
+  const el=document.createElement('div');el.className='hk';el.id='hk';$('sheetBody').prepend(el);hkDraw(m,st)}
+const fmtS=x=>x>=60?`${Math.floor(x/60)}분 ${String(Math.round(x%60)).padStart(2,'0')}초`:`${Math.round(x)}초`;
+function hkDraw(m,st){const el=$('hk');if(!el)return;const i=cur.hk.i,known=(S.menuServed[cur.menu]>0)||(S.hkSeen||[]).includes(cur.menu);
+  el.innerHTML=`<div class="hkh"><b>직접 만들기</b><span class="num">${Math.min(i+1,st.length)} / ${st.length}</span>${known?'<button class="hkskip" id="hkSkip">익힌 순서 · 건너뛰기</button>':''}</div>
+    <ol class="hks">${st.map((x,k)=>`<li class="${k<i?'ok':k===i?'now':''}"><span>${x.t}</span>${k===i?'<div class="hka" id="hka"></div>':''}</li>`).join('')}</ol>`;
+  if($('hkSkip'))$('hkSkip').addEventListener('click',()=>hkFinish(m,st));
+  if(i<st.length)hkAct(m,st,st[i].a)}
+function hkNext(m,st){cur.hk.i++;if(cur.hk.i>=st.length)hkFinish(m,st);else hkDraw(m,st)}
+function hkFinish(m,st){cur.hkDone=true;S.hkSeen=[...new Set([...(S.hkSeen||[]),cur.menu])];save();$('sheet').classList.remove('prepping');
+  const el=$('hk');if(el)el.outerHTML=recipeHTML(st.map(x=>x.t)).replace('<details class="rcp"','<details class="rcp hkdone"').replace('만드는 순서','✓ 직접 만들기 끝 · 만드는 순서');
+  toast(m.station==='lab'?'이제 작업대에서 손님 취향을 맞춰 봐요':m.station==='layer'?'이제 층을 쌓아 볼까요?':'이제 우려서 맛을 볼까요?')}
+function hkAct(m,st,code){const box=$('hka'),[type,a1,a2,a3]=code.split(':'),done=()=>{box.classList.add('fin');setTimeout(()=>hkNext(m,st),RM?0:380)};
+  const say=(t,bad)=>{const n=box.querySelector('.hkm');if(n){n.textContent=t;n.classList.toggle('bad',!!bad)}};
+  if(type==='tap'||type==='whisk'){const n=+a1||1,lb=type==='whisk'?'휘휘 젓기':(a2||'넣기');let k=0;
+    box.innerHTML=`<div class="hkg"><i style="width:0%"></i></div><button class="btn go hkb">${lb}${n>1?` <small>0/${n}</small>`:''}</button>`;
+    const b=box.querySelector('.hkb'),g=box.querySelector('.hkg i');
+    b.addEventListener('click',()=>{k++;g.style.width=Math.min(100,k/n*100)+'%';if(n>1)b.querySelector('small').textContent=`${k}/${n}`;b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');if(k>=n){b.disabled=true;done()}});return}
+  if(type==='wait'){box.innerHTML=`<div class="hkg"><i style="width:0%"></i></div><button class="btn go hkb">${a1||'기다리기'}</button>`;
+    const b=box.querySelector('.hkb'),g=box.querySelector('.hkg i');b.addEventListener('click',()=>{b.disabled=true;b.textContent='시간이 흐르는 중…';g.style.transition='width 1.4s linear';g.style.width='100%';setTimeout(done,RM?0:1450)});return}
+  /* 붓기·데우기·우리기: 범위 안에서 멈추기 */
+  let lo,hi,min=0,max,unit,fmt,hold=type!=='steep',target;
+  if(type==='pour'){target=+a1;[lo,hi]=a2.split('-').map(Number);unit=a3||'mL';max=target*1.5;fmt=v=>`${Math.round(v)}${unit}`}
+  else if(type==='heat'){[lo,hi]=a1.split('-').map(Number);min=20;max=100;fmt=v=>`${Math.round(v)}°C`}
+  else{[lo,hi]=a1.split('-').map(Number);max=hi*1.45;fmt=fmtS}
+  const span=max-min,dur=type==='steep'?3600:3200;
+  box.innerHTML=`<div class="hkg band"><b style="left:${(lo-min)/span*100}%;width:${(hi-lo)/span*100}%"></b><i style="width:0%"></i></div>
+    <div class="hkv"><span class="num" id="hkv">${fmt(min)}</span><span class="hkm">${type==='pour'?`${fmt(lo)}~${fmt(hi)}에서 손을 떼요`:type==='heat'?`${lo}~${hi}°C에서 손을 떼요`:`${fmtS(lo)}~${fmtS(hi)} 사이에 멈춰요`}</span></div>
+    <button class="btn go hkb">${type==='pour'?'꾹 눌러 붓기':type==='heat'?'꾹 눌러 데우기':'우리기 시작'}</button>`;
+  const b=box.querySelector('.hkb'),g=box.querySelector('.hkg i'),vv=$('hkv');let v=min,t0=0,raf=0,on=false;
+  const tick=ts=>{if(!t0)t0=ts;v=Math.min(max,min+span*(ts-t0)/dur);g.style.width=((v-min)/span*100)+'%';vv.textContent=fmt(v);if(v>=max){stop();return}raf=requestAnimationFrame(tick)};
+  const start=()=>{if(on||b.disabled)return;on=true;t0=0;v=min;b.classList.add('on');if(type==='steep')b.textContent='건져내기';raf=requestAnimationFrame(tick)};
+  const stop=()=>{if(!on)return;on=false;cancelAnimationFrame(raf);b.classList.remove('on');
+    if(v>=lo&&v<=hi){b.disabled=true;say(`좋아요! ${fmt(v)}`);done();return}
+    say(v<lo?`${fmt(v)} · 조금 모자라요. 다시 해 봐요`:`${fmt(v)} · 너무 지나쳤어요. 다시 해 봐요`,true);
+    setTimeout(()=>{if(b.disabled)return;g.style.width='0%';vv.textContent=fmt(min);if(type==='steep')b.textContent='우리기 시작'},RM?0:700)};
+  if(hold){b.addEventListener('pointerdown',e=>{e.preventDefault();start()});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,stop));
+    b.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();start()}});b.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter')stop()})}
+  else b.addEventListener('click',()=>{on?stop():start()})}
 const recipeHTML=(L,open)=>L?`<details class="rcp"${open?' open':''}><summary>만드는 순서 · ${L.length}단계</summary><ol>${L.map(t=>`<li>${t}</li>`).join('')}</ol></details>`:'';
 function openSpDet(id){const s=D.SPECIAL.find(x=>x.id===id),v=(S.special||{})[id]||1,m=$('mdet'),done=sciDone(30+ +id);
   const slide=n=>{const own=v>=n;return `<div class="sps${own?'':' lock'}"><img src="a/sp/${id}_${n}.webp" alt="${own?s.name+(n===2?' (두 번째 방문)':' (첫 번째 방문)'):'아직 받지 못한 두 번째 잔'}"><span class="spv">${n===1?'첫 번째 방문':'두 번째 방문'}${own?' · 소장':''}</span>${own?'':'<span class="spl">두 번째 방문 때 열려요</span>'}</div>`};
