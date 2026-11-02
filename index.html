@@ -804,6 +804,13 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .str .sc b{letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .str .sc.long .u{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .str .sc.long{font-size:12.5px}
+
+/* 새 작업대 */
+.labsci{margin-top:4px;background:#F4F8FC;border:1px solid #D6E3F0;border-radius:12px;padding:8px 10px;font-size:13px;line-height:1.55;color:#3E4A5C;word-break:keep-all}
+.labsci b{display:block;font-family:var(--display);color:var(--navy);font-size:13.5px;margin-bottom:2px}
+.pdone .panel{border:1.5px solid var(--brass);align-items:flex-start}
+.pdone p{margin:0}
+.mdc .mtry{margin-top:.8cqh;border-radius:999px;font-size:max(13px,1.6cqh)}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -965,7 +972,110 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const MENUS={...D.EXTRACT,...D.LAYER};
+/* ---------- 새 작업대 6종 (녹이기·섞기·탄산·색·빛·거르기·굳히기) ---------- */
+/* 새 재료 */
+[['cocoa','코코아 가루',35,'라떼'],['vanilla','바닐라 시럽',30,'라떼'],['honey','꿀',30,'라떼'],['oat','귀리 우유',30,'라떼'],['hazelnut','헤이즐넛 시럽',30,'라떼'],
+ ['herb','티 블렌드',30,'커피·차'],['lemon','레몬즙',20,'에이드'],['ice','얼음',10,'스무디·디저트'],['gelatin','젤라틴',25,'스무디·디저트']]
+ .forEach(([id,nm,price,cat])=>{if(!D.INGS.some(i=>i.id===id))D.INGS.push({id,nm,price,cat})});
+/* 추출 작업대에 더하는 차 3종 (녹차 모델을 그대로 씀) */
+[['hibiscus',24,'히비스커스 루비티',[[196,92,104],[128,20,44]],['herb']],['mintdew',26,'민트 이슬티',[[214,226,170],[120,150,70]],['herb']],['lavender',28,'라벤더 레몬티',[[226,206,150],[150,110,60]],['herb','lemon']]]
+ .forEach(([k,no,name,color,raw])=>{D.EXTRACT[k]={...D.EXTRACT.greentea,no,name,color};D.TASTE[k]={bright:'가볍고 향긋하게',balanced:'은은하게',bold:'진하고 깊게'};D.EXTRACT_RAW[k]=raw});
+const LABK={
+ dissolve:{st:'녹이기',sl:d=>[['temp',`${d.base} 온도`,20,90,5,50,'°C',['미지근하게','뜨겁게']],['stir','젓는 횟수',0,30,2,8,'번',['안 저음','많이']],['amt',`${d.add} 양`,5,35,1,15,'g',['조금','많이']]],
+  model:p=>{const sol=6+p.temp*0.36,k=(0.35+p.stir*0.11)*Math.pow(1.7,(p.temp-40)/20),f=(1-Math.exp(-k))*Math.min(1,sol/p.amt);return {x:f*100,y:p.amt*f/250*100}},
+  X:['녹은 정도','%',40,100,10],Y:['단맛 진하기','%',0,14,2],
+  T:{light:['은은하게',[92,100],[2.5,4.6]],normal:['보통으로',[92,100],[4.6,6.6]],strong:['진하고 달게',[92,100],[6.6,9.2]]},
+  tip:{xlo:d=>`바닥에 ${d.add} 덩어리가 남았어요. 더 데우거나 더 저어 보세요. 너무 많이 넣으면 다 녹지 못해요.`,ylo:d=>`맛이 연해요. ${jo(d.add,'을/를')} 조금 더 넣어 보세요.`,yhi:d=>`너무 달고 진해요. ${jo(d.add,'을/를')} 줄여 보세요.`},
+  sci:'따뜻할수록, 많이 저을수록 빨리 녹아요. 온도가 높으면 녹을 수 있는 양(용해도)도 커져요.'},
+ mix:{st:'섞기',sl:d=>[['a',`${d.base} 양`,100,250,10,180,'mL',['적게','많이']],['b',`${d.add} 양`,10,90,5,40,'mL',['조금','많이']],['t','섞는 시간',5,90,5,15,'초',['짧게','오래']]],
+  model:(p,d)=>{const fr=p.b/(p.a+p.b),tau=6+d.visc*fr*60;return {x:p.b*d.cb/(p.a+p.b),y:100*(1-Math.exp(-p.t/tau))}},
+  X:['진하기(농도)','%',0,16,2],Y:['고르게 섞인 정도','%',30,100,10],
+  T:{light:['연하게',[4,6],[85,100]],normal:['보통으로',[6,8.5],[85,100]],strong:['진하게',[8.5,11],[85,100]]},
+  tip:{xlo:d=>`연해요. ${jo(d.add,'을/를')} 더 넣거나 ${jo(d.base,'을/를')} 줄여 보세요.`,xhi:d=>`진해요. ${jo(d.base,'을/를')} 더 넣어 희석해 보세요.`,ylo:d=>`아직 고르게 섞이지 않았어요. 걸쭉한 재료일수록 오래 섞어야 해요.`},
+  sci:'농도는 전체 양 가운데 녹아 있는 재료의 비율이에요. 걸쭉한 재료일수록 고르게 섞이는 데 오래 걸려요.'},
+ carb:{st:'탄산',sl:d=>[['temp','탄산수 온도',2,25,1,12,'°C',['아주 차갑게','미지근하게']],['stir','젓는 횟수',0,20,1,8,'번',['안 저음','많이']],['h','붓는 높이',2,20,1,10,'cm',['낮게','높이서']]],
+  model:p=>{const sol=Math.exp(-0.035*(p.temp-2));return {x:100*sol*Math.exp(-0.035*p.stir)*Math.exp(-0.025*(p.h-2)),y:100*(1-Math.exp(-(p.stir+p.h*0.25+1)/5))}},
+  X:['남은 기포','%',0,100,20],Y:['섞인 정도','%',30,100,10],
+  T:{fizz:['톡 쏘게',[64,100],[70,100]],soft:['부드러운 탄산으로',[45,70],[85,100]]},
+  tip:{xlo:d=>'기포가 많이 빠졌어요. 더 차갑게, 덜 젓고, 낮게 부어 보세요.',xhi:d=>'탄산이 너무 세요. 조금 더 저어 기포를 빼 보세요.',ylo:d=>`${d.add}이 바닥에 몰려 있어요. 조금 더 저어 보세요.`},
+  sci:'기체는 차가운 물에 더 많이 녹아 있어요. 젓거나 높이서 부으면 녹아 있던 이산화 탄소가 빠져나가요.'},
+ indicator:{st:'색·빛',sl:d=>[['drop','레몬즙',0,20,1,2,'방울',['안 넣음','많이']],['w','물 양',100,300,10,200,'mL',['적게','많이']]],
+  model:p=>({x:7.2-4.4*(1-Math.exp(-p.drop/6)),y:7500/p.w}),
+  X:['산성도 (pH)','',2,8,1],Y:['색 진하기','%',20,80,10],
+  T:{blue:['파란빛 그대로',[6.2,7.5],[35,60]],purple:['보랏빛으로',[4.4,5.8],[35,60]],pink:['분홍빛으로',[2.8,4.1],[35,60]]},
+  tip:{xhi:d=>'산성이 약해 색이 덜 바뀌었어요. 레몬즙을 더 넣어 보세요.',xlo:d=>'산성이 너무 강해 분홍빛까지 갔어요. 레몬즙을 줄여 보세요.',ylo:d=>'색이 너무 옅어요. 물을 줄여 보세요.',yhi:d=>'색이 너무 진해요. 물을 더 넣어 보세요.'},
+  sci:'꽃잎과 열매 속 색소(안토사이아닌)는 산성이 강해질수록 파랑 → 보라 → 분홍으로 바뀌어요. 천연 지시약이에요.'},
+ scatter:{st:'색·빛',sl:d=>[['milk','우유 양',0,120,5,15,'mL',['안 넣음','많이']],['t','홍차 우리는 시간',1,6,0.5,3,'분',['짧게','길게']]],
+  model:p=>({x:100*Math.exp(-p.milk/45),y:0.4+0.25*p.t}),
+  X:['빛이 지나가는 정도','%',0,100,20],Y:['홍차 진하기','%',0.5,2.2,0.3],
+  T:{moon:['맑은 달빛처럼',[35,55],[1.0,1.5]],soft:['뽀얗고 포근하게',[10,30],[1.2,1.8]]},
+  tip:{xlo:d=>'너무 뿌예서 빛이 거의 지나가지 못해요. 우유를 줄여 보세요.',xhi:d=>'너무 맑아요. 우유를 조금 더 넣어 보세요.',ylo:d=>'홍차 맛이 연해요. 조금 더 우려 보세요.',yhi:d=>'홍차가 너무 진해요. 우리는 시간을 줄여 보세요.'},
+  sci:'우유 속 작은 지방 알갱이가 빛을 여러 방향으로 흩뜨려서(산란) 차가 뿌옇게 보여요. 우유가 많을수록 빛이 덜 지나가요.'},
+ thick:{st:'색·빛',sl:d=>[['mm','젤리 두께',5,40,1,20,'mm',['얇게','두껍게']],['c','과일즙 농도',10,60,5,30,'%',['연하게','진하게']]],
+  model:p=>({x:100*Math.exp(-p.mm*p.c/100*0.12),y:p.c*p.mm/20}),
+  X:['빛이 지나가는 정도','%',0,100,20],Y:['색 진하기','',0,80,20],
+  T:{star:['별빛이 비치게',[55,80],[15,35]],gem:['진한 보석빛으로',[25,45],[35,60]]},
+  tip:{xlo:d=>'빛이 잘 안 지나가요. 젤리를 얇게 하거나 과일즙을 연하게 해 보세요.',xhi:d=>'빛이 너무 그대로 지나가요. 조금 두껍게 하거나 진하게 해 보세요.',ylo:d=>'색이 옅어요.',yhi:d=>'색이 너무 진해요.'},
+  sci:'빛은 물질이 두꺼울수록, 색소가 진할수록 많이 흡수돼서 덜 지나가요.'},
+ filter:{st:'거르기',sl:d=>[['mesh','거름망 눈 크기',0.1,2,0.1,1.4,'mm',['아주 곱게','굵게']],['wait','가라앉히는 시간',0,10,0.5,2,'분',['바로','오래']]],
+  model:p=>({x:100-55*Math.pow(p.mesh,0.7)*Math.exp(-p.wait/4),y:82-p.wait*3-(2-p.mesh)*4}),
+  X:['맑기','%',40,100,10],Y:['마실 때 온도','°C',40,85,10],
+  T:{clear:['맑고 깔끔하게',[85,100],[60,82]],nutty:['고소하게, 살짝 탁해도',[65,85],[65,82]]},
+  tip:{xlo:d=>`${d.add} 찌꺼기가 많이 떠 있어요. 더 고운 거름망을 쓰거나 조금 더 기다려 보세요.`,xhi:d=>'너무 맑아서 고소한 맛까지 빠졌어요. 거름망을 굵게 해 보세요.',ylo:d=>'기다리는 동안 식었어요. 가라앉히는 시간을 줄여 보세요.'},
+  sci:'거름망 구멍보다 큰 알갱이는 걸러지고, 무거운 알갱이는 시간이 지나면 바닥에 가라앉아요(침강).'},
+ gel:{st:'굳히기',sl:d=>[['g','젤라틴 양',1,8,0.5,3,'g',['조금','많이']],['t','식히는 시간',10,120,10,40,'분',['짧게','오래']],['T','냉장고 온도',2,10,1,5,'°C',['아주 차갑게','덜 차갑게']]],
+  model:p=>({x:100*(1-Math.exp(-p.t/(12+(p.T-2)*4))),y:p.g*1.2}),
+  X:['굳은 정도','%',30,100,10],Y:['단단함','',0,10,2],
+  T:{soft:['말랑말랑하게',[90,100],[2.5,4.5]],firm:['탱글탱글하게',[90,100],[4.5,7]]},
+  tip:{xlo:d=>'가운데가 아직 덜 굳었어요. 더 오래, 더 차갑게 식혀 보세요.',ylo:d=>'너무 물러요. 젤라틴을 늘려 보세요.',yhi:d=>'너무 단단해요. 젤라틴을 줄여 보세요.'},
+  sci:'젤라틴은 식으면서 그물 구조를 만들어 액체를 가둬요(겔). 차가울수록 빨리 굳어요.'},
+ freeze:{st:'굳히기',sl:d=>[['t','얼리는 시간',10,90,5,40,'분',['짧게','오래']],['T','냉동실 온도',-25,-5,1,-15,'°C',['아주 차갑게','덜 차갑게']],['s','설탕 양',0,40,2,6,'g',['안 넣음','많이']]],
+  model:p=>{const fp=-0.08*p.s,rate=Math.max(0,fp-p.T)*0.0025;return {x:100*(1-Math.exp(-p.t*rate)),y:4+p.s*0.3}},
+  X:['언 정도','%',0,100,20],Y:['단맛','',2,16,2],
+  T:{slush:['사각사각 슬러시로',[55,72],[7,10.5]],ice:['꽁꽁 얼음 알갱이로',[72,90],[6,9]]},
+  tip:{xlo:d=>'덜 얼었어요. 더 오래, 더 차갑게 얼려 보세요. 설탕이 많으면 천천히 얼어요.',xhi:d=>'너무 꽁꽁 얼었어요. 얼리는 시간을 줄여 보세요.',ylo:d=>'단맛이 부족해요. 설탕을 조금 더 넣어 보세요.',yhi:d=>'너무 달아요. 설탕을 줄여 보세요.'},
+  sci:'설탕이 녹아 있으면 어는점이 낮아져서 천천히 얼어요. 반쯤 언 상태가 슬러시예요.'},
+ cool:{st:'굳히기·열',sl:d=>[['T','데우는 온도',50,95,5,80,'°C',['살짝','팔팔']],['t','식히는 시간',0,10,0.5,2,'분',['바로','오래']],['cup','컵 재질',0,2,1,0,'',['도자기','스테인리스'],['도자기','유리','스테인리스']]],
+  model:p=>{const k=[0.06,0.09,0.15][p.cup];return {x:22+(p.T-22)*Math.exp(-k*p.t),y:100-Math.max(0,p.T-80)*3}},
+  X:['마실 때 온도','°C',30,95,10],Y:['단호박 향','%',50,100,10],
+  T:{warm:['따뜻하게',[52,62],[80,100]],hot:['뜨끈하게',[62,72],[80,100]]},
+  tip:{xlo:d=>'너무 식었어요. 식히는 시간을 줄이거나 열이 덜 빠지는 컵을 써 보세요.',xhi:d=>'아직 너무 뜨거워요. 조금 더 식히거나 열이 잘 빠지는 컵을 써 보세요.',ylo:d=>'너무 팔팔 끓여서 향이 날아갔어요. 데우는 온도를 낮춰 보세요.'},
+  sci:'뜨거운 음료의 열은 공기와 컵으로 빠져나가요. 열을 잘 전하는 금속 컵일수록 빨리 식어요.'}};
+D.LAB={};
+[[2,'mix',{base:'거품 우유',add:'에스프레소',cb:30,visc:0.4,raw:['milk','beans']}],
+ [4,'dissolve',{base:'우유',add:'바닐라 설탕',raw:['beans','milk','vanilla']}],
+ [6,'filter',{add:'흑임자',raw:['milk']}],
+ [7,'mix',{base:'귀리 우유',add:'헤이즐넛 시럽',cb:32,visc:0.8,raw:['oat','hazelnut']}],
+ [8,'dissolve',{base:'우유',add:'민트 초콜릿',raw:['milk','cocoa']}],
+ [9,'dissolve',{base:'우유',add:'코코아 가루',raw:['milk','cocoa']}],
+ [12,'carb',{add:'자몽청',raw:['soda','orange']}],
+ [13,'mix',{base:'탄산수',add:'레몬청',cb:45,visc:0.3,raw:['soda','lemon']}],
+ [14,'carb',{add:'청포도청',raw:['soda','green']}],
+ [15,'mix',{base:'탄산수',add:'딸기 라임청',cb:45,visc:0.5,raw:['soda','straw']}],
+ [19,'indicator',{T:['blue','purple'],raw:['blue','lemon','soda']}],
+ [20,'carb',{add:'사과 시나몬청',raw:['soda','honey']}],
+ [21,'indicator',{T:['blue','purple','pink'],raw:['herb','lemon']}],
+ [23,'scatter',{raw:['blacktea','milk']}],
+ [25,'dissolve',{base:'캐모마일 차',add:'꿀',raw:['herb','honey']}],
+ [27,'mix',{base:'루이보스 차',add:'오렌지 껍질청',cb:35,visc:0.3,raw:['herb','orange']}],
+ [29,'filter',{add:'생강',raw:['yuzu','honey']}],
+ [30,'filter',{add:'볶은 보리',raw:['herb']}],
+ [33,'mix',{base:'우유',add:'자색고구마 퓨레',cb:30,visc:1.25,raw:['milk','violet']}],
+ [34,'cool',{raw:['milk','condensed']}],
+ [35,'mix',{base:'귀리 우유',add:'바나나',cb:28,visc:1.25,raw:['oat','milk']}],
+ [36,'mix',{base:'얼음물',add:'망고 퓨레',cb:28,visc:1.25,raw:['yellow','ice']}],
+ [37,'indicator',{T:['purple','pink'],raw:['violet','milk']}],
+ [38,'freeze',{raw:['green','ice']}],
+ [39,'gel',{raw:['milk','gelatin']}],
+ [40,'thick',{raw:['red','gelatin']}]]
+ .forEach(([no,kind,d])=>{const b=D.BOOK.find(x=>x.no===no);D.LAB['l'+String(no).padStart(2,'0')]={no,name:b.name,station:'lab',kind,...d}});
+const LABKEY={};Object.entries(D.LAB).forEach(([k,m])=>LABKEY[m.no]=k);
+D.BOOK.forEach(b=>{if(!b.play)b.play=LABKEY[b.no]||Object.keys(D.EXTRACT).find(k=>D.EXTRACT[k].no===b.no)});
+const labT=m=>{const K=LABK[m.kind];return m.T?Object.fromEntries(m.T.map(k=>[k,K.T[k]])):K.T};
+const RAWS=k=>{const m=MENUS[k];return m.station==='extract'?D.EXTRACT_RAW[k]:m.station==='lab'?m.raw:[...new Set(m.recipe.map(RAW))]};
+const STN={extract:'추출',layer:'층 쌓기'};const stName=m=>m.station==='lab'?LABK[m.kind].st:STN[m.station];
+
+const MENUS={...D.EXTRACT,...D.LAYER,...D.LAB};
 const C=D.CUSTOMERS, byNo=n=>C.find(c=>c.no===n);
 const REG=C.filter(c=>!c.hidden&&!c.sci).map(c=>c.no),SCI=C.filter(c=>c.sci&&!c.companion);
 const SEQ=(()=>{const q=[];SCI.forEach((c,i)=>{q.push([c.no,0]);if(i>0)q.push([SCI[i-1].no,1])});q.push([SCI[SCI.length-1].no,1]);return q})();
@@ -1073,10 +1183,10 @@ function toast(t){const el=document.createElement('div');el.className='toast';el
 
 /* ---------- 재료 창고 ---------- */
 const CAP=40,ING=id=>D.INGS.find(i=>i.id===id),RAW=id=>D.RAW_OF[id]||id;
-const has=(list,n)=>list.every(r=>(S.stock[r]||0)>=n);
+const has=(list,n)=>(cur&&cur.practice)||list.every(r=>(S.stock[r]||0)>=n);
 const J=n=>n<=0?'0잔':n%5===0?n/5+'잔':n<5?'1잔 미만':'약 '+Math.round(n/5)+'잔';
-function useStock(list,n){[...new Set(list)].forEach(r=>{S.stock[r]=Math.max(0,(S.stock[r]||0)-n)});save();refreshStock()}
-function refreshStock(){if($('stockBar')&&cur&&D.EXTRACT_RAW[cur.menu])$('stockBar').innerHTML=stockChips(D.EXTRACT_RAW[cur.menu]);if($('bottles')&&cur&&MENUS[cur.menu].station==='layer')renderBottles(MENUS[cur.menu])}
+function useStock(list,n){if(cur&&cur.practice)return;[...new Set(list)].forEach(r=>{S.stock[r]=Math.max(0,(S.stock[r]||0)-n)});save();refreshStock()}
+function refreshStock(){if($('stockBar')&&cur&&MENUS[cur.menu]&&MENUS[cur.menu].station!=='layer')$('stockBar').innerHTML=stockChips(RAWS(cur.menu));if($('bottles')&&cur&&MENUS[cur.menu].station==='layer')renderBottles(MENUS[cur.menu])}
 function stockChips(list){return '<span class="sb-l">재료 창고</span>'+list.map(r=>{const n=S.stock[r]||0;return `<span class="sb ${n<5?'low':''}">${ING(r).nm} <b class="num">${J(n)}</b></span>`}).join('')}
 const NEED=5;
 function noStock(list,n){const lack=[...new Set(list)].filter(r=>(S.stock[r]||0)<n);
@@ -1097,9 +1207,9 @@ function renderMarket(){stats();$('tabBuy').setAttribute('aria-selected',mTab===
   if(mTab==='buy')renderBuy();else renderQuiz()}
 $('tabBuy').addEventListener('click',()=>{mTab='buy';renderMarket()});$('tabQuiz').addEventListener('click',()=>{mTab='quiz';renderMarket()});
 $('mOpen').addEventListener('click',()=>{show('cafe');startCustomer()});
-const INGIC={beans:'coffee_beans',blacktea:'black_tea',greentea:'green_tea',matchap:'matcha',dalgonamix:'dalgona',milk:'milk',cream:'whipped_cream',condensed:'condensed_milk',caramel:'caramel',straw:'strawberry',red:'pomegranate_syrup',blue:'blue_syrup',yellow:'mango_puree',green:'kiwi_juice',violet:'purple_syrup',orange:'orange_juice',yuzu:'yuzu_soda',soda:'sparkling_water'};
+const INGIC={cocoa:'cocoa',vanilla:'vanilla',honey:'honey',oat:'oat_milk',hazelnut:'hazelnut',herb:'herb',lemon:'lemon',ice:'ice',gelatin:'gelatin',beans:'coffee_beans',blacktea:'black_tea',greentea:'green_tea',matchap:'matcha',dalgonamix:'dalgona',milk:'milk',cream:'whipped_cream',condensed:'condensed_milk',caramel:'caramel',straw:'strawberry',red:'pomegranate_syrup',blue:'blue_syrup',yellow:'mango_puree',green:'kiwi_juice',violet:'purple_syrup',orange:'orange_juice',yuzu:'yuzu_soda',soda:'sparkling_water'};
 function renderBuy(){const cats=[...new Set(D.INGS.map(i=>i.cat))];
-  $('mBuy').innerHTML=cats.map(c=>`<div class="mcat"><h3><img class="mci" src="a/m/${({'커피·차':'01','라떼':'02','에이드':'12'})[c]||'01'}.webp" alt="">${c}</h3>${D.INGS.filter(i=>i.cat===c).map(i=>{const n=S.stock[i.id]||0,full=n+20>CAP,poor=S.coins<i.price;
+  $('mBuy').innerHTML=cats.map(c=>`<div class="mcat"><h3><img class="mci" src="a/m/${({'커피·차':'01','라떼':'02','에이드':'12','스무디·디저트':'36'})[c]||'01'}.webp" alt="">${c}</h3>${D.INGS.filter(i=>i.cat===c).map(i=>{const n=S.stock[i.id]||0,full=n+20>CAP,poor=S.coins<i.price;
     return `<div class="mrow"><img class="mi" src="a/i/${INGIC[i.id]}.webp" alt="" loading="lazy"><div class="mn"><b>${i.nm}</b><div class="gauge" role="img" aria-label="${J(n)} / ${J(CAP)}"><span style="width:${n/CAP*100}%" class="${n<5?'low':''}"></span></div><span class="num mc">${J(n)} / ${J(CAP)}</span></div>
       <button class="btn ${full||poor?'':'go'}" data-buy="${i.id}" ${full||poor?'disabled':''}>${full?'가득':`+4잔 · ${i.price}룬`}</button></div>`}).join('')}</div>`).join('')
     +`<p class="foot">룬이 모자라면 과학 퀴즈로 벌 수 있어요. 손님께 음료를 팔아도 룬이 들어와요.</p>`;
@@ -1191,6 +1301,7 @@ function startCustomer(){
     cur=c;cur.isNew=isNew;tastes=0;S.turn++;cur.revealed=c.sci?sciDone(c.no):!((S.visits[c.no]||0)===0&&c.ep1.anon);cur.spr=((S.visits[c.no]||0)===1&&c.ep2.sprite)||c.no;
     sceneMode(c.sci?'fullmoon':c.no===28?(firstHidden?'merlinEvent':'merlin'):c.no===30?(firstHidden?'eliasEvent':'elias'):slotMode());
     const v=S.visits[c.no]||0;cur.ep=v===0?'ep1':v===1?'ep2':'again';S.visits[c.no]=v+1;
+    if(cur.ep==='again'&&!c.sci&&Math.random()<0.7){cur={...c,ep:'again',isNew,revealed:cur.revealed,spr:cur.spr};altOrder()}
     if(!S.met.includes(c.no))S.met.push(c.no);
     C.filter(x=>x.companion===c.no).forEach(x=>{if(cur.ep==='ep2'&&!S.met.includes(x.no)){S.met.push(x.no);S.visits[x.no]=1}});
     if(c.hidden&&!S.appeared.includes(c.no))S.appeared.push(c.no);
@@ -1218,7 +1329,7 @@ function ask(){
 }
 function order(){
   face('n',false);
-  say(EP().order,{order:true,then:()=>next('주문 받기',()=>{
+  say(cur.alt?cur.alt.order:EP().order,{order:true,then:()=>next('주문 받기',()=>{
     openStation();$('who').innerHTML='<span class="np">나</span><small>바리스타</small>';$('line').className='line';
     $('line').textContent=`${cur.revealed?cur.name+'님이':cur.sci?'보름달 손님이':'손님이'} 기다리고 있어요. 작업대에서 ${jo(MENUS[cur.menu].name,'을/를')} 만들어 주세요.`;
     next('작업대 열기',()=>sheet('open'));
@@ -1229,10 +1340,10 @@ function reaction(st,pay,hints){
   const m=MENUS[cur.menu];const sv=$('served');const src=`a/m/${pad(m.no)}.webp`;sv.src=src;sv.alt=m.name;sv.classList.toggle('muddy',m.station==='layer'&&st<3);sv.hidden=true;
   sv.hidden=false;rewardPop(S5(st),pay);
   face(st===3?'h':st===2?'d':'d');
-  const t=st===3?EP().r3:st===2?EP().r2:'음… 제가 주문한 거랑은 조금 다른 것 같아요.';
+  const t=st===3?(cur.alt?cur.alt.r3:EP().r3):st===2?(cur.alt?cur.alt.r2:EP().r2):'음… 제가 주문한 거랑은 조금 다른 것 같아요.';
   say(t,{then:()=>{
     if(hints.length){const h=document.createElement('div');h.className='note';h.innerHTML='<b>바리스타 노트</b><br>'+hints.join('<br>');$('choices').appendChild(h)}
-    next('▶',()=>{face('h');say(EP().bye,{then:()=>{
+    next('▶',()=>{face('h');say(cur.alt?cur.alt.bye:EP().bye,{then:()=>{
       if(cur.no===30&&cur.ep==='ep2')$('choices').innerHTML='<div class="note"><b>1장 · 플레이아데스에서 온 바리스타 · 끝</b><br>로페의 편지가 서른 해 만에 아빠에게 닿았어요. 이제 보름달이 뜨는 밤이면, 카페의 문이 다른 시대로 이어져요.<br><b>2장 · 보름달의 기록</b>이 시작돼요.</div>';
       if(cur.sci)sciFinish();
       giftStep(afterVisit)}})});
@@ -1246,7 +1357,7 @@ function sciFinish(){const c=cur,v=cur.ep==='ep2'?2:1;S.special=S.special||{};S.
 function rewardPop(n,pay){const c=$('ctr');c.querySelector('.rpop')?.remove();const p=document.createElement('div');p.className='rpop';p.setAttribute('role','status');
   p.innerHTML=`<span class="sr">별 5개 중 ${n}개, ${pay}룬</span><div class="rst">${[0,1,2,3,4].map(i=>`<img src="a/u/ic_star.webp" alt="" class="${i<n?'on':''}" style="--i:${i}">`).join('')}</div><div class="rco"><img src="a/u/ic_coin.webp" alt="">+${pay}<small>룬</small></div>`;
   c.appendChild(p);setTimeout(()=>p.classList.add('out'),2600);setTimeout(()=>p.remove(),3300)}
-function finishServe(st,pay,hints){
+function finishServe(st,pay,hints){if(cur&&cur.practice){practiceDone(st,hints);return}
   S.coins+=pay;S.served++;S.stars+=S5(st);S.menuServed[cur.menu]=(S.menuServed[cur.menu]||0)+1;
   if(!cur.hidden)S.regServed++;
   S.today.push({no:cur.no,menu:cur.menu,st,pay,isNew:!!cur.isNew});stats();reaction(st,pay,hints);
@@ -1295,11 +1406,12 @@ $('cat').addEventListener('click',()=>{
 function ticket(){const m=MENUS[cur.menu];
   let pills='';
   if(m.station==='extract')pills=`<span class="pill">${D.STRENGTH[cur.strength]}</span><span class="pill alt">${D.TASTE[cur.menu][cur.taste]}</span>${cur.menu==='coldbrew'?'<span class="pill" style="background:#FFF4E2;color:#7A5426">소금 크림 위에 띄우기</span>':''}`;
+  else if(m.station==='lab')pills=`<span class="pill">${labT(m)[cur.target][0]}</span><span class="pill alt">${LABK[m.kind].st} 작업대</span>`;
   else pills=[...cur.items].sort(()=>Math.random()-.5).map(id=>{const l=m.shelf.find(x=>x.id===id);return `<span class="pill"><span class="dot" style="background:${l.hex}"></span>${l.nm}</span>`}).join('');
   return `<img src="a/m/${pad(m.no)}.webp" alt=""><div><div class="lbl">ORDER · ${cur.name}</div><div class="what">${m.name}</div><div class="pills">${pills}</div></div><button class="btn" id="sheetToggle">손님 보기</button>`;
 }
-function openStation(){const m=MENUS[cur.menu];if(m.station==='extract')openExtract(m);else openLayer(m);sheet('open');
-  const raws=m.station==='extract'?D.EXTRACT_RAW[cur.menu]:[...new Set(m.recipe.map(RAW))];if(!has(raws,NEED))noStock(raws,NEED)}
+function openStation(){const m=MENUS[cur.menu];if(m.station==='extract')openExtract(m);else if(m.station==='lab')openLab(m);else openLayer(m);sheet('open');
+  const raws=RAWS(cur.menu);if(!has(raws,NEED))noStock(raws,NEED)}
 const BENCH={
   drip:{tools:[['kettle',2,22],['dripper_server',24,19],['scale',45,27],['thermometer',74,21]],hand:['pour',13,30,40]},
   icetea:{tools:[['kettle',3,23],['mixing_glass',27,18],['scale',47,27],['thermometer',76,21]],hand:['pour',16,30,40]},
@@ -1495,6 +1607,83 @@ function serveL(m){
   finishServe(st,pay,h);
 }
 
+/* ---------- 새 작업대 화면 (슬라이더 + 손님 취향 그래프) ---------- */
+let lhist=[],llast=null;
+const lfmt=s=>v=>s[8]?s[8][v]:`${+(+v).toFixed(2)}${s[6]?(s[6].length>2?' ':'')+s[6]:''}`;
+function openLab(m){const K=LABK[m.kind],sl=K.sl(m);lhist=[];llast=null;
+  setSheet(ticket(),`<div class="stockbar" id="stockBar"></div><div id="warn"></div>
+  <div class="station">
+    <div class="panel"><h3>${K.st} 작업대 <small>변인을 하나씩 바꿔 보세요</small></h3>
+      ${sl.map(s=>`<div class="ctl"><label for="s-${s[0]}">${s[1]}</label><output id="o-${s[0]}">${lfmt(s)(s[5])}</output>
+        <input type="range" id="s-${s[0]}" min="${s[2]}" max="${s[3]}" step="${s[4]}" value="${s[5]}"><div class="ends"><span>${s[7][0]}</span><span>${s[7][1]}</span></div></div>`).join('')}
+      <div class="labsci"><b>과학 노트</b>${K.sci}</div>
+    </div>
+    <div class="panel"><h3>맛보기 결과 <small id="tries">시음 0회</small></h3>
+      <div id="xres"><p class="empty">조건을 정하고 맛을 봐 주세요. 점선 상자가 손님 취향이에요.</p></div>
+      <svg class="chart" id="chart" viewBox="0 0 340 250" role="img" aria-label="${K.X[0]}와 ${K.Y[0]} 그래프"></svg>
+    </div>
+  </div>
+  <div class="sticky-act"><button class="btn go big" id="brew">만들어서 맛보기</button><button class="btn brass big" id="serveX" disabled>손님께 드리기</button></div>`);
+  sl.forEach(s=>$('s-'+s[0]).addEventListener('input',e=>{$('o-'+s[0]).textContent=lfmt(s)(+e.target.value)}));
+  $('brew').addEventListener('click',()=>labBrew(m));$('serveX').addEventListener('click',()=>labServe(m));
+  drawLab(m);refreshStock();}
+function labIn(m,r){const [,xr,yr]=labT(m)[cur.target];return {a:r.x>=xr[0]&&r.x<=xr[1],b:r.y>=yr[0]&&r.y<=yr[1],xr,yr}}
+function labBrew(m){const K=LABK[m.kind],sl=K.sl(m),raws=m.raw;if(!has(raws,NEED)){noStock(raws,NEED);return}useStock(raws,1);clearWarn();
+  const p={};sl.forEach(s=>p[s[0]]=+$('s-'+s[0]).value);const r=K.model(p,m);tastes++;
+  if(llast){const diff=sl.filter(s=>llast.p[s[0]]!==p[s[0]]);if(diff.length===1){S.oneVar++;save()}}
+  if(tastes>=3&&!S.kai){S.kai=true;save()}
+  const prev=llast;llast={p,r};lhist.push(r);
+  const {a,b}=labIn(m,r),[xl,xu]=[K.X[0],K.X[1]],[yl,yu]=[K.Y[0],K.Y[1]];
+  const chg=prev?sl.filter(s=>prev.p[s[0]]!==p[s[0]]):null;
+  const cap=!prev?'첫 시음':chg.length===0?'조건을 바꾸지 않았어요':chg.length===1?`바꾼 변인: ${chg[0][1]} ${lfmt(chg[0])(prev.p[chg[0][0]])} → ${lfmt(chg[0])(p[chg[0][0]])}`:`변인을 ${chg.length}개 바꿨어요. 무엇 때문에 달라졌는지 가리기 어려워요`;
+  $('tries').textContent=`시음 ${tastes}회`;
+  $('xres').innerHTML=`<div class="result pop"><img class="tcup" src="a/m/${pad(m.no)}.webp" alt="${m.name}" style="${labCup(m,r)}"><div class="taste">
+    <div class="meter"><span>${xl}</span><b>${+r.x.toFixed(1)}${xu?' '+xu:''}</b></div><div class="meter"><span>${yl}</span><b>${+r.y.toFixed(2)}${yu?' '+yu:''}</b></div>
+    <div><b>${a&&b?'손님 취향에 딱 맞아요':a||b?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요'}</b></div><div style="color:var(--muted);font-size:13px">${cap}</div></div></div>`;
+  $('serveX').disabled=false;drawLab(m);}
+function labCup(m,r){if(m.kind==='indicator')return `filter:hue-rotate(${Math.round((r.x-6.2)*-32)}deg) saturate(${(0.6+r.y/80).toFixed(2)})`;
+  if(m.kind==='scatter')return `filter:brightness(${(1.25-r.x/250).toFixed(2)}) contrast(${(0.8+r.x/300).toFixed(2)})`;
+  if(m.kind==='thick'||m.kind==='filter')return `filter:saturate(${(0.5+r.y/60).toFixed(2)}) opacity(${(0.65+r.x/300).toFixed(2)})`;
+  const {a,b}=labIn(m,r);return a&&b?'':`filter:saturate(.75) brightness(1.05)`}
+function labServe(m){if(!llast)return;const raws=m.raw;if(!has(raws,4)){noStock(raws,4);return}useStock(raws,4);
+  const K=LABK[m.kind],r=llast.r,{a,b,xr,yr}=labIn(m,r),st=a&&b?3:a||b?2:1,pay=st===3?55:st===2?45:25,h=[];
+  if(r.x<xr[0]&&K.tip.xlo)h.push(K.tip.xlo(m));if(r.x>xr[1]&&K.tip.xhi)h.push(K.tip.xhi(m));
+  if(r.y<yr[0]&&K.tip.ylo)h.push(K.tip.ylo(m));if(r.y>yr[1]&&K.tip.yhi)h.push(K.tip.yhi(m));
+  $('serveX').disabled=true;$('brew').disabled=true;finishServe(st,pay,st<3?h:[]);}
+function drawLab(m){const K=LABK[m.kind],W=340,H=250,L=46,R=12,T=14,B=40,[,,x0,x1,xs]=K.X,[,,y0,y1,ys]=K.Y,[lab,xr,yr]=labT(m)[cur.target];
+  const X=x=>L+(clamp(x,x0,x1)-x0)/(x1-x0)*(W-L-R),Y=y=>T+(1-(clamp(y,y0,y1)-y0)/(y1-y0))*(H-T-B);
+  const yd=ys<1?1:0,xd=xs<1?1:0;let s='';
+  for(let x=x0;x<=x1+1e-9;x+=xs)s+=`<line x1="${X(x)}" x2="${X(x)}" y1="${T}" y2="${H-B}" stroke="#E4DACA"/><text x="${X(x)}" y="${H-B+15}" font-size="11" text-anchor="middle" fill="#5E6B7E">${x.toFixed(xd)}</text>`;
+  for(let y=y0;y<=y1+1e-9;y+=ys)s+=`<line x1="${L}" x2="${W-R}" y1="${Y(y)}" y2="${Y(y)}" stroke="#E4DACA"/><text x="${L-6}" y="${Y(y)+4}" font-size="11" text-anchor="end" fill="#5E6B7E">${y.toFixed(yd)}</text>`;
+  s+=`<rect x="${X(xr[0])}" y="${Y(yr[1])}" width="${X(xr[1])-X(xr[0])}" height="${Y(yr[0])-Y(yr[1])}" fill="rgba(201,163,101,.18)" stroke="#9C7A3E" stroke-width="2" stroke-dasharray="5 4" rx="4"/><text x="${X(xr[0])+5}" y="${Y(yr[1])+14}" font-size="11" fill="#9C7A3E" font-weight="700">손님 취향</text>`;
+  s+=`<text x="${(L+W-R)/2}" y="${H-6}" font-size="12" text-anchor="middle" fill="#1F2F4A">${K.X[0]}${K.X[1]?` (${K.X[1]})`:''}</text><text transform="translate(12 ${(T+H-B)/2}) rotate(-90)" font-size="12" text-anchor="middle" fill="#1F2F4A">${K.Y[0]}${K.Y[1]?` (${K.Y[1]})`:''}</text>`;
+  if(lhist.length>1)s+=`<polyline points="${lhist.map(r=>X(r.x)+','+Y(r.y)).join(' ')}" fill="none" stroke="#7FA6C9" stroke-width="1.2" stroke-dasharray="3 3"/>`;
+  lhist.forEach((r,i)=>{s+=i===lhist.length-1?`<circle cx="${X(r.x)}" cy="${Y(r.y)}" r="7" fill="#233D62" stroke="#FFFDF8" stroke-width="2.5"/>`:`<circle cx="${X(r.x)}" cy="${Y(r.y)}" r="4" fill="#7FA6C9"/>`});
+  $('chart').innerHTML=s;}
+/* 주문 정하기: 다시 온 손님이 새 음료를 고를 때, 그리고 연습할 때 */
+const pickR=a=>a[Math.floor(Math.random()*a.length)];
+function setOrder(o,k){const m=MENUS[k];o.menu=k;
+  if(m.station==='extract'){o.strength=pickR(Object.keys(D.STRENGTH));o.taste=pickR(Object.keys(D.TASTE[k]))}
+  else if(m.station==='layer')o.items=[...m.recipe];
+  else o.target=pickR(Object.keys(labT(m)));return o}
+function orderLine(o){const m=MENUS[o.menu];
+  const what=m.station==='extract'?`${D.STRENGTH[o.strength]}, ${D.TASTE[o.menu][o.taste]}`:m.station==='layer'?`${o.items.map(id=>m.shelf.find(x=>x.id===id).col).join(', ')} 층이 다 보이게`:labT(m)[o.target][0];
+  return pickR([`오늘은 ${jo(m.name,'을/를')} 마셔 볼래요. ${what}요.`,`${m.name} 한 잔 부탁해요. ${what}요.`,`메뉴판 보다가 눈에 띄었어요. ${m.name}, ${what}요.`])}
+function altOrder(){const keys=Object.keys(MENUS).filter(k=>S.enabled[k]!==false&&k!==cur.menu);if(!keys.length)return;
+  const fresh=keys.filter(k=>!(S.menuServed[k]>0)),k=pickR(fresh.length&&Math.random()<0.7?fresh:keys);
+  setOrder(cur,k);cur.alt={order:orderLine(cur),r3:pickR(['와, 딱 제가 원하던 맛이에요.','이거예요, 이거! 다음에도 이걸로 할래요.','처음 마셔 보는데 마음에 쏙 들어요.']),
+    r2:pickR(['음, 조금 아쉽지만 괜찮아요.','생각했던 맛이랑은 살짝 달라요. 그래도 잘 마실게요.']),bye:pickR(['잘 마셨어요. 또 올게요.','다음엔 다른 것도 마셔 볼래요.','오늘도 고마워요.'])}}
+/* 연습: 메뉴 도감에서 바로 작업대 열기 (룬·재료는 쓰지 않아요) */
+let pracPrev=null;
+function practice(k){const sh=$('sheet');if(sh.classList.contains('open')||sh.classList.contains('peek')){toast('지금 받은 주문을 마친 뒤에 연습할 수 있어요');return}
+  pracPrev=cur;cur=setOrder({name:'연습',no:0,practice:true,revealed:true},k);tastes=0;$('mdet').hidden=true;show('cafe');openStation()}
+function practiceDone(st,h){const el=document.createElement('div');el.className='pdone';
+  el.innerHTML=`<div class="panel pop"><h3>연습 결과</h3>${starIc(S5(st))}<p>${st===3?'손님 취향에 딱 맞췄어요!':st===2?'거의 다 왔어요.':'조금 더 연습해 봐요.'}</p>${h.length?`<div class="note">${h.join('<br>')}</div>`:''}
+    <div class="row"><button class="btn go" id="pAgain">한 번 더</button><button class="btn" id="pEnd">연습 끝내기</button></div></div>`;
+  $('sheetBody').appendChild(el);el.scrollIntoView({behavior:RM?'auto':'smooth',block:'nearest'});
+  $('pAgain').addEventListener('click',()=>{const k=cur.menu;cur=setOrder({name:'연습',no:0,practice:true,revealed:true},k);tastes=0;openStation()});
+  $('pEnd').addEventListener('click',()=>{cur=pracPrev;pracPrev=null;sheet(null);if(!cur&&!busy){if(!S.prologue)prologue();else startCustomer()}})}
+
 /* ---------- 도감 ---------- */
 let sel=null;
 const ALBUM=[
@@ -1573,10 +1762,10 @@ function renderMenus(){
   $('mt1').setAttribute('aria-selected',mch===1);$('mt2').setAttribute('aria-selected',mch===2);document.querySelector('.mbstage').classList.toggle('ch2',mch===2);
   $('menus').hidden=mch!==1;$('spmenus').hidden=mch!==2;
   const sold=D.BOOK.filter(b=>b.play&&S.menuServed[b.play]>0).length,spn=Object.keys(S.special||{}).length;
-  $('menuSum').textContent=mch===1?`판매해서 연 메뉴 ${sold}/40`:`보름달 밤의 손님이 남긴 특별 음료 ${spn}/${D.SPECIAL.length}`;
-  $('menus').innerHTML=D.BOOK.map(b=>{const n=b.play?S.menuServed[b.play]||0:0,open=n>0;
+  $('menuSum').textContent=mch===1?`손님께 내 본 메뉴 ${sold}/40 · 눌러서 만들어 볼 수 있어요`:`보름달 밤의 손님이 남긴 특별 음료 ${spn}/${D.SPECIAL.length}`;
+  $('menus').innerHTML=D.BOOK.map(b=>{const n=b.play?S.menuServed[b.play]||0:0,open=true;
     return `<div class="mcard ${open?'':'off'}" ${open?`data-no="${b.no}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/m/${pad(b.no)}.webp" alt="${open?b.name:b.name+', 아직 열리지 않은 메뉴'}"><span class="cc num">${pad(b.no)}</span><span class="nm">${b.name}</span><span class="cc">${b.concept}</span>
-    <span class="st ${open?'on':'off'}">${open?`${n}잔 판매`:b.play?'팔면 열려요':'곧 오픈'}</span></div>`}).join('');
+    <span class="st ${n?'on':'off'}">${n?`${n}잔 판매`:`${stName(MENUS[b.play])} 작업대`}</span></div>`}).join('');
   const SPOPEN=S.special||{};
   $('spmenus').innerHTML=D.SPECIAL.map(s=>{const v=SPOPEN[s.id]||0;const who=sciDone(30+ +s.id)?s.who:'보름달 손님';return `<div class="mcard sp ${v?'':'off'}" ${v?`data-sp="${s.id}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/sp/${s.id}_${v>=2?2:1}.webp" alt="${v?s.name:s.name+', 아직 열리지 않은 특별 음료'}"><span class="cc num">${s.id}</span><span class="nm">${s.name}</span><span class="cc">${v?who:'보름달 손님'}</span>
     <span class="st ${v?'on':'off'}">${v>=2?'두 번째 방문':v?'첫 번째 방문':'보름달 밤에 열려요'}</span></div>`}).join('');
@@ -1588,7 +1777,8 @@ function openSpDet(id){const s=D.SPECIAL.find(x=>x.id===id),v=(S.special||{})[id
   m.hidden=false;m.onclick=e=>{if(e.target===m||e.target.closest('.mdx'))m.hidden=true};}
 function openMdet(no){
   const b=D.BOOK.find(x=>x.no===no),m=$('mdet');
-  m.innerHTML=`<div class="mdc pop"><button class="mdx" aria-label="설명 닫기">✕</button><img src="a/m/${pad(b.no)}.webp" alt="${b.name}"><span class="num">No. ${pad(b.no)}</span><h3>${b.name}</h3><div class="orn"></div><div class="ing">${b.ing}</div><p>${b.line}</p><span class="tag">${b.concept}</span></div>`;
+  m.innerHTML=`<div class="mdc pop"><button class="mdx" aria-label="설명 닫기">✕</button><img src="a/m/${pad(b.no)}.webp" alt="${b.name}"><span class="num">No. ${pad(b.no)}</span><h3>${b.name}</h3><div class="orn"></div><div class="ing">${b.ing}</div><p>${b.line}</p><span class="tag">${stName(MENUS[b.play])} 작업대 · ${b.concept}</span><button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
+  $('mTry').addEventListener('click',e=>{e.stopPropagation();practice(b.play)});
   m.hidden=false;
   const close=()=>{m.hidden=true};
   m.onclick=e=>{if(e.target===m||e.target.closest('.mdx'))close()};
@@ -1686,8 +1876,8 @@ renderDecor();
 
 /* ---------- 수업 설정 ---------- */
 function renderSettings(){
-  const groups=[['추출 작업대',Object.keys(D.EXTRACT)],['층 쌓기 작업대',Object.keys(D.LAYER)]];
-  $('menuSet').innerHTML='<legend>오늘 운영할 메뉴</legend>'+groups.map(([g,ks])=>`<div style="font-size:13px;color:var(--muted);margin-top:4px">${g}</div>`+ks.map(k=>`<label><input type="checkbox" data-k="${k}" ${S.enabled[k]?'checked':''}> ${MENUS[k].name} <span style="color:var(--muted);font-size:12.5px">· 손님 ${C.filter(c=>c.menu===k).length}명</span></label>`).join('')).join('');
+  const groups=[['추출 작업대',Object.keys(D.EXTRACT)],['층 쌓기 작업대',Object.keys(D.LAYER)],['새 작업대 (녹이기·섞기·탄산·색·빛·거르기·굳히기) · 다시 온 손님이 주문해요',Object.keys(D.LAB)]];
+  $('menuSet').innerHTML='<legend>오늘 운영할 메뉴</legend>'+groups.map(([g,ks])=>`<div style="font-size:13px;color:var(--muted);margin-top:4px">${g}</div>`+ks.map(k=>`<label><input type="checkbox" data-k="${k}" ${S.enabled[k]?'checked':''}> ${MENUS[k].name} <span style="color:var(--muted);font-size:12.5px">· ${MENUS[k].station==='lab'?LABK[MENUS[k].kind].st:`손님 ${C.filter(c=>c.menu===k).length}명`}</span></label>`).join('')).join('');
   $('menuSet').querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{S.enabled[i.dataset.k]=i.checked;save()}));
   $('optD').checked=S.showD;
   $('perDay').innerHTML=[3,4,5,6,7,8].map(n=>`<option value="${n}" ${S.perDay===n?'selected':''}>${n}명</option>`).join('');
