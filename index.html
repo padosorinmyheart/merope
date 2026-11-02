@@ -838,6 +838,16 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 
 /* 도감 제목: 남색 띠 안에 여백 */
 .bstage .btitle,.mbstage .btitle,.gstage.ch2 .btitle,.abstage .btitle,.mbstage.ch2 .btitle{font-size:max(13.5px,1.95cqh)!important;letter-spacing:.18em}
+
+/* 나의 메로페 방 미리보기 */
+.shtabs{display:grid!important;grid-template-columns:repeat(4,1fr);gap:5px!important}
+.shtabs button{min-height:32px!important;font-size:13px!important}
+.shroom2{position:relative;height:clamp(210px,34vh,330px);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 45%,#2A3E62,#14213A 75%);box-shadow:inset 0 0 0 1.5px #C9A365,0 6px 16px -10px rgba(30,40,60,.6)}
+.shroom2 .rbox{position:absolute;left:50%;top:50%;height:104%;aspect-ratio:1;transform:translate(-50%,-50%);transition:transform .45s ease}
+.shroom2 .rbox.zoom{transform:translate(-50%,-50%) scale(2.1);transform-origin:var(--zx) var(--zy)}
+.shroom2 .rbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.shroom2 .rbox img.pv{animation:pvglow 1.6s ease-in-out infinite}
+.shroom2 .chip{position:absolute;top:8px;font-size:11px;font-family:var(--display);font-weight:700;color:#FBF4E4;background:rgba(27,50,83,.85);border-radius:999px;padding:2px 10px;box-shadow:inset 0 0 0 1px rgba(214,184,120,.7);z-index:2}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -919,7 +929,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
     <div class="shw">
       <header class="shh"><div class="shban"><small>Merope</small><h2>룬 상점</h2></div>
         <div class="shrow"><p class="shsub">나만의 메로페를 꾸며 보세요</p><div class="shcoin"><img src="a/u/ic_coin.webp" alt=""><b id="shCoins">0</b>룬</div></div></header>
-      <div class="shtabs" role="tablist"><button role="tab" data-t="decor">소품</button><button role="tab" data-t="gift">선물</button><button role="tab" data-t="box">보관함</button></div>
+      <div class="shtabs" role="tablist"><button role="tab" data-t="prop">소품</button><button role="tab" data-t="floor">바닥</button><button role="tab" data-t="wallpaper">벽지</button><button role="tab" data-t="rug">러그</button><button role="tab" data-t="lighting">조명</button><button role="tab" data-t="scenery">풍경</button><button role="tab" data-t="gift">선물</button><button role="tab" data-t="box">보관함</button></div>
       <div class="shprev" id="shPrev"></div>
       <div class="shsel" id="shSel"></div>
       <div class="shgrid" id="shGrid"></div>
@@ -1960,42 +1970,81 @@ function decorHTML(placed,pv){const P={...(placed||{})};if(pv)P[pv.slot]=pv.id;
   return Object.entries(P).map(([k,id])=>{const d=DECOR.find(x=>x.id===id),sl=SLOTS[k];if(!d||!sl)return '';
     return `${sl.a==='t'?`<i class="dchain${pv&&pv.slot===k?' pv':''}" style="left:${sl.x}%;height:${sl.y}%"></i>`:''}<span class="dc a-${sl.a}${pv&&pv.slot===k?' pv':''}" style="left:${sl.x}%;top:${sl.y}%;width:${d.w}%"><img src="a/d/${d.id}.webp" alt=""></span>`}).join('')}
 function renderDecor(){$('decor').innerHTML=decorHTML(S.placed);if(MODES[mode]&&MODES[mode].bg.startsWith('room_'))setBg(MODES[mode].bg,false,MODES[mode].fg,MODES[mode].mt)}
-let shT='decor',shSel=null;
-function shItems(){if(shT==='decor')return DECOR;if(shT==='gift')return GIFTS;return [...DECOR,...GIFTS].filter(x=>S.owned.includes(x.id))}
+/* ---------- 나의 메로페: 층 그림 방 (1024×1024 같은 좌표, 10단 순서) ---------- */
+const ROOM_OPT={
+ floor:{nm:'바닥',def:'oak',it:[['oak','오크 마루',0,'가장 처음의 따뜻한 오크 마루예요.'],['walnut','월넛 마루',200,'짙고 차분한 월넛 마루예요.'],['white_oak','밝은 오크 마루',200,'햇살처럼 밝은 오크 마루예요.']]},
+ wallpaper:{nm:'벽지',def:'ivory',it:[['ivory','아이보리 벽',0,'크림빛 카빙이 살아 있는 아이보리 벽이에요.'],['cool_pearl','쿨 펄 벽',200,'푸른 기가 도는 진주빛 벽이에요.'],['champagne','샴페인 벽',200,'은은한 금빛이 도는 샴페인 벽이에요.']]},
+ rug:{nm:'러그',def:'navy',it:[['navy','남색 별자리 러그',0,'남색 바탕에 금빛 별자리를 수놓은 러그예요.'],['ivory','아이보리 별자리 러그',150,'밝은 아이보리 바탕의 별자리 러그예요.'],['rose','로즈 별자리 러그',150,'더스티 로즈빛 별자리 러그예요.']]},
+ lighting:{nm:'조명',def:'orbit',it:[['orbit','천체 궤도 조명',0,'행성 궤도를 닮은 황동 조명 세트예요.'],['pearl','오팔 진주 조명',250,'둥근 오팔 유리의 진주 조명 세트예요.'],['starry','별빛 랜턴 조명',250,'별빛이 새어 나오는 랜턴 조명 세트예요.']]},
+ scenery:{nm:'풍경',def:'day',it:[['day','낮의 호수',0,'햇살 아래 반짝이는 호수 마을이 창밖에 보여요.'],['sunset','노을 호수',180,'노을빛으로 물든 호수가 창밖에 보여요.'],['night','밤의 호수',180,'불빛이 하나둘 켜진 밤 호수가 창밖에 보여요.']]}};
+const RPROPS=[
+ ['starlight_prism','별빛 프리즘',80,'햇빛을 작은 무지개로 나눠요.','보어·리비트'],['moon_hourglass','달빛 모래시계',60,'모래가 천천히 떨어지며 시간을 재요.','장영실'],
+ ['constellation_frame','별자리 액자',100,'별자리를 금선으로 이은 액자예요.','스텔라·케플러'],['letter_box','편지 보관함',0,'별 도장 편지를 모아 두는 상자예요.','베아트리스·오리온'],
+ ['brass_telescope','놋쇠 망원경',150,'창가에서 하늘을 보는 놋쇠 망원경이에요.','케플러·셀레네'],['honcheonui','혼천의',160,'하늘의 움직임을 본뜬 조선의 천문 기구예요.','장영실'],
+ ['small_balance','작은 저울',90,'카운터 위에서 무게를 재는 작은 저울이에요.','라부아지에·마리안'],['seed_pot','씨앗 화분',70,'싹이 돋기를 기다리는 작은 화분이에요.','우장춘'],
+ ['christmas_candle','크리스마스 촛불',70,'손님 테이블을 밝히는 작은 촛불이에요.','패러데이']];
+/* 소품 밑변 중앙 (1024 기준) — 미리보기에서 그 자리를 확대 */
+const RPOS={starlight_prism:[301,779],moon_hourglass:[465,528],constellation_frame:[145,394],letter_box:[527,802],brass_telescope:[859,746],honcheonui:[250,754],small_balance:[178,608],seed_pot:[686,553],christmas_candle:[673, 665]};
+const RITEMS=[...Object.entries(ROOM_OPT).flatMap(([cat,o])=>o.it.map(([k,nm,price,desc])=>({id:`${cat}:${k}`,cat,key:k,nm,price,desc,icon:`a/r/i/${cat}_${k}.webp`,room:1}))),
+  ...RPROPS.map(([k,nm,price,desc,who])=>({id:'prop:'+k,cat:'prop',key:k,nm,price,desc:`${desc} 어울리는 손님: ${who}`,icon:`a/r/i/${k}.webp`,room:1}))];
+const RI=id=>RITEMS.find(x=>x.id===id);
+function roomState(){const r={...Object.fromEntries(Object.entries(ROOM_OPT).map(([c,o])=>[c,o.def])),...(S.room||{})};r.props={...(S.rprops||{letter_box:1})};return r}
+function roomOwned(id){const it=RI(id);return it&&(it.price===0||S.owned.includes(id))}
+function roomHTML(st){const L=(p,cls='',sty='')=>`<img src="a/r/${p}.webp" alt="" class="${cls}" style="${sty}">`,gl={day:.15,sunset:.6,night:1}[st.scenery];
+  return L('scenery/'+st.scenery)+L('floor/'+st.floor)+L('wallpaper/'+st.wallpaper)+L('rug/'+st.rug)+L('furniture/fixed_builtins')+L('furniture/dining_layout')
+   +RPROPS.filter(([k])=>st.props[k]).map(([k])=>L('props/'+k,st.pv===k?'pv':'')).join('')
+   +L(`lighting/${st.lighting}_fixtures`)+L('ambient/'+st.scenery)+L(`lighting/${st.lighting}_glow`,'',`opacity:${gl}`)}
+const SHTABS=[['prop','소품'],['floor','바닥'],['wallpaper','벽지'],['rug','러그'],['lighting','조명'],['scenery','풍경'],['gift','선물'],['box','보관함']];
+let shT='prop',shSel=null;
+function shItems(){if(shT==='gift')return GIFTS;if(shT==='box')return [...RITEMS.filter(x=>x.price>0&&S.owned.includes(x.id)),...DECOR.filter(x=>S.owned.includes(x.id)),...GIFTS.filter(x=>S.owned.includes(x.id))];return RITEMS.filter(x=>x.cat===shT)}
+function isOn(it){const st=roomState();return it.cat==='prop'?!!st.props[it.key]:st[it.cat]===it.key}
 function renderShop(){
   $('shCoins').textContent=S.coins.toLocaleString('ko-KR');
   document.querySelectorAll('.shtabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===shT));
   const list=shItems();if(!list.some(x=>x.id===shSel))shSel=list.length?(list.find(x=>!x.who||S.met.includes(x.who))||list[0]).id:null;
-  const it=shSel&&SHOPI(shSel),isG=it&&!!it.who,own=it&&S.owned.includes(it.id),met=!isG||S.met.includes(it.who),gname=isG?byNo(it.who).name:'';
+  const it=shSel&&(RI(shSel)||SHOPI(shSel)),isG=it&&!!it.who,isR=it&&it.room,own=it&&(isR?roomOwned(it.id):S.owned.includes(it.id)),met=!isG||S.met.includes(it.who),gname=isG?byNo(it.who).name:'';
   /* 미리보기 */
   if(!it){$('shPrev').innerHTML=`<div class="shempty">아직 보관함이 비어 있어요.<br>소품이나 선물을 사면 여기에 모여요.</div>`}
-  else if(!isG){const room=roomBgName();const pv={slot:it.slot,id:it.id};const placedNow=S.placed[it.slot]===it.id;
+  else if(isR){const st=roomState();if(it.cat==='prop'){st.props[it.key]=1;st.pv=it.key}else st[it.cat]=it.key;
+    const z=it.cat==='prop'?RPOS[it.key]:null;
+    $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox${z?' zoom':''}" style="${z?`--zx:${z[0]/10.24}%;--zy:${(z[1]-30)/10.24}%`:''}">${roomHTML(st)}</div>
+      <span class="chip l">나의 메로페</span><span class="chip r">${isOn(it)?'지금 적용 중':'구매 전 미리보기'}</span></div>`}
+  else if(!isG){const room=roomBgName(),pv={slot:it.slot,id:it.id};
     $('shPrev').innerHTML=`<div class="shroom" style="--rb:url(a/s/${room}.webp)"><div class="shimg zoom" style="--sx:${SLOTS[it.slot].x}%;--sy:${SLOTS[it.slot].y}%;background-image:url(a/s/${room}${S.placed.wall||it.slot==='wall'?'_nf':''}.webp)"><div class="decor">${decorHTML(S.placed,pv)}</div></div>
-      <span class="chip l">카페 미리보기</span><span class="chip r">${placedNow?'지금 놓여 있어요':'놓았을 때 모습'}</span></div>`}
+      <span class="chip l">손님 맞는 자리</span><span class="chip r">${S.placed[it.slot]===it.id?'지금 놓여 있어요':'놓았을 때 모습'}</span></div>`}
   else{$('shPrev').innerHTML=`<div class="shgift"><img class="gp ${met?'':'lock'}" src="${sprite(it.who,'h')}" alt=""><div class="gi"><img src="a/g/${it.id}.webp" alt=""></div>
       <span class="chip l">${met?gname+'님께 줄 선물':'아직 만나지 못한 손님'}</span><span class="chip r">${S.given.includes(it.id)?'건넸어요':own?'다음 방문 때 건네요':'선물 미리보기'}</span></div>`}
   /* 고른 물건 */
-  $('shSel').innerHTML=it?`<img src="a/g/${it.id}.webp" alt=""><div><b>${met?it.nm:'???'}</b><span>${met?it.desc:'손님을 만나면 열려요.'}</span></div><em>${isG?(S.given.includes(it.id)?'건넴':own?'보유 중':'미리보기 중'):own?(S.placed[it.slot]===it.id?'놓여 있음':'보유 중'):'미리보기 중'}</em>`:'';
+  const icon=x=>x.icon||`a/g/${x.id}.webp`;
+  const stOf=x=>x.room?(roomOwned(x.id)?(isOn(x)?(x.cat==='prop'?'놓여 있음':'적용 중'):'보유 중'):''):x.who?(S.given.includes(x.id)?'건넴':S.owned.includes(x.id)?'보유 중':''):(S.owned.includes(x.id)?(S.placed[x.slot]===x.id?'놓여 있음':'보유 중'):'');
+  $('shSel').innerHTML=it?`<img src="${icon(it)}" alt=""><div><b>${met?it.nm:'???'}</b><span>${met?it.desc:'손님을 만나면 열려요.'}</span></div><em>${stOf(it)||'미리보기 중'}</em>`:'';
   /* 목록 */
-  let html='';const card=x=>{const o=S.owned.includes(x.id),m=!x.who||S.met.includes(x.who),st=x.who?(S.given.includes(x.id)?'건넴':o?'보유 중':''):(o?(S.placed[x.slot]===x.id?'놓여 있음':'보유 중'):'');
-    return `<button class="shcard${x.id===shSel?' sel':''}${o?' own':''}${m?'':' lock'}" data-id="${x.id}"><img src="a/g/${x.id}.webp" alt="" loading="lazy"><b>${m?x.nm:'???'}</b>${st?`<span class="own">✓ ${st}</span>`:`<span class="pr"><img src="a/u/ic_coin.webp" alt="">${x.price} 룬</span>`}</button>`};
+  const card=x=>{const m=!x.who||S.met.includes(x.who),st=stOf(x);
+    return `<button class="shcard${x.id===shSel?' sel':''}${st?' own':''}${m?'':' lock'}" data-id="${x.id}"><img src="${icon(x)}" alt="" loading="lazy"><b>${m?x.nm:'???'}</b>${st?`<span class="own">✓ ${st}</span>`:`<span class="pr"><img src="a/u/ic_coin.webp" alt="">${x.price} 룬</span>`}</button>`};
+  let html='';
   if(shT==='gift'){[...new Set(GIFTS.map(g=>g.who))].forEach(w=>{const c=byNo(w),m=S.met.includes(w);html+=`<div class="shgh"><img src="${sprite(w,'n')}" alt="" class="${m?'':'lock'}">${m?c.name:'???'}<small>${m?c.role:'아직 만나지 못한 손님'}</small></div>`+GIFTS.filter(g=>g.who===w).map(card).join('')})}
-  else if(shT==='box'&&!list.length)html='';
   else html=list.map(card).join('');
-  const tot=shT==='decor'?`<p class="shcount">모은 소품 ${DECOR.filter(d=>S.owned.includes(d.id)).length} / ${DECOR.length}</p>`:shT==='gift'?`<p class="shcount">건넨 선물 ${GIFTS.filter(g=>S.given.includes(g.id)).length} / ${GIFTS.length}</p>`:'';
+  const tot=shT==='prop'?`<p class="shcount">모은 소품 ${RITEMS.filter(x=>x.cat==='prop'&&roomOwned(x.id)).length} / ${RPROPS.length}</p>`:shT==='gift'?`<p class="shcount">건넨 선물 ${GIFTS.filter(g=>S.given.includes(g.id)).length} / ${GIFTS.length}</p>`:ROOM_OPT[shT]?`<p class="shcount">${ROOM_OPT[shT].nm} ${ROOM_OPT[shT].it.filter(([k])=>roomOwned(shT+':'+k)).length} / 3</p>`:'';
   $('shGrid').innerHTML=tot+html;
   $('shGrid').querySelectorAll('.shcard').forEach(b=>b.addEventListener('click',()=>{shSel=b.dataset.id;renderShop()}));
   /* 버튼 */
   const B=$('shBuy');B.onclick=null;B.disabled=false;B.className='shbuy';
-  if(!it){B.textContent='소품 보러 가기';B.onclick=()=>{shT='decor';renderShop()}}
+  const done=()=>{save();stats();renderShop();renderDecor()};
+  const applyR=x=>{if(x.cat==='prop')S.rprops={...roomState().props,[x.key]:1};else S.room={...(S.room||{}),[x.cat]:x.key}};
+  if(!it){B.textContent='소품 보러 가기';B.onclick=()=>{shT='prop';renderShop()}}
   else if(!own){if(!met){B.disabled=true;B.textContent='손님을 만나면 살 수 있어요'}
     else if(S.coins<it.price){B.disabled=true;B.textContent=`${it.price-S.coins} 룬이 모자라요`}
     else{B.innerHTML=`${it.price} 룬으로 구매`;B.onclick=()=>{S.coins-=it.price;S.owned=[...S.owned,it.id];
-      if(!isG){S.placed={...S.placed,[it.slot]:it.id};toast(`${jo(it.nm,'을/를')} ${SLOTS[it.slot].nm}에 놓았어요`)}else toast(`${gname}님이 오면 ${jo(it.nm,'을/를')} 건넬 수 있어요`);
-      stats();renderShop();renderDecor()}}}
+      if(isR){applyR(it);toast(it.cat==='prop'?`${jo(it.nm,'을/를')} 카페에 놓았어요`:`${jo(it.nm,'으로/로')} 바꿨어요`)}
+      else if(!isG){S.placed={...S.placed,[it.slot]:it.id};toast(`${jo(it.nm,'을/를')} ${SLOTS[it.slot].nm}에 놓았어요`)}
+      else toast(`${gname}님이 오면 ${jo(it.nm,'을/를')} 건넬 수 있어요`);done()}}}
+  else if(isR){if(it.cat==='prop'){if(isOn(it)){B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{const p=roomState().props;delete p[it.key];S.rprops=p;done()}}
+      else{B.textContent='카페에 놓기';B.onclick=()=>{applyR(it);done()}}}
+    else if(isOn(it)){B.disabled=true;B.textContent='지금 적용 중이에요'}
+    else{B.textContent='이걸로 바꾸기';B.onclick=()=>{applyR(it);done()}}}
   else if(isG){B.disabled=true;B.textContent=S.given.includes(it.id)?`${gname}님께 건넸어요`:`${gname}님이 오면 건넬 수 있어요`}
-  else if(S.placed[it.slot]===it.id){B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{const p={...S.placed};delete p[it.slot];S.placed=p;save();renderShop();renderDecor()}}
-  else{B.textContent=S.placed[it.slot]?`${SLOTS[it.slot].nm}에 바꿔 놓기`:'카페에 놓기';B.onclick=()=>{S.placed={...S.placed,[it.slot]:it.id};save();renderShop();renderDecor()}}
+  else if(S.placed[it.slot]===it.id){B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{const p={...S.placed};delete p[it.slot];S.placed=p;done()}}
+  else{B.textContent=S.placed[it.slot]?`${SLOTS[it.slot].nm}에 바꿔 놓기`:'손님 맞는 자리에 놓기';B.onclick=()=>{S.placed={...S.placed,[it.slot]:it.id};done()}}
 }
 function roomBgName(){const m=MODES[mode];return m&&m.bg.startsWith('room_')?m.bg:'room_day'}
 document.querySelectorAll('.shtabs button').forEach(b=>b.addEventListener('click',()=>{shT=b.dataset.t;shSel=null;renderShop();$('shGrid').scrollTop=0}));
