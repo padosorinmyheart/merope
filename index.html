@@ -828,6 +828,16 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .mstage .mrow .mn b{font-size:13.5px;line-height:1.35}
 .mstage .mrow .gauge{height:6px}
 .mstage .mrow .btn{padding:3px 10px;font-size:12.5px;border-radius:10px;min-width:64px}
+
+/* 1장 손님 도감: 좌우 대칭 새 배경 (그림 속 제목은 지우고 화면 글자로) */
+.gstage:not(.ch2):not(.abstage){background-image:url(a/s/book_guests_v2.webp)}
+.gstage:not(.ch2):not(.abstage) .btitle{left:28%;right:28%;top:6.1%;height:3.4%}
+.gstage:not(.ch2):not(.abstage) .gtabs{top:12.4%}
+.gstage:not(.ch2):not(.abstage) .bsub{top:15.9%}
+.gstage:not(.ch2):not(.abstage) .blist{top:18.9%;left:7%;right:7%;bottom:4.6%}
+
+/* 도감 제목: 남색 띠 안에 여백 */
+.bstage .btitle,.mbstage .btitle,.gstage.ch2 .btitle,.abstage .btitle,.mbstage.ch2 .btitle{font-size:max(13.5px,1.95cqh)!important;letter-spacing:.18em}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -1484,9 +1494,9 @@ function finishServe(st,pay,hints){if(cur&&cur.practice){practiceDone(st,hints);
   S.today.push({no:cur.no,menu:cur.menu,st,pay,isNew:!!cur.isNew});stats();reaction(st,pay,hints);
 }
 const UIIMG={};
-function preUI(){['journal','market','pen_icon','book_guests','book_guests2','book_menu','book_profile'].forEach(n=>{if(UIIMG[n])return;const im=new Image();im.src=`a/s/${n}.webp`;UIIMG[n]={im,p:(im.decode?im.decode().catch(()=>{}):new Promise(r=>{im.onload=im.onerror=r})).then(()=>{UIIMG[n].done=1})}})}
+function preUI(){['journal','market','pen_icon','book_guests_v2','book_guests','book_guests2','book_menu','book_profile'].forEach(n=>{if(UIIMG[n])return;const im=new Image();im.src=`a/s/${n}.webp`;UIIMG[n]={im,p:(im.decode?im.decode().catch(()=>{}):new Promise(r=>{im.onload=im.onerror=r})).then(()=>{UIIMG[n].done=1})}})}
 setTimeout(()=>{preUI();C.forEach(c=>{if(S.met.includes(c.no)){const i=new Image();i.src=sprite(c.no,'n')}})},1200);
-const VIMG={album:'book_guests2',guests:'book_guests',menu:'book_menu',market:'market',journal:'journal'};
+const VIMG={album:'book_guests2',guests:'book_guests_v2',menu:'book_menu',market:'market',journal:'journal'};
 function closing(){preUI();
   actor.classList.add('away');$('served').hidden=true;sceneMode('closing');
   sheet(null);
