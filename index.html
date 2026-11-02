@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102224035">
+<meta name="merope-ver" content="20261102225005">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -487,6 +487,9 @@ td.k{font-family:var(--body)}
 .hkb.bump{animation:hkbump .18s ease}
 @keyframes hkbump{50%{transform:scale(.95)}}
 .sheet .rcp.hkdone summary{color:#4E7A5A}
+.hks li.stp{color:#A99B80}.hks li.stp em,.rcp li.stp em{font-style:normal;font-size:11.5px;color:#8A6A2E;background:#F3EAD7;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.hknext{background:#EEF4EC;border-radius:14px;padding:10px 14px;margin:0 0 12px;box-shadow:inset 0 0 0 1px #BFD3BF;font-size:13.5px;color:#2F4A37}
+.hknext b{font-family:var(--display);margin-right:8px}.hknext ol{margin:6px 0 0;padding-left:1.3em;line-height:1.5;color:#2A2216}
 .sheet .rcp{background:#FFFCF5;border-radius:14px;padding:8px 14px;box-shadow:inset 0 0 0 1px #E3D3B3;margin:0 0 10px}
 .mdc p{margin:0;font-size:max(13px,1.6cqh);line-height:1.5;color:#3E3326;word-break:keep-all}
 .mdc .tag{font-size:max(11.5px,1.4cqh);color:var(--muted);border:1px solid #E2CFA6;border-radius:999px;padding:1px 10px}
@@ -766,13 +769,14 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.16em;cursor:pointer;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));position:relative;overflow:hidden;border-radius:999px}
 .tgo3::after{content:"";position:absolute;top:0;bottom:0;left:-40%;width:28%;background:linear-gradient(100deg,transparent,rgba(255,236,190,.28),transparent);transform:skewX(-18deg);animation:shine 5s ease-in-out infinite}
 .tgo3:active{transform:translateY(1px)}
-.tdock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;width:100%;margin-top:6px}
+.tdock{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;margin-top:6px}
 .tdock button{display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:none;padding:2px 0;cursor:pointer;color:#F3E8CF;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;white-space:nowrap;text-shadow:0 1px 6px rgba(8,14,28,.9)}
 .tdock .med{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#FFFCF4,#F1E6CF);
   box-shadow:inset 0 0 0 1.5px #C9A365,inset 0 0 0 4px #FBF5E8,inset 0 0 0 5px rgba(201,163,101,.55),0 6px 12px -6px rgba(0,0,0,.6);transition:transform .2s}
 .title .tdock .med img{position:static;transform:none;width:30px;height:30px;aspect-ratio:auto;object-fit:contain;max-width:none}
 .tdock button:hover .med,.tdock button:focus-visible .med{transform:translateY(-2px)}
 .tdock button:active .med{transform:translateY(1px)}
+@media (max-width:380px){.tdock .med{width:44px;height:44px}.tdock button{font-size:11px}}
 @media (max-height:700px){.tbot{padding-top:70px}.tbot h1 .en{font-size:36px}.title .tdiv{display:none}.tplate{gap:4px;padding:12px 14px 10px}.tdock .med{width:42px;height:42px}.title .tdock .med img{width:26px;height:26px}}
 /* 프롤로그 소품 층: 장면 위, 대사창 아래 */
 .pprop{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 56px);bottom:calc(var(--dlgh,230px) + 8px);z-index:3;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
@@ -1017,10 +1021,11 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
       <p class="hst" id="hSt"></p>
       <button class="tgo3 hgo" id="hGo"><span>손님 받기</span></button>
       <div class="tdock hdock">
-        <button data-v="market"><span class="med"><img src="a/u/ic_coin.webp" alt=""></span>장보기</button>
-        <button data-v="shop"><span class="med"><img src="a/r/i/starlight_prism.webp" alt=""></span>룬 상점</button>
-        <button data-v="guests"><span class="med"><img src="a/u/st_merlin.webp" alt=""></span>손님 도감</button>
-        <button data-v="menu"><span class="med"><img src="a/u/st_coffee.webp" alt=""></span>메뉴 도감</button>
+          <button data-v="guests"><span class="med"><img src="a/u/st_merlin.webp" alt=""></span>손님 도감</button>
+          <button data-v="menu"><span class="med"><img src="a/u/st_coffee.webp" alt=""></span>메뉴 도감</button>
+          <button data-v="album"><span class="med"><img src="a/u/ic_star.webp" alt=""></span>앨범</button>
+          <button data-v="shop"><span class="med"><img src="a/r/i/starlight_prism.webp" alt=""></span>룬 상점</button>
+          <button data-v="market"><span class="med"><img src="a/u/ic_coin.webp" alt=""></span>장보기</button>
       </div>
     </div>
   </section>
@@ -1159,16 +1164,17 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
           <button data-v="guests"><span class="med"><img src="a/u/st_merlin.webp" alt=""></span>손님 도감</button>
           <button data-v="menu"><span class="med"><img src="a/u/st_coffee.webp" alt=""></span>메뉴 도감</button>
           <button data-v="album"><span class="med"><img src="a/u/ic_star.webp" alt=""></span>앨범</button>
-          <button data-v="shop"><span class="med"><img src="a/u/ic_coin.webp" alt=""></span>룬 상점</button>
+          <button data-v="shop"><span class="med"><img src="a/r/i/starlight_prism.webp" alt=""></span>룬 상점</button>
+          <button data-v="market"><span class="med"><img src="a/u/ic_coin.webp" alt=""></span>장보기</button>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<script src="data.js?v=20261102224035"></script>
-<script src="quiz.js?v=20261102224035"></script>
-<script src="recipes.js?v=20261102224035"></script>
+<script src="data.js?v=20261102225005"></script>
+<script src="quiz.js?v=20261102225005"></script>
+<script src="recipes.js?v=20261102225005"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2190,19 +2196,21 @@ function renderMenus(){
 /* ---------- 직접 만들기: 레시피 순서를 손으로 하나씩 ---------- */
 function hkSteps(m){const no=m.special?cur.menu.slice(2):(m.no||(D.BOOK.find(b=>b.play===cur.menu)||{}).no),L=(m.special?window.CAFE_SPRECIPE:window.CAFE_RECIPE)||{},A=(m.special?window.CAFE_SPRACT:window.CAFE_RACT)||{};
   return L[no]&&A[no]?L[no].map((t,i)=>({t,a:A[no][i]})):null}
-function hkStart(m){const st=hkSteps(m),sh=$('sheet');if(!st||cur.hkDone){sh.classList.remove('prepping');return}
+function hkStart(m){const st=hkSteps(m),sh=$('sheet');if(!st||cur.hkDone||!st.some(x=>x.a!=='st')){sh.classList.remove('prepping');if(st&&!cur.hkDone)$('sheetBody').insertAdjacentHTML('afterbegin',hkGuide(m,st,true));return}
   cur.hk=cur.hk||{i:0};sh.classList.add('prepping');
   const el=document.createElement('div');el.className='hk';el.id='hk';$('sheetBody').prepend(el);hkDraw(m,st)}
 const fmtS=x=>x>=60?`${Math.floor(x/60)}분 ${String(Math.round(x%60)).padStart(2,'0')}초`:`${Math.round(x)}초`;
-function hkDraw(m,st){const el=$('hk');if(!el)return;const i=cur.hk.i,known=(S.menuServed[cur.menu]>0)||(S.hkSeen||[]).includes(cur.menu);
+const stLabel=m=>`${stName(m)} 작업대`;
+function hkGuide(m,st,open){return `<details class="rcp hkdone"${open?' open':''}><summary>만드는 순서 · ${st.length}단계</summary><ol>${st.map(x=>`<li${x.a==='st'?' class="stp"':''}>${x.t}${x.a==='st'?` <em>${stLabel(m)}</em>`:''}</li>`).join('')}</ol></details>`}
+function hkDraw(m,st){const el=$('hk');if(!el)return;while(cur.hk.i<st.length&&st[cur.hk.i].a==='st')cur.hk.i++;if(cur.hk.i>=st.length){hkFinish(m,st);return}const i=cur.hk.i,known=(S.menuServed[cur.menu]>0)||(S.hkSeen||[]).includes(cur.menu);
   el.innerHTML=`<div class="hkh"><b>직접 만들기</b><span class="num">${Math.min(i+1,st.length)} / ${st.length}</span>${known?'<button class="hkskip" id="hkSkip">익힌 순서 · 건너뛰기</button>':''}</div>
-    <ol class="hks">${st.map((x,k)=>`<li class="${k<i?'ok':k===i?'now':''}"><span>${x.t}</span>${k===i?'<div class="hka" id="hka"></div>':''}</li>`).join('')}</ol>`;
+    <ol class="hks">${st.map((x,k)=>x.a==='st'?`<li class="stp"><span>${x.t}</span> <em>↓ ${stLabel(m)}</em></li>`:`<li class="${k<i?'ok':k===i?'now':''}"><span>${x.t}</span>${k===i?'<div class="hka" id="hka"></div>':''}</li>`).join('')}</ol>`;
   if($('hkSkip'))$('hkSkip').addEventListener('click',()=>hkFinish(m,st));
   if(i<st.length)hkAct(m,st,st[i].a)}
-function hkNext(m,st){cur.hk.i++;if(cur.hk.i>=st.length)hkFinish(m,st);else hkDraw(m,st)}
+function hkNext(m,st){cur.hk.i++;hkDraw(m,st)}
 function hkFinish(m,st){cur.hkDone=true;S.hkSeen=[...new Set([...(S.hkSeen||[]),cur.menu])];save();$('sheet').classList.remove('prepping');
-  const el=$('hk');if(el)el.outerHTML=recipeHTML(st.map(x=>x.t)).replace('<details class="rcp"','<details class="rcp hkdone"').replace('만드는 순서','✓ 직접 만들기 끝 · 만드는 순서');
-  toast(m.station==='lab'?'이제 작업대에서 손님 취향을 맞춰 봐요':m.station==='layer'?'이제 층을 쌓아 볼까요?':'이제 우려서 맛을 볼까요?')}
+  const el=$('hk'),stp=st.filter(x=>x.a==='st');if(el){el.outerHTML=`<div class="hknext"><b>✓ 손질 끝</b>${stp.length?`<span>남은 단계는 ${stLabel(m)}에서 해요</span><ol>${stp.map(x=>`<li>${x.t}</li>`).join('')}</ol>`:''}</div>`}
+  const nx=document.querySelector('.hknext');if(nx){const t=nx.nextElementSibling;if(t)setTimeout(()=>t.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'}),250)}}
 function hkAct(m,st,code){const box=$('hka'),[type,a1,a2,a3]=code.split(':'),done=()=>{box.classList.add('fin');setTimeout(()=>hkNext(m,st),RM?0:380)};
   const say=(t,bad)=>{const n=box.querySelector('.hkm');if(n){n.textContent=t;n.classList.toggle('bad',!!bad)}};
   if(type==='tap'||type==='whisk'){const n=+a1||1,lb=type==='whisk'?'휘휘 젓기':(a2||'넣기');let k=0;
