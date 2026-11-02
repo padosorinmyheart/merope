@@ -679,23 +679,23 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 
 /* ---------- 통합 UI · 첫 화면 (문 너머의 온기) ---------- */
 .tbot{position:absolute;left:0;right:0;bottom:0;padding:110px var(--gxr) max(18px,env(safe-area-inset-bottom,0px)) var(--gx);display:flex;justify-content:center;
-  background:linear-gradient(180deg,rgba(12,20,38,0),rgba(12,20,38,.55) 34%,rgba(12,20,38,.82))}
+  background:linear-gradient(180deg,rgba(12,20,38,0),rgba(12,20,38,.35) 40%,rgba(12,20,38,.6))}
 .tplate{position:relative;width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 16px 14px;border-radius:26px;
-  background:linear-gradient(180deg,rgba(27,45,76,.55),rgba(18,30,54,.78));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  background:linear-gradient(180deg,rgba(27,45,76,.22),rgba(18,30,54,.48));backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
   box-shadow:inset 0 0 0 1px rgba(214,184,120,.75),inset 0 0 0 5px rgba(18,30,54,.35),inset 0 0 0 6px rgba(214,184,120,.3),0 18px 40px -16px rgba(0,0,0,.7)}
 .tplate::before,.tplate::after{content:"✦";position:absolute;top:10px;color:#E7D5A3;font-size:12px;opacity:.85}
 .tplate::before{left:14px}.tplate::after{right:14px}
-.title .tmoon2{position:static;transform:none;width:30px;height:30px;margin:-34px 0 -2px;aspect-ratio:auto;filter:drop-shadow(0 0 10px rgba(255,226,150,.7))}
+.title .tmoon2{position:static;transform:none;width:30px;height:30px;margin:-46px 0 6px;aspect-ratio:auto;filter:drop-shadow(0 0 10px rgba(255,226,150,.7))}
 .tbot h1{margin:0;line-height:1}
 .tbot h1 .en{font-family:"Cormorant Garamond",var(--display),serif;font-style:italic;font-weight:500;font-size:44px;color:#FBF4E4;letter-spacing:.01em;text-shadow:0 2px 14px rgba(10,16,30,.6),0 0 20px rgba(231,213,163,.25)}
-.tbot .tko{margin:0;font-family:var(--display);font-size:12.5px;color:#E7D5A3;letter-spacing:.14em}
+.tbot .tko{margin:0;font-family:var(--display);font-size:12.5px;color:#E7D5A3;letter-spacing:.14em;text-shadow:0 1px 6px rgba(8,14,28,.9)}
 .title .tdiv{position:static;transform:none;height:auto;width:92%;aspect-ratio:1080/48;margin:2px 0 4px;opacity:.95}
-.tgo3{width:100%;max-width:340px;aspect-ratio:640/110;border:0;padding:0;background:url(a/u/btn_primary.webp) center/100% 100% no-repeat;color:#FBF4E4;
-  font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.2em;cursor:pointer;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));position:relative;overflow:hidden;border-radius:999px}
+.tgo3{width:72%;max-width:250px;aspect-ratio:640/110;border:0;padding:0;background:url(a/u/btn_primary.webp) center/100% 100% no-repeat;color:#FBF4E4;
+  font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.16em;cursor:pointer;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));position:relative;overflow:hidden;border-radius:999px}
 .tgo3::after{content:"";position:absolute;top:0;bottom:0;left:-40%;width:28%;background:linear-gradient(100deg,transparent,rgba(255,236,190,.28),transparent);transform:skewX(-18deg);animation:shine 5s ease-in-out infinite}
 .tgo3:active{transform:translateY(1px)}
 .tdock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;width:100%;margin-top:6px}
-.tdock button{display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:none;padding:2px 0;cursor:pointer;color:#F3E8CF;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;white-space:nowrap}
+.tdock button{display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:none;padding:2px 0;cursor:pointer;color:#F3E8CF;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;white-space:nowrap;text-shadow:0 1px 6px rgba(8,14,28,.9)}
 .tdock .med{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#FFFCF4,#F1E6CF);
   box-shadow:inset 0 0 0 1.5px #C9A365,inset 0 0 0 4px #FBF5E8,inset 0 0 0 5px rgba(201,163,101,.55),0 6px 12px -6px rgba(0,0,0,.6);transition:transform .2s}
 .title .tdock .med img{position:static;transform:none;width:30px;height:30px;aspect-ratio:auto;object-fit:contain;max-width:none}
