@@ -1075,8 +1075,107 @@ const labT=m=>{const K=LABK[m.kind];return m.T?Object.fromEntries(m.T.map(k=>[k,
 const RAWS=k=>{const m=MENUS[k];return m.station==='extract'?D.EXTRACT_RAW[k]:m.station==='lab'?m.raw:[...new Set(m.recipe.map(RAW))]};
 const STN={extract:'추출',layer:'층 쌓기'};const stName=m=>m.station==='lab'?LABK[m.kind].st:STN[m.station];
 
-const MENUS={...D.EXTRACT,...D.LAYER,...D.LAB};
+/* ---------- 과학자 전용 음료 작업대 (설계안 '과학자 특별 음료' 표) ---------- */
+/* 각 과학자는 자기 전용 음료를 주문하고, 작업대 조작이 그 사람의 발견과 이어진다. t1 = 첫 방문 주문, t2 = 두 번째 방문 주문 */
+Object.assign(LABK,{
+ sp01:{st:'섞기 · 저울',sl:d=>[['lid','섞을 때 뚜껑',0,1,1,0,'',['열고','닫고'],['열고 섞기','닫고 섞기']],['syr','엘더플라워 시럽',10,60,5,20,'g',['조금','많이']],['stir','젓는 횟수',0,20,2,10,'번',['안 저음','많이']]],
+  model:p=>({x:p.lid?0:0.35+p.stir*0.12,y:p.syr*0.6/(250+p.syr)*100}),
+  X:['섞기 전후 무게 차이','g',0,2,0.5],Y:['단맛','%',0,14,2],
+  T:{t1:['무게는 그대로, 은은하게',[0,0.1],[4,6.6]],t2:['무게는 그대로, 조금 더 달게',[0,0.1],[6.6,9.2]]},
+  tip:{xhi:d=>'뚜껑을 열고 섞었더니 기포(이산화 탄소)가 빠져나가 무게가 줄었어요. 뚜껑을 닫고 섞어 보세요.',ylo:d=>'단맛이 부족해요. 시럽을 조금 더 넣어 보세요.',yhi:d=>'너무 달아요. 시럽을 줄여 보세요.'},
+  sci:'닫힌 용기 안에서는 섞기 전과 후의 질량이 같아요(질량 보존). 열린 용기에서는 기체가 빠져나가 가벼워진 것처럼 보일 뿐이에요.'},
+ sp02:{st:'거르기 · 여러 번',sl:d=>[['n','거르는 횟수',1,8,1,1,'번',['한 번','여러 번']],['mesh','거름망 눈 크기',0.2,1.5,0.1,1,'mm',['곱게','굵게']]],
+  model:p=>({x:100-60*Math.pow(p.mesh,0.8)*Math.pow(0.62,p.n-1),y:100*Math.pow(0.93,p.n-1)*(1-0.08*(1.5-p.mesh))}),
+  X:['맑기','%',30,100,10],Y:['남은 양','%',40,100,10],
+  T:{t1:['맑게, 그래도 넉넉하게',[85,100],[70,100]],t2:['아주 맑게, 조금만 남아도',[95,100],[45,75]]},
+  tip:{xlo:d=>'아직 탁해요. 한 번 더 거르거나 더 고운 거름망을 써 보세요.',ylo:d=>'너무 많이 걸러서 양이 줄었어요. 거르는 횟수를 줄여 보세요.'},
+  sci:'여러 번 걸러야 아주 적은 양의 순수한 것만 남아요. 퀴리는 몇 톤이나 되는 광석 찌꺼기를 거르고 또 걸러 라듐 화합물 0.1 g을 얻었어요.'},
+ sp03:{st:'녹이기 · 인덕션',sl:d=>[['pot','냄비',0,1,1,0,'',['유리','쇠'],['유리 냄비','쇠 냄비']],['pw','코일 세기',1,10,1,5,'단',['약하게','세게']],['t','데우는 시간',0,5,0.5,2,'분',['짧게','길게']]],
+  model:p=>{const T=Math.min(100,20+(p.pot?14:0.8)*p.pw*p.t);return {x:100*(1-Math.exp(-Math.max(0,T-45)/15)),y:T}},
+  X:['토피가 녹은 정도','%',0,100,20],Y:['온도','°C',20,100,10],
+  T:{t1:['토피가 다 녹게, 타지 않게',[90,100],[60,86]],t2:['따끈하게만',[85,100],[55,76]]},
+  tip:{xlo:d=>'토피가 덜 녹았어요. 유리 냄비는 코일 위에서 데워지지 않아요. 쇠 냄비로 바꾸거나 더 데워 보세요.',yhi:d=>'너무 뜨거워 토피가 탈 것 같아요. 코일을 약하게 하거나 시간을 줄여 보세요.'},
+  sci:'코일에 흐르는 전류가 빠르게 바뀌면 자기장이 바뀌고, 쇠 냄비 안에 전류가 생겨 냄비가 데워져요(전자기 유도). 유리에는 전류가 흐르지 않아 그대로예요.'},
+ sp04:{st:'추출 · 물시계',sl:d=>[['gap','위 항아리 물 채우는 간격',0,10,1,6,'분',['계속 채움','가끔']],['hole','물구멍 크기',1,5,1,3,'호',['작게','크게']]],
+  model:p=>({x:100-p.gap*7,y:0.4+0.25*(6-p.hole)-p.gap*0.02}),
+  X:['물방울 고르기','%',20,100,20],Y:['진하기','%',0.4,1.6,0.2],
+  T:{t1:['고르게, 보통 진하기',[85,100],[1.0,1.3]],t2:['끝까지 고르게, 은은하게',[90,100],[0.75,1.05]]},
+  tip:{xlo:d=>'물 높이가 낮아지면서 물방울이 점점 느려졌어요. 위 항아리를 더 자주 채워 보세요.',ylo:d=>'연해요. 물구멍을 작게 해 천천히 우려 보세요.',yhi:d=>'진해요. 물구멍을 키워 보세요.'},
+  sci:'위 항아리의 물 높이가 일정해야 아래로 떨어지는 물방울 빠르기도 일정해요. 장영실의 자격루는 여러 항아리로 물 높이를 일정하게 지켜 시간을 쟀어요.'},
+ sp05:{st:'추출 · 타원 붓기',sl:d=>[['near','가까울 때 붓는 빠르기',1,10,1,5,'',['느리게','빠르게']],['far','멀 때 붓는 빠르기',1,10,1,5,'',['느리게','빠르게']],['t','우리는 시간',1,5,0.5,3,'분',['짧게','길게']]],
+  model:p=>({x:100*Math.exp(-1.6*Math.abs(Math.log(p.near/p.far/2))),y:0.5+0.22*p.t}),
+  X:['고르게 우러난 정도','%',0,100,20],Y:['진하기','%',0.6,1.8,0.2],
+  T:{t1:['고르게, 보통 진하기',[88,100],[1.0,1.3]],t2:['고르게, 진하게',[88,100],[1.3,1.62]]},
+  tip:{xlo:d=>'고르게 우러나지 않았어요. 주전자 길은 가까운 쪽이 먼 쪽보다 두 배 가까워요. 가까울 때 두 배 빠르게 부어 보세요.',ylo:d=>'연해요. 더 오래 우려 보세요.',yhi:d=>'진해요. 우리는 시간을 줄여 보세요.'},
+  sci:'행성은 해에 가까울 때 빠르고 멀 때 느려요. 같은 시간 동안 행성과 해를 이은 선이 쓸고 가는 넓이가 같거든요(케플러 제2법칙).'},
+ sp06:{st:'층 쌓기 · 빈칸',sl:d=>[['den','빈칸에 넣을 시럽 밀도',1.00,1.30,0.01,1.05,'g/mL',['가볍게','무겁게']],['sp','붓는 빠르기',1,5,1,4,'',['천천히','빠르게']]],
+  model:p=>({x:Math.max(0,100-1200*Math.abs(p.den-1.13)-(p.sp-1)*6),y:2+(p.den-1)*30}),
+  X:['층이 또렷한 정도','%',0,100,20],Y:['단맛','%',0,12,2],
+  T:{t1:['층이 또렷하게',[85,100],[5,7]],t2:['그때처럼 또렷하게',[90,100],[5,7]]},
+  tip:{xlo:d=>'층 경계가 흐려요. 선반의 병들은 일정한 차이로 늘어서 있어요. 규칙을 따라 빈칸의 밀도를 다시 맞혀 보고, 천천히 부어 보세요.'},
+  sci:'멘델레예프는 원소를 성질 순서로 늘어놓고 규칙이 어긋나는 자리를 비워 둔 채, 아직 발견되지 않은 원소의 성질을 미리 맞혔어요. 선반의 병: 1.03 → 1.08 → ? → 1.18 → 1.23 g/mL'},
+ sp07:{st:'색·빛 · 깜빡이는 별',sl:d=>[['P','별 젤리의 깜빡임 주기',1,30,1,5,'일',['빠르게','천천히']],['dep','젤리를 띄우는 깊이',1,10,0.5,3,'칸',['가까이','멀리']]],
+  model:p=>{const x=10+30*Math.log10(p.P);return {x,y:x*10/(p.dep*p.dep)}},
+  X:['진짜 밝기','',0,60,10],Y:['보이는 밝기','',0,60,10],
+  T:{t1:['진짜로는 밝은데 멀리서 은은하게',[44,60],[4,10]],t2:['가까이 있는 작은 별처럼',[10,25],[10,30]]},
+  tip:{xlo:d=>'진짜 밝기가 어두운 별이에요. 더 천천히 깜빡이는 별을 골라 보세요.',xhi:d=>'진짜로 너무 밝은 별이에요. 더 빨리 깜빡이는 별을 골라 보세요.',ylo:d=>'너무 멀어서 거의 안 보여요. 조금 가까이 띄워 보세요.',yhi:d=>'너무 가까워서 눈부셔요. 조금 멀리 띄워 보세요.'},
+  sci:'세페이드 변광성은 천천히 깜빡일수록 진짜로 밝아요(주기-광도 관계). 진짜 밝기와 보이는 밝기를 비교하면 별까지의 거리를 알 수 있어요.'},
+ sp08:{st:'섞기 · 교배',sl:d=>[['p','구운 밤 비율 (나머지는 들깨)',0,100,5,85,'%',['들깨만','밤만']],['T','우유 온도',40,80,2,50,'°C',['미지근하게','뜨겁게']]],
+  model:p=>({x:4*(p.p/100)*(1-p.p/100)*100,y:p.T}),
+  X:['두 맛이 어우러진 정도','%',0,100,20],Y:['따뜻함','°C',40,80,10],
+  T:{t1:['두 맛이 다 나게, 따뜻하게',[85,100],[60,72]],t2:['어머니가 데워 주시던 것처럼',[80,100],[66,78]]},
+  tip:{xlo:d=>'한쪽 맛만 나요. 두 재료를 비슷하게 섞어 보세요.',ylo:d=>'미지근해요. 조금 더 데워 보세요.',yhi:d=>'너무 뜨거워요. 조금 식혀 보세요.'},
+  sci:'서로 다른 두 종을 교배하면 어느 쪽과도 다른 새 종이 생길 수 있어요. 우장춘은 배추 무리와 양배추 무리가 만나 유채가 생긴다는 걸 밝혀 "종의 합성"을 보여 줬어요.'},
+ sp09:{st:'색·빛 · 계단 불빛',sl:d=>[['E','조명 에너지 다이얼',1,10,0.5,5.5,'',['낮게','높게']],['t','비추는 시간',1,6,0.5,3,'초',['짧게','길게']]],
+  model:p=>{const n=Math.round(p.E/3)*3||3,x=100*Math.exp(-Math.pow(p.E-n,2)/0.08);return {x,y:x*p.t/10}},
+  X:['빛나는 정도','%',0,100,20],Y:['빛 세기','',0,60,10],
+  T:{t1:['푸르게 또렷이',[90,100],[28,46]],t2:['은은하게',[90,100],[9,25]]},
+  tip:{xlo:d=>'이 칸에서는 빛나지 않아요. 다이얼은 정해진 계단에서만 반응해요. 칸을 바꿔 가며 찾아보세요.',ylo:d=>'빛이 약해요. 조금 더 오래 비춰 보세요.',yhi:d=>'빛이 너무 세요. 비추는 시간을 줄여 보세요.'},
+  sci:'원자 속 전자는 정해진 에너지 계단에만 머물 수 있어요. 그래서 정해진 에너지에만 반응하고, 정해진 색의 빛만 내요(보어의 원자 모형).'},
+ sp10:{st:'탄산 · 기체 무게',sl:d=>[['T','탄산수 온도',2,25,1,15,'°C',['아주 차갑게','미지근하게']],['t','병을 열어 둔 시간',0,20,1,8,'분',['바로','오래']]],
+  model:p=>({x:2.2*(1-Math.exp(-p.t/8))*(1+(p.T-2)*0.03),y:100*Math.exp(-p.t/8)*Math.exp(-0.035*(p.T-2))}),
+  X:['빠져나간 기체 무게','g',0,4,0.5],Y:['남은 탄산','%',0,100,20],
+  T:{t1:['기체가 0.5~1 g 빠졌을 때',[0.5,1.0],[50,80]],t2:['지난번처럼',[0.5,1.0],[50,80]]},
+  tip:{xlo:d=>'기체가 거의 안 빠졌어요. 조금 더 열어 두세요.',xhi:d=>'기체가 너무 많이 빠졌어요. 열어 두는 시간을 줄이거나 더 차갑게 해 보세요.',ylo:d=>'탄산이 거의 없어요. 더 차갑게, 짧게 열어 두세요.'},
+  sci:'기체에도 무게가 있어요. 병을 열기 전과 후의 무게 차이가 빠져나간 이산화 탄소의 무게예요. 캐번디시는 여러 기체의 무게를 재다가 수소를 발견했어요.'},
+ sp11:{st:'굳히기 · 둘로 나누기',sl:d=>[['m','굳힌 크림 덩이',10,60,5,20,'g',['작게','크게']],['n','나누는 횟수',0,3,1,0,'번',['그대로','여러 번']]],
+  model:p=>({x:40+p.n*12*p.m/30,y:p.n*p.m*0.5}),
+  X:['데워진 온도','°C',30,90,10],Y:['사라진 무게','mg',0,80,20],
+  T:{t1:['반으로 나눠 따뜻하게',[55,65],[5,25]],t2:['반으로 나눠, 지난번처럼',[55,65],[5,25]]},
+  tip:{xlo:d=>'아직 미지근해요. 크림을 반으로 나눠 보세요.',xhi:d=>'너무 뜨거워요. 덜 나누거나 덩이를 작게 해 보세요.',yhi:d=>'너무 많이 쪼갰어요. 반으로만 나눠 주세요.'},
+  sci:'무거운 원자핵이 둘로 쪼개지면 조각들의 질량을 합한 값이 처음보다 아주 조금 줄고, 그만큼이 에너지가 돼요(핵분열, E = mc²). 여기서는 크게 부풀려 보여 줬어요.'}});
+D.SPM={};D.SPECIAL.forEach(s=>{D.SPM['sp'+s.id]={no:0,name:s.name,station:'lab',kind:'sp'+s.id,special:1,img:`a/sp/${s.id}_1.webp`,
+  raw:{'01':['soda','straw'],'02':['milk'],'03':['beans','milk','caramel'],'04':['herb','honey'],'05':['blacktea'],'06':['milk','red'],'07':['herb'],'08':['milk'],'09':['beans','soda'],'10':['blacktea','soda'],'11':['herb','milk']}[s.id]}});
+const MENUS={...D.EXTRACT,...D.LAYER,...D.LAB,...D.SPM};
 const C=D.CUSTOMERS, byNo=n=>C.find(c=>c.no===n);
+/* 과학자 주문과 반응: 전용 음료에 맞춘 대사 (이야기 장면은 data.js 그대로) */
+const SPLINE={
+ 31:[{order:'두 사람의 정원을 두 잔 부탁합니다. 한 잔은 아내 몫으로 포장해 주십시오. 섞기 전과 후의 무게가 똑같아야 합니다. 그 사람은 정확한 걸 좋아하거든요.',r3:'완벽합니다. 저울 눈금이 한 칸도 움직이지 않았군요.',r2:'무게가 조금 달라졌군요. 사라진 게 아니라 어디론가 빠져나간 겁니다. 뚜껑을 확인해 보시지요.'},
+     {order:'그 사람이 늘 포장해 오던 걸로 주세요. 수첩에는 "무게는 그대로, 조금 더 달게"라고 적혀 있었어요. 오늘은 여기서 마실게요. 처음으로요.',r2:'무게가 조금 달라졌네요. 그래도 사라진 건 없어요. 그 사람이 늘 하던 말이에요.'}],
+ 32:[{order:'푸른 밤의 온기로 주세요. 여러 번 걸러서 맑게요. 그래도 넉넉하게 남겨 주세요. 손은 시려도, 오늘은 이게 마시고 싶네요.',r3:'맑네요. 거르고 또 거른 맛이에요. 그 사람한테도 보여 주고 싶다.',r2:'조금 탁하네요. 괜찮아요. 저도 4년 동안 거르고 또 걸렀는걸요.'},
+     {order:'그때 그 따뜻한 거요. 이번엔 아주 맑게, 조금만 남아도 괜찮아요. 그 사람이랑 같이 오기로 했던 날 마시려던 거.',r2:'탁해도 괜찮아요. 오늘은 그냥 여기 앉아 있고 싶었어요.'}],
+ 33:[{order:'크리스마스의 작은 불씨 주세요! 토피가 다 녹게, 그런데 타지 않게요. 코일 위에 냄비를 올리면 불 없이도 데워진다면서요? 직접 보고 싶어요.',r3:'불꽃도 없는데 쇠 냄비가 데워졌어요! 전기와 자석이 열을 만든 거죠? 노트에 적어 둘게요.',r2:'토피가 덜 녹았네요. 냄비 탓일까요? 왜 그랬는지도 적어 둘게요.'},
+     {order:'그때 그 따뜻한 거요. 오늘은 따끈하게만요. 마시기 전에 냄비부터 한참 볼게요.',r2:'조금 아쉽네요. 괜찮아요. 왜 그랬는지 설명하는 것도 강연이 되니까요.'}],
+ 34:[{order:'물방울의 시간을 한 잔 내어 주시겠소? 위 항아리의 물이 줄지 않게 지켜 주시오. 물이 고르게 떨어져야 맛도 고르오.'},
+     {order:'지난번에 마신 것, 그것으로 한 잔 더 주시오. 이번에는 은은하게. 물방울 소리를 끝까지 듣고 가겠소.'}],
+ 35:[{order:'혜성의 귀환이요. 주전자를 타원으로 돌리면서 부어 주세요. 가까울 땐 빠르게, 멀 땐 천천히요. 그래야 고르게 우러나요.',r3:'고르게 우러났네요. 궤도도 이렇게 딱 맞아떨어지면 좋을 텐데.',r2:'고르지 않네요. 제 머릿속 같아요. 가까운 데서 더 빨랐어야 했나 봐요.'},
+     {order:'이번에는 두 잔이요. 진하게요. 하나는 포장으로요. 어머니 드릴 거예요. 잔소리 들어도 괜찮아요. 이제는.',r2:'조금 아쉽지만 괜찮아요. 어머니는 맛보다 제가 온 걸 더 좋아하실 테니까.'}],
+ 36:[{order:'마지막 한 칸을 주시오. 선반의 병들이 일정한 차이로 늘어서 있지 않소? 빈자리에 들어갈 병을 맞혀서, 층이 또렷하게.',r3:'보시오! 빈칸을 맞히니 층이 또렷하잖소. 원소도 마찬가지요.',r2:'흐릿하군. 빈칸을 잘못 짚었다는 뜻이지. 내 카드처럼.'},
+     {order:'오늘은 두 잔 주시오. 그때처럼 또렷하게. 하나는 그냥 여기 두고 가겠소.',r3:'하나도 흐리지 않군. 어머니가 보셨으면 좋아하셨을 거요.',r2:'조금 흐리군. 괜찮소. 오늘은 무엇도 나를 속상하게 못 하오.'}],
+ 37:[{order:'별이 숨 쉬는 밤 주세요. 컵 속 별 젤리 중에, 진짜로는 밝은데 멀리 있어서 은은하게 보이는 별로요. 깜빡이는 빠르기를 보면 알 수 있어요.',r3:'맞아요. 천천히 깜빡이는 별이 진짜로 밝은 별이에요. 정확하네요.',r2:'음, 이 별은 아닌 것 같아요. 깜빡임을 다시 세어 볼까요?'},
+     {order:'그때 그거요. 이번엔 가까이 있는 작은 별처럼요.'}],
+ 38:[{order:'씨앗이 잠든 샘으로 주세요. 밤이랑 들깨가 둘 다 느껴지게, 따뜻하게요. 어릴 때 어머니가 우유를 자주 데워 주셨거든요.',r3:'두 맛이 만나서 새 맛이 됐네요. 어머니한테 편지로 써 보내야겠어요.',r2:'한쪽 맛만 나네요. 괜찮아요. 섞여야 강해진다니까요.'},
+     {order:'그때 그 따뜻한 우유로 주세요. 어머니가 데워 주시던 것처럼요.'}],
+ 39:[{order:'금빛의 귀환 한 잔 주세요. 불빛 다이얼을 돌리다 보면 딱 맞는 칸에서만 푸르게 빛날 거예요. 오늘은 정신을 바짝 차려야 해서요.',r3:'딱 그 칸에서 빛나네요. 고맙습니다. 손 떨림이 좀 멎네요.'},
+     {order:'그때 그 금빛으로 주세요. 오늘은 은은하게요.',r3:'고맙습니다. 녹여도 사라지지 않는 것도 있네요.'}],
+ 40:[{order:'(새 쪽지) 정원 끝의 쪽지. 탄산수 병, 열기 전후 무게 잴 것. 기체가 0.5~1 g 빠졌을 때 낼 것.',r2:'(찻잔 밑에 쪽지가 놓여 있다) 무게 오차 있음. 다음엔 정확히.'},
+     {order:'(새 쪽지) 정원 끝의 쪽지. 지난번처럼.'}],
+ 41:[{order:'국경 너머의 온기로 주세요. 굳힌 크림을 반으로 나눠 주실 수 있어요? 반은 지금, 반은 이따가. 이제 아껴서 살아야 하거든요.'},
+     {order:'한 잔을 둘로 나눠 주세요. 지난번처럼요.'}]};
+C.forEach(c=>{if(!c.sci)return;c.menu='sp'+c.sci;const L=SPLINE[c.companion||c.no];if(L&&!c.companion){Object.assign(c.ep1,L[0]);Object.assign(c.ep2,L[1])}});
+const drinkImg=m=>m.img||`a/m/${String(m.no).padStart(2,'0')}.webp`;
+
+
 const REG=C.filter(c=>!c.hidden&&!c.sci).map(c=>c.no),SCI=C.filter(c=>c.sci&&!c.companion);
 const SEQ=(()=>{const q=[];SCI.forEach((c,i)=>{q.push([c.no,0]);if(i>0)q.push([SCI[i-1].no,1])});q.push([SCI[SCI.length-1].no,1]);return q})();
 const sciDone=no=>{const c=byNo(no);return (S.sciDone||[]).includes(c&&c.companion||no)};
@@ -1301,6 +1400,7 @@ function startCustomer(){
     cur=c;cur.isNew=isNew;tastes=0;S.turn++;cur.revealed=c.sci?sciDone(c.no):!((S.visits[c.no]||0)===0&&c.ep1.anon);cur.spr=((S.visits[c.no]||0)===1&&c.ep2.sprite)||c.no;
     sceneMode(c.sci?'fullmoon':c.no===28?(firstHidden?'merlinEvent':'merlin'):c.no===30?(firstHidden?'eliasEvent':'elias'):slotMode());
     const v=S.visits[c.no]||0;cur.ep=v===0?'ep1':v===1?'ep2':'again';S.visits[c.no]=v+1;
+    if(c.sci)cur.target=cur.ep==='ep1'?'t1':'t2';
     if(cur.ep==='again'&&!c.sci&&Math.random()<0.7){cur={...c,ep:'again',isNew,revealed:cur.revealed,spr:cur.spr};altOrder()}
     if(!S.met.includes(c.no))S.met.push(c.no);
     C.filter(x=>x.companion===c.no).forEach(x=>{if(cur.ep==='ep2'&&!S.met.includes(x.no)){S.met.push(x.no);S.visits[x.no]=1}});
@@ -1337,7 +1437,7 @@ function order(){
 }
 function reaction(st,pay,hints){
   sheet(null);
-  const m=MENUS[cur.menu];const sv=$('served');const src=`a/m/${pad(m.no)}.webp`;sv.src=src;sv.alt=m.name;sv.classList.toggle('muddy',m.station==='layer'&&st<3);sv.hidden=true;
+  const m=MENUS[cur.menu];const sv=$('served');const src=drinkImg(m);sv.src=src;sv.alt=m.name;sv.classList.toggle('muddy',m.station==='layer'&&st<3);sv.hidden=true;
   sv.hidden=false;rewardPop(S5(st),pay);
   face(st===3?'h':st===2?'d':'d');
   const t=st===3?(cur.alt?cur.alt.r3:EP().r3):st===2?(cur.alt?cur.alt.r2:EP().r2):'음… 제가 주문한 거랑은 조금 다른 것 같아요.';
@@ -1408,7 +1508,7 @@ function ticket(){const m=MENUS[cur.menu];
   if(m.station==='extract')pills=`<span class="pill">${D.STRENGTH[cur.strength]}</span><span class="pill alt">${D.TASTE[cur.menu][cur.taste]}</span>${cur.menu==='coldbrew'?'<span class="pill" style="background:#FFF4E2;color:#7A5426">소금 크림 위에 띄우기</span>':''}`;
   else if(m.station==='lab')pills=`<span class="pill">${labT(m)[cur.target][0]}</span><span class="pill alt">${LABK[m.kind].st} 작업대</span>`;
   else pills=[...cur.items].sort(()=>Math.random()-.5).map(id=>{const l=m.shelf.find(x=>x.id===id);return `<span class="pill"><span class="dot" style="background:${l.hex}"></span>${l.nm}</span>`}).join('');
-  return `<img src="a/m/${pad(m.no)}.webp" alt=""><div><div class="lbl">ORDER · ${cur.name}</div><div class="what">${m.name}</div><div class="pills">${pills}</div></div><button class="btn" id="sheetToggle">손님 보기</button>`;
+  return `<img src="${drinkImg(m)}" alt=""><div><div class="lbl">ORDER · ${cur.name}</div><div class="what">${m.name}</div><div class="pills">${pills}</div></div><button class="btn" id="sheetToggle">손님 보기</button>`;
 }
 function openStation(){const m=MENUS[cur.menu];if(m.station==='extract')openExtract(m);else if(m.station==='lab')openLab(m);else openLayer(m);sheet('open');
   const raws=RAWS(cur.menu);if(!has(raws,NEED))noStock(raws,NEED)}
@@ -1637,7 +1737,7 @@ function labBrew(m){const K=LABK[m.kind],sl=K.sl(m),raws=m.raw;if(!has(raws,NEED
   const chg=prev?sl.filter(s=>prev.p[s[0]]!==p[s[0]]):null;
   const cap=!prev?'첫 시음':chg.length===0?'조건을 바꾸지 않았어요':chg.length===1?`바꾼 변인: ${chg[0][1]} ${lfmt(chg[0])(prev.p[chg[0][0]])} → ${lfmt(chg[0])(p[chg[0][0]])}`:`변인을 ${chg.length}개 바꿨어요. 무엇 때문에 달라졌는지 가리기 어려워요`;
   $('tries').textContent=`시음 ${tastes}회`;
-  $('xres').innerHTML=`<div class="result pop"><img class="tcup" src="a/m/${pad(m.no)}.webp" alt="${m.name}" style="${labCup(m,r)}"><div class="taste">
+  $('xres').innerHTML=`<div class="result pop"><img class="tcup" src="${drinkImg(m)}" alt="${m.name}" style="${labCup(m,r)}"><div class="taste">
     <div class="meter"><span>${xl}</span><b>${+r.x.toFixed(1)}${xu?' '+xu:''}</b></div><div class="meter"><span>${yl}</span><b>${+r.y.toFixed(2)}${yu?' '+yu:''}</b></div>
     <div><b>${a&&b?'손님 취향에 딱 맞아요':a||b?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요'}</b></div><div style="color:var(--muted);font-size:13px">${cap}</div></div></div>`;
   $('serveX').disabled=false;drawLab(m);}
@@ -1669,7 +1769,7 @@ function setOrder(o,k){const m=MENUS[k];o.menu=k;
 function orderLine(o){const m=MENUS[o.menu];
   const what=m.station==='extract'?`${D.STRENGTH[o.strength]}, ${D.TASTE[o.menu][o.taste]}`:m.station==='layer'?`${o.items.map(id=>m.shelf.find(x=>x.id===id).col).join(', ')} 층이 다 보이게`:labT(m)[o.target][0];
   return pickR([`오늘은 ${jo(m.name,'을/를')} 마셔 볼래요. ${what}요.`,`${m.name} 한 잔 부탁해요. ${what}요.`,`메뉴판 보다가 눈에 띄었어요. ${m.name}, ${what}요.`])}
-function altOrder(){const keys=Object.keys(MENUS).filter(k=>S.enabled[k]!==false&&k!==cur.menu);if(!keys.length)return;
+function altOrder(){const keys=Object.keys(MENUS).filter(k=>!MENUS[k].special&&S.enabled[k]!==false&&k!==cur.menu);if(!keys.length)return;
   const fresh=keys.filter(k=>!(S.menuServed[k]>0)),k=pickR(fresh.length&&Math.random()<0.7?fresh:keys);
   setOrder(cur,k);cur.alt={order:orderLine(cur),r3:pickR(['와, 딱 제가 원하던 맛이에요.','이거예요, 이거! 다음에도 이걸로 할래요.','처음 마셔 보는데 마음에 쏙 들어요.']),
     r2:pickR(['음, 조금 아쉽지만 괜찮아요.','생각했던 맛이랑은 살짝 달라요. 그래도 잘 마실게요.']),bye:pickR(['잘 마셨어요. 또 올게요.','다음엔 다른 것도 마셔 볼래요.','오늘도 고마워요.'])}}
@@ -1773,7 +1873,8 @@ function renderMenus(){
   $('menus').querySelectorAll('.mcard[data-no]').forEach(el=>{const go=()=>openMdet(+el.dataset.no);el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 }
 function openSpDet(id){const s=D.SPECIAL.find(x=>x.id===id),v=(S.special||{})[id]||1,m=$('mdet'),done=sciDone(30+ +id);
-  m.innerHTML=`<div class="mdc sp pop"><button class="mdx" aria-label="설명 닫기">✕</button><img src="a/sp/${id}_${v>=2?2:1}.webp" alt="${s.name}"><span class="num">보름달의 기록 · ${id}</span><h3>${s.name}</h3><div class="orn"></div><div class="ing">${s.ing}</div><p>${s.line}</p><span class="tag">${done?s.who:'이야기가 끝나면 손님 이름이 새겨져요'}</span></div>`;
+  m.innerHTML=`<div class="mdc sp pop"><button class="mdx" aria-label="설명 닫기">✕</button><img src="a/sp/${id}_${v>=2?2:1}.webp" alt="${s.name}"><span class="num">보름달의 기록 · ${id}</span><h3>${s.name}</h3><div class="orn"></div><div class="ing">${s.ing}</div><p>${s.line}</p><span class="tag">${LABK['sp'+id].st} 작업대 · ${done?s.who:'이야기가 끝나면 손님 이름이 새겨져요'}</span><button class="btn go mtry" id="mTry">작업대에서 만들어 보기</button></div>`;
+  $('mTry').addEventListener('click',e=>{e.stopPropagation();practice('sp'+id)});
   m.hidden=false;m.onclick=e=>{if(e.target===m||e.target.closest('.mdx'))m.hidden=true};}
 function openMdet(no){
   const b=D.BOOK.find(x=>x.no===no),m=$('mdet');
