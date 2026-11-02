@@ -8,7 +8,7 @@
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=IBM+Plex+Mono:wght@500;600&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Gothic:wght@400;700&family=Gaegu:wght@400;700&family=IBM+Plex+Mono:wght@500;600&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap">
 <style>
 /* Layout: 한 화면짜리 게임 셸. 장면(잘라 확대한 배경+손님)이 위를 채우고, 대사창은 아래에 겹쳐 뜨고,
    작업대·도감·설정은 셸 안에서 올라오는 시트와 덮개 화면. 페이지 스크롤 없음. 한 가지 세계(낮의 달 카페)로 고정한 단일 테마 */
@@ -16,8 +16,8 @@
   color-scheme:light;
   --cream:#F8F3E8; --paper:#FFFDF8; --sky:#BDD5E9; --sky-deep:#7FA6C9; --navy:#233D62; --ink:#1F2F4A; --muted:#5E6B7E;
   --wood:#D9B58A; --wood-deep:#A87C4F; --sage:#AABCA6; --brass:#C9A365; --brass-deep:#9C7A3E; --rose:#C25D7C; --line:#E4DACA;
-  --display:"Gowun Batang","Noto Serif KR",serif;
-  --body:"Gowun Dodum",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --display:"Nanum Myeongjo","Noto Serif KR",serif;
+  --body:"Nanum Gothic",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   --gx:max(12px,env(safe-area-inset-left,0px)); --gxr:max(12px,env(safe-area-inset-right,0px));
 }
@@ -676,6 +676,44 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .prepov #prep{width:min(560px,100%)}
 .prepov .prep{border-radius:20px 20px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -12px 30px rgba(20,30,50,.3);max-height:80vh;overflow:auto}
 .prepact{gap:8px}
+
+/* ---------- 통합 UI · 첫 화면 (문 너머의 온기) ---------- */
+.tbot{position:absolute;left:0;right:0;bottom:0;padding:90px var(--gxr) max(22px,env(safe-area-inset-bottom,0px)) var(--gx);display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:linear-gradient(180deg,rgba(14,22,40,0),rgba(14,22,40,.5) 38%,rgba(14,22,40,.78))}
+.tbot h1{margin:0;line-height:1}
+.tbot h1 .en{font-family:"Cormorant Garamond",var(--display),serif;font-style:italic;font-weight:500;font-size:46px;color:#FBF4E4;letter-spacing:.01em;text-shadow:0 2px 14px rgba(10,16,30,.6)}
+.tbot .tko{margin:0 0 6px;font-family:var(--display);font-size:13.5px;color:#EFE4CC;letter-spacing:.04em;text-shadow:0 1px 8px rgba(10,16,30,.7)}
+.tgo3{width:100%;max-width:380px;height:52px;border-radius:999px;border:1.5px solid #C9A365;background:linear-gradient(180deg,#2B4A74,#1B3253);color:#FBF4E4;
+  font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.16em;cursor:pointer;position:relative;box-shadow:0 10px 24px -10px rgba(5,10,25,.8),inset 0 1px 0 rgba(255,255,255,.18)}
+.tgo3::before,.tgo3::after{content:"✦";position:absolute;top:50%;transform:translateY(-50%);color:#E7D5A3;font-size:11px}
+.tgo3::before{left:18px}.tgo3::after{right:18px}
+.tgo3:active{transform:translateY(1px)}
+.tsub3{display:flex;gap:8px;width:100%;max-width:380px}
+.tsub3 button{flex:1;min-height:44px;border-radius:999px;border:1px solid #D9C59A;background:#FBF6EA;color:#233D62;font-family:var(--display);font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 6px 14px -8px rgba(5,10,25,.7)}
+.tsub3 button:active{transform:translateY(1px)}
+
+/* 프롤로그 소품 층: 장면 위, 대사창 아래 */
+.pprop{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 56px);bottom:calc(var(--dlgh,230px) + 8px);z-index:3;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
+.pprop.on{opacity:1;transform:none}
+.pprop>img{height:min(78%,270px);margin-top:12%;width:auto;filter:drop-shadow(0 10px 18px rgba(5,10,25,.5))}
+.pprop .pp{position:relative;height:100%;max-height:420px;display:flex;align-items:center;justify-content:center}
+.pprop .pp img{max-height:100%;max-width:min(82vw,360px);filter:drop-shadow(0 12px 22px rgba(5,10,25,.55))}
+.pprop[data-k=key] .pp img{max-width:min(36vw,150px);transform:rotate(-14deg)}
+.pprop[data-k=journal] .pp img{max-width:min(92vw,460px)}
+.pprop .hand{position:absolute;margin:0;font-family:"Gaegu",var(--body),cursive;color:#3E3326;text-align:center;line-height:1.45;font-weight:700;word-break:keep-all}
+.pprop[data-k=note] .hand{left:22%;right:18%;top:24%;font-size:clamp(17px,4.8vw,22px)}
+.pprop[data-k=journal] .hand{left:52%;right:9%;top:30%;font-size:clamp(16px,4.2vw,21px)}
+@media (prefers-reduced-motion: reduce){.pprop{transition:none;transform:none}}
+
+/* 묶음 결말 일러스트 (3:2) */
+.acard.end .aimg{aspect-ratio:3/2}
+.acard.end:not(.open) .aimg img{top:-2%;height:175%}
+
+/* 통합 UI · 재료 아이콘, 이중 테두리 닫기 버튼 */
+.mrow .mi{width:40px;height:40px;flex:none;object-fit:contain;margin-right:-2px;filter:drop-shadow(0 2px 3px rgba(60,40,20,.18))}
+.xbtn{width:44px;height:44px;background:url(a/u/x.webp) center/contain no-repeat!important;color:transparent!important;font-size:0!important;box-shadow:none!important;border:0!important}
+.xbtn:active{background-image:url(a/u/x_on.webp)!important}
+#gPrev.xbtn{background-image:url(a/u/prev.webp)!important}#gNext.xbtn{background-image:url(a/u/next.webp)!important}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -708,7 +746,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </div>
 
   <!-- 대사창 -->
-  <section class="dlg" aria-live="polite">
+  <div class="pprop" id="pprop" hidden aria-hidden="true"></div>
+<section class="dlg" aria-live="polite">
     <div class="nameplate" id="who"><span class="np">메로페</span></div>
     <div class="dbody"><div class="line" id="line">문을 열었어요. 첫 손님을 기다리는 중…</div>
     <div class="choices" id="choices"></div>
@@ -795,15 +834,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   <!-- 시작 화면 -->
   <section class="title" id="v-title" aria-label="카페 메로페 시작">
     <div class="tfill" id="tFill" aria-hidden="true"></div>
-    <img id="tImg" src="a/ext_day.webp" alt="달 간판이 걸린 카페 메로페 외관">
-    <div class="card tcard2">
-      <div class="thead"><img class="tmoon" src="a/u/ic_moon.webp" alt=""><h1><span class="en">Merope</span></h1><span class="tko">카페 메로페 · 만월의 과학 카페</span></div>
-      <button class="tgo2" data-v="cafe"><span>가게 문 열기</span></button>
-      <div class="tsub2">
-        <button data-v="guests"><img src="a/u/st_merlin.webp" alt="">손님 도감</button><i aria-hidden="true">✦</i>
-        <button data-v="menu"><img src="a/u/st_coffee.webp" alt="">메뉴 도감</button><i aria-hidden="true">✦</i>
-        <button data-v="album"><img src="a/u/ic_star.webp" alt="">앨범</button>
-      </div>
+    <img id="tImg" src="a/s/title_night.webp" alt="보름달 아래 문이 열린 카페 메로페 외관">
+    <div class="tbot">
+      <h1><span class="en">Merope</span></h1>
+      <p class="tko">문을 열면, 이야기가 시작돼요</p>
+      <button class="tgo3" data-v="cafe"><span>가게 문 열기</span></button>
+      <div class="tsub3"><button data-v="guests">손님 도감</button><button data-v="menu">메뉴 도감</button><button data-v="album">앨범</button></div>
     </div>
   </section>
 </main>
@@ -884,7 +920,7 @@ function face(e,motion){if(!cur)return;actor.src=sprite(cur.spr||cur.no,e);
   setTimeout(()=>{actor.classList.remove('hop','sag');actor.classList.add('idle')},650);}
 const MODES={day:{bg:'room_day',c:1,p:1,f:.6},sunset:{bg:'room_sunset',c:1,p:1,f:.6},rain:{bg:'room_night',c:1,p:1,f:.6},
   merlinEvent:{bg:'11_merlin_reveal',a:0,f:.36},merlin:{bg:'09_merlin_nook',a:[34,20,56],f:.33},eliasEvent:{bg:'12_elias_return',a:0,f:.6},elias:{bg:'10_elias_door',a:[63,1,106],f:.62},
-  closing:{bg:'08_closing_night',a:0,f:.5},fullmoon:{bg:'room_night',c:1,p:1,f:.6},prologue:{bg:'../ext_night',a:0,p:1,f:.5},prologueIn:{bg:'09_merlin_nook',a:0,f:.33}};
+  closing:{bg:'08_closing_night',a:0,f:.5},fullmoon:{bg:'room_night',c:1,p:1,f:.6},prologue:{bg:'pro_closed',a:0,p:1,f:.5},prologueIn:{bg:'pro_ajar',a:0,p:1,f:.5}};
 function layout(){const sh=$('shell'),W=sh.clientWidth,H=sh.clientHeight,m=MODES[mode],w=$('world');if(!W||!H)return;
   const R=m.p?1418/1858:16/9;let Hs,Ws,left;
   const ct=$('ctr'),ch=ct.offsetHeight||H*.42,SW=Math.min(W,Math.max(H-ch*0.45,H*0.62)*1418/1858);sh.style.setProperty('--stw',SW+'px');
@@ -944,9 +980,10 @@ function renderMarket(){stats();$('tabBuy').setAttribute('aria-selected',mTab===
   if(mTab==='buy')renderBuy();else renderQuiz()}
 $('tabBuy').addEventListener('click',()=>{mTab='buy';renderMarket()});$('tabQuiz').addEventListener('click',()=>{mTab='quiz';renderMarket()});
 $('mOpen').addEventListener('click',()=>{show('cafe');startCustomer()});
+const INGIC={beans:'coffee_beans',blacktea:'black_tea',greentea:'green_tea',matchap:'matcha',dalgonamix:'dalgona',milk:'milk',cream:'whipped_cream',condensed:'condensed_milk',caramel:'caramel',straw:'strawberry',red:'pomegranate_syrup',blue:'blue_syrup',yellow:'mango_puree',green:'kiwi_juice',violet:'purple_syrup',orange:'orange_juice',yuzu:'yuzu_soda',soda:'sparkling_water'};
 function renderBuy(){const cats=[...new Set(D.INGS.map(i=>i.cat))];
   $('mBuy').innerHTML=cats.map(c=>`<div class="mcat"><h3><img class="mci" src="a/m/${({'커피·차':'01','라떼':'02','에이드':'12'})[c]||'01'}.webp" alt="">${c}</h3>${D.INGS.filter(i=>i.cat===c).map(i=>{const n=S.stock[i.id]||0,full=n+20>CAP,poor=S.coins<i.price;
-    return `<div class="mrow"><div class="mn"><b>${i.nm}</b><div class="gauge" role="img" aria-label="${J(n)} / ${J(CAP)}"><span style="width:${n/CAP*100}%" class="${n<5?'low':''}"></span></div><span class="num mc">${J(n)} / ${J(CAP)}</span></div>
+    return `<div class="mrow"><img class="mi" src="a/i/${INGIC[i.id]}.webp" alt="" loading="lazy"><div class="mn"><b>${i.nm}</b><div class="gauge" role="img" aria-label="${J(n)} / ${J(CAP)}"><span style="width:${n/CAP*100}%" class="${n<5?'low':''}"></span></div><span class="num mc">${J(n)} / ${J(CAP)}</span></div>
       <button class="btn ${full||poor?'':'go'}" data-buy="${i.id}" ${full||poor?'disabled':''}>${full?'가득':`+4잔 · ${i.price}룬`}</button></div>`}).join('')}</div>`).join('')
     +`<p class="foot">룬이 모자라면 과학 퀴즈로 벌 수 있어요. 손님께 음료를 팔아도 룬이 들어와요.</p>`;
   $('mBuy').querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>{const i=ING(b.dataset.buy);if(S.coins<i.price)return;S.coins-=i.price;S.stock[i.id]=Math.min(CAP,(S.stock[i.id]||0)+20);stats();renderBuy();refreshStock();clearWarn()}));}
@@ -988,7 +1025,7 @@ let typing=null,full='',onDone=null;
 function say(text,o={}){
   if(!o.me&&!o.sys&&!o.note&&/^\([^()]*\)$/.test(text))o.nar=true;
   const anon=cur&&!cur.revealed;
-  $('who').innerHTML=o.nar?'':o.note?'<span class="np">쪽지</span>':o.me?'<span class="np">나</span><small>바리스타</small>':o.sys?'<span class="np">메로페</span>':`<span class="np">${anon?'???':cur.name}</span><small>${anon?(cur.sci?(cur.ep==='ep1'?'보름달 밤의 손님':'다시 찾아온 보름달 손님'):'처음 보는 손님'):cur.role}</small>`;
+  $('who').innerHTML=o.nar?'':o.note?`<span class="np">${o.label||'쪽지'}</span>`:o.me?'<span class="np">나</span><small>바리스타</small>':o.sys?'<span class="np">메로페</span>':`<span class="np">${anon?'???':cur.name}</span><small>${anon?(cur.sci?(cur.ep==='ep1'?'보름달 밤의 손님':'다시 찾아온 보름달 손님'):'처음 보는 손님'):cur.role}</small>`;
   const el=$('line');el.className='line'+(o.order?' order':'')+(o.nar?' nar':'')+(o.note?' memo':'');$('choices').innerHTML='';$('dctl').innerHTML='';
   full=text;onDone=o.then||null;clearInterval(typing);
   if(RM){el.textContent=full;finish();return}
@@ -998,19 +1035,29 @@ function finish(){$('line').textContent=full;typing=null;if(onDone){const f=onDo
 document.querySelector('.dlg').addEventListener('click',e=>{if(e.target.closest('button,a,input,.note'))return;
   if(typing){clearInterval(typing);finish();return}const nx=$('dctl').querySelector('.dbtn.nx');if(nx)nx.click()});
 function next(label,fn){$('dctl').innerHTML='';const b=document.createElement('button');if(label==='▶'){b.className='dbtn nx';b.setAttribute('aria-label','다음')}else{b.className='dbtn';b.textContent=label}b.addEventListener('click',fn);$('dctl').appendChild(b);}
-function run(lines,i,end){if(i>=lines.length)return end();const [t,e,f]=lines[i];if(f==='r'&&cur)cur.revealed=true;
-  const o={then:()=>next('▶',()=>run(lines,i+1,end))};if(e==='x')o.nar=true;else if(e==='me')o.me=true;else if(e==='note')o.note=true;else if(cur)face(e);say(t,o)}
+function run(lines,i,end){if(i>=lines.length)return end();const [t,e,f,pp]=lines[i];if(f==='r'&&cur)cur.revealed=true;prop(pp||null,e==='note'?t:null);
+  const o={then:()=>next('▶',()=>run(lines,i+1,end))};if(e==='x')o.nar=true;else if(e==='me')o.me=true;else if(e==='note'){o.note=true;if(pp==='journal')o.label='기록장'}else if(cur)face(e);say(t,o)}
+/* 프롤로그 소품: 장면 위에 쪽지·기록장·열쇠·멀린(꼬리 2프레임, 550ms) */
+const PPF={note:'note',journal:'journal_page',key:'key',cover:'journal_cover'},PPA={cat:['merlin_tail_01','merlin_tail_02'],catkey:['merlin_key_hint_01','merlin_key_hint_02']};
+Object.values(PPA).flat().concat(Object.values(PPF)).forEach(k=>{const im=new Image();im.src=`a/p/${k}.webp`});
+let ppT=null,ppK=null;
+function prop(k,text){const P=$('pprop');clearInterval(ppT);ppT=null;
+  if(!k){ppK=null;P.classList.remove('on');setTimeout(()=>{if(!ppK)P.hidden=true},250);return}
+  const same=ppK===k;ppK=k;P.hidden=false;P.className='pprop';P.dataset.k=k;
+  if(PPA[k]){const fr=PPA[k];let i=0;P.innerHTML=`<img src="a/p/${fr[0]}.webp" alt="">`;const im=P.firstChild;if(!RM)ppT=setInterval(()=>{i^=1;im.src=`a/p/${fr[i]}.webp`},550)}
+  else P.innerHTML=`<div class="pp"><img src="a/p/${PPF[k]}.webp" alt="">${text?`<p class="hand">${text}</p>`:''}</div>`;
+  if(same)P.classList.add('on');else requestAnimationFrame(()=>requestAnimationFrame(()=>P.classList.add('on')))}
 
 function prologue(){busy=true;cur=null;sceneMode('prologue');
   const A=[['(유난히 길고 힘든 하루였다. 집으로 가는 골목길, 보름달이 유난히 밝다.)','x'],['…여기 카페가 있었나?','me'],
     ['(불 꺼진 카페. 달 모양 간판에 먼지가 앉아 있다. 문에 붙은 쪽지가 달빛을 받아 은은하게 빛난다.)','x'],
-    ['바리스타 구함. 커피는 못 내려도 됩니다. 이야기를 끝까지 들어 줄 사람이면 됩니다.','note'],['…이상한 구인 공고네.','me']];
-  const B=[['(문이 저절로 살짝 열린다. 안에는 먼지 쌓인 테이블, 그리고 창가에 검은 고양이 한 마리.)','x'],
-    ['(고양이가 노란 눈으로 오래 나를 보다가, 카운터 위 낡은 열쇠 쪽으로 꼬리를 한 번 흔든다.)','x']];
-  const E=[['(카운터 서랍에는 누렇게 바랜 기록장이 한 권 있다. 첫 장에 둥글둥글한 글씨. "변인은 하나씩, 이야기는 끝까지.")','x'],['(그날부터 나는 이 카페의 바리스타다.)','x']];
-  const done=()=>{S.prologue=1;save();busy=false;sceneMode('day');startCustomer()};
+    ['바리스타 구함. 커피는 못 내려도 됩니다. 이야기를 끝까지 들어 줄 사람이면 됩니다.','note',0,'note'],['…이상한 구인 공고네.','me',0,'note']];
+  const B=[['(문이 저절로 살짝 열린다. 안에는 먼지 쌓인 테이블, 그리고 창가에 검은 고양이 한 마리.)','x',0,'cat'],
+    ['(고양이가 노란 눈으로 오래 나를 보다가, 카운터 위 낡은 열쇠 쪽으로 꼬리를 한 번 흔든다.)','x',0,'catkey']];
+  const E=[['(카운터 서랍에는 누렇게 바랜 기록장이 한 권 있다. 첫 장을 펼치니 둥글둥글한 글씨.)','x',0,'cover'],['변인은 하나씩, 이야기는 끝까지.','note',0,'journal'],['(그날부터 나는 이 카페의 바리스타다.)','x']];
+  const done=()=>{prop(null);S.prologue=1;save();busy=false;sceneMode('day');startCustomer()};
   const pick=()=>{$('who').innerHTML='<span class="np">나</span><small>바리스타</small>';$('line').className='line';$('line').textContent='어떻게 할까?';$('dctl').innerHTML='';
-    const ch=[['열쇠를 집는다',[['(고양이가 만족한 듯 눈을 감고 다시 둥글게 눕는다.)','x']]],['"안녕? 여기 주인이니?"',[['(고양이는 대답 대신 하품을 한다. 그리고 다시 열쇠 쪽으로 꼬리를 흔든다.)','x'],['(열쇠를 집는다.)','x']]]];
+    const ch=[['열쇠를 집는다',[['(초승달 손잡이가 달린 낡은 황동 열쇠. 손에 쥐자 고양이가 만족한 듯 눈을 감고 다시 둥글게 눕는다.)','x',0,'key']]],['"안녕? 여기 주인이니?"',[['(고양이는 대답 대신 하품을 한다. 그리고 다시 열쇠 쪽으로 꼬리를 흔든다.)','x',0,'catkey'],['(열쇠를 집는다. 초승달 손잡이가 달린 낡은 황동 열쇠다.)','x',0,'key']]]];
     $('choices').innerHTML=ch.map((c,i)=>`<button class="choice" data-i="${i}">${c[0]}</button>`).join('');
     $('choices').querySelectorAll('.choice').forEach(b=>b.addEventListener('click',()=>run([...ch[+b.dataset.i][1],...E],0,done)))};
   run(A,0,()=>{sceneMode('prologueIn');run(B,0,pick)});
@@ -1335,22 +1382,24 @@ function serveL(m){
 let sel=null;
 const ALBUM=[
  {id:'ch1',title:'다시 차오르는 달',who:30,spr:30,cost:40,big:1,ok:()=> (S.visits[30]||0)>=2,need:'1장을 끝까지 보면 열 수 있어요'},
+ ...[['end1','창가의 수상한 고양이',[10,11,12,19]],['end3','전하지 못한 말',[6,21,16]],['end4','교복 주머니 속 비밀',[1,2,3,14]],['end2','금요일의 택배',[22,23,7]]].map(([id,title,g])=>({id,title,who:g[0],spr:g[0],cost:30,big:1,end:1,
+   names:g.map(n=>byNo(n).name).join(' · ')+(id==='end1'?' · 멀린':''),ok:()=>g.every(n=>(S.visits[n]||0)>=2),need:`${g.length}명의 이야기를 모두 들으면 열 수 있어요`})),
  ...[25,26,27,28,29,30].map(n=>({id:'h'+n,title:{25:'손톱만큼의 차이',26:'서른 해 늦은 배달',27:'82쪽',28:'오후 세 시의 연구',29:'달이 다 찼다',30:'아빠, 내가 없어도'}[n],who:n,spr:n,cost:25,ok:()=> (S.visits[n]||0)>=2,need:'두 번째 이야기까지 들으면 열 수 있어요'})),
  ...C.filter(c=>c.sci&&!c.companion).map(c=>({id:'s'+c.sci,title:{31:'두 사람의 정원',32:'요정의 불빛',33:'촛불의 과학',34:'스스로 울리는 종',35:'언덕 위의 혜성',36:'비워 둔 칸',37:'숨 쉬는 별',38:'마르지 않는 샘',39:'선반 위의 갈색 병',40:'정원의 새',41:'눈 덮인 숲의 계산'}[c.no],who:c.no,spr:c.no,cost:25,ok:()=>sciDone(c.no),need:'이야기가 끝나면 열 수 있어요'}))];
 const bank=()=>Math.max(0,S.stars-(S.spent||0));
 function renderAlbum(){const have=S.album||[],n=have.length;
   $('albumSum').innerHTML=`모은 별 <b>★ ${bank()}</b> · 열린 일러스트 ${n}/${ALBUM.length}`;
   $('albums').innerHTML=ALBUM.map(a=>{const op=have.includes(a.id),ok=a.ok(),c=byNo(a.who);
-    const nm=ok||op?(a.who&&c?dn(c):''):'???';
-    if(op)return `<button class="acard open ${a.big?'big':''}" data-id="${a.id}"><div class="aimg"><img loading="lazy" src="a/il/${a.id}.webp" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.classList.add('ph')" alt="${a.title}"></div><span class="at">${a.title}</span><span class="aw">${nm}</span></button>`;
-    if(ok)return `<div class="acard ready ${a.big?'big':''}"><div class="aimg"><img loading="lazy" src="${sprite(a.spr,'n')}" alt=""><span class="spark" aria-hidden="true">✦</span></div><span class="at">${a.title}</span><span class="aw">${nm}</span><button class="abuy" data-id="${a.id}" ${bank()<a.cost?'disabled':''}><img src="a/u/ic_star.webp" alt="">${a.cost}로 열기</button></div>`;
-    return `<div class="acard lock ${a.big?'big':''}"><div class="aimg"><img loading="lazy" src="${sprite(a.spr,'n')}" alt=""><span class="lk" aria-hidden="true">☾</span></div><span class="at">???</span><span class="aw">${a.need}</span><span class="acost"><img src="a/u/ic_star.webp" alt="">${a.cost}</span></div>`}).join('');
+    const nm=ok||op?(a.names||(a.who&&c?dn(c):'')):'???';
+    if(op)return `<button class="acard open ${a.big?'big':''} ${a.end?'end':''}" data-id="${a.id}"><div class="aimg"><img loading="lazy" src="a/il/${a.id}.webp" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.classList.add('ph')" alt="${a.title}"></div><span class="at">${a.title}</span><span class="aw">${nm}</span></button>`;
+    if(ok)return `<div class="acard ready ${a.big?'big':''} ${a.end?'end':''}"><div class="aimg"><img loading="lazy" src="${sprite(a.spr,'n')}" alt=""><span class="spark" aria-hidden="true">✦</span></div><span class="at">${a.title}</span><span class="aw">${nm}</span><button class="abuy" data-id="${a.id}" ${bank()<a.cost?'disabled':''}><img src="a/u/ic_star.webp" alt="">${a.cost}로 열기</button></div>`;
+    return `<div class="acard lock ${a.big?'big':''} ${a.end?'end':''}"><div class="aimg"><img loading="lazy" src="${sprite(a.spr,'n')}" alt=""><span class="lk" aria-hidden="true">☾</span></div><span class="at">???</span><span class="aw">${a.need}</span><span class="acost"><img src="a/u/ic_star.webp" alt="">${a.cost}</span></div>`}).join('');
   $('albums').querySelectorAll('.abuy').forEach(b=>b.addEventListener('click',()=>{const a=ALBUM.find(x=>x.id===b.dataset.id);if(bank()<a.cost)return;
     S.spent=(S.spent||0)+a.cost;S.album=[...(S.album||[]),a.id];stats();save();renderAlbum();showIllust(a,true)}));
   $('albums').querySelectorAll('.acard.open').forEach(b=>b.addEventListener('click',()=>showIllust(ALBUM.find(x=>x.id===b.dataset.id))));
 }
 function showIllust(a,fresh){const el=document.createElement('div');el.className='ilview'+(fresh?' fresh':'');el.setAttribute('role','dialog');el.setAttribute('aria-label',a.title);
-  el.innerHTML=`<figure><img src="a/il/${a.id}.webp" alt="${a.title}" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.closest('figure').classList.add('ph')"><figcaption>${fresh?'<small>새 일러스트가 열렸어요</small>':''}<b>${a.title}</b><span>${dn(byNo(a.who))}</span><em class="phn">일러스트 준비 중이에요</em></figcaption></figure><button class="xbtn" aria-label="닫기">✕</button>`;
+  el.innerHTML=`<figure><img src="a/il/${a.id}.webp" alt="${a.title}" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.closest('figure').classList.add('ph')"><figcaption>${fresh?'<small>새 일러스트가 열렸어요</small>':''}<b>${a.title}</b><span>${a.names||dn(byNo(a.who))}</span><em class="phn">일러스트 준비 중이에요</em></figcaption></figure><button class="xbtn" aria-label="닫기">✕</button>`;
   $('shell').appendChild(el);const close=()=>el.remove();el.querySelector('.xbtn').addEventListener('click',close);el.addEventListener('click',e=>{if(e.target===el)close()});}
 let gch=1;
 document.querySelectorAll('.gtabs button').forEach(b=>b.addEventListener('click',()=>{gch=+b.dataset.ch;renderGuests();const l=document.querySelector('.gstage .blist');if(l)l.scrollTop=0}));
@@ -1449,7 +1498,7 @@ function bindReset(){
 }
 bindReset();
 
-{const hr=new Date().getHours(),t=hr>=6&&hr<16?'day':hr>=16&&hr<19?'sunset':'night';$('tImg').src=`a/ext_${t}.webp`;$('tFill').style.backgroundImage=`url(a/ext_${t}.webp)`}
+$('tFill').style.backgroundImage='url(a/s/title_night.webp)';
 sceneMode('day');show('title');
 $('mJournal').addEventListener('click',peekJournal);
 $('stl').addEventListener('click',peekJournal);$('stl').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();peekJournal()}});
