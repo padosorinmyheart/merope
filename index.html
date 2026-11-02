@@ -678,20 +678,30 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .prepact{gap:8px}
 
 /* ---------- 통합 UI · 첫 화면 (문 너머의 온기) ---------- */
-.tbot{position:absolute;left:0;right:0;bottom:0;padding:90px var(--gxr) max(22px,env(safe-area-inset-bottom,0px)) var(--gx);display:flex;flex-direction:column;align-items:center;gap:8px;
-  background:linear-gradient(180deg,rgba(14,22,40,0),rgba(14,22,40,.5) 38%,rgba(14,22,40,.78))}
+.tbot{position:absolute;left:0;right:0;bottom:0;padding:110px var(--gxr) max(18px,env(safe-area-inset-bottom,0px)) var(--gx);display:flex;justify-content:center;
+  background:linear-gradient(180deg,rgba(12,20,38,0),rgba(12,20,38,.55) 34%,rgba(12,20,38,.82))}
+.tplate{position:relative;width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 16px 14px;border-radius:26px;
+  background:linear-gradient(180deg,rgba(27,45,76,.55),rgba(18,30,54,.78));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  box-shadow:inset 0 0 0 1px rgba(214,184,120,.75),inset 0 0 0 5px rgba(18,30,54,.35),inset 0 0 0 6px rgba(214,184,120,.3),0 18px 40px -16px rgba(0,0,0,.7)}
+.tplate::before,.tplate::after{content:"✦";position:absolute;top:10px;color:#E7D5A3;font-size:12px;opacity:.85}
+.tplate::before{left:14px}.tplate::after{right:14px}
+.title .tmoon2{position:static;transform:none;width:30px;height:30px;margin:-34px 0 -2px;aspect-ratio:auto;filter:drop-shadow(0 0 10px rgba(255,226,150,.7))}
 .tbot h1{margin:0;line-height:1}
-.tbot h1 .en{font-family:"Cormorant Garamond",var(--display),serif;font-style:italic;font-weight:500;font-size:46px;color:#FBF4E4;letter-spacing:.01em;text-shadow:0 2px 14px rgba(10,16,30,.6)}
-.tbot .tko{margin:0 0 6px;font-family:var(--display);font-size:13.5px;color:#EFE4CC;letter-spacing:.04em;text-shadow:0 1px 8px rgba(10,16,30,.7)}
-.tgo3{width:100%;max-width:380px;height:52px;border-radius:999px;border:1.5px solid #C9A365;background:linear-gradient(180deg,#2B4A74,#1B3253);color:#FBF4E4;
-  font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.16em;cursor:pointer;position:relative;box-shadow:0 10px 24px -10px rgba(5,10,25,.8),inset 0 1px 0 rgba(255,255,255,.18)}
-.tgo3::before,.tgo3::after{content:"✦";position:absolute;top:50%;transform:translateY(-50%);color:#E7D5A3;font-size:11px}
-.tgo3::before{left:18px}.tgo3::after{right:18px}
+.tbot h1 .en{font-family:"Cormorant Garamond",var(--display),serif;font-style:italic;font-weight:500;font-size:44px;color:#FBF4E4;letter-spacing:.01em;text-shadow:0 2px 14px rgba(10,16,30,.6),0 0 20px rgba(231,213,163,.25)}
+.tbot .tko{margin:0;font-family:var(--display);font-size:12.5px;color:#E7D5A3;letter-spacing:.14em}
+.title .tdiv{position:static;transform:none;height:auto;width:92%;aspect-ratio:1080/48;margin:2px 0 4px;opacity:.95}
+.tgo3{width:100%;max-width:340px;aspect-ratio:640/110;border:0;padding:0;background:url(a/u/btn_primary.webp) center/100% 100% no-repeat;color:#FBF4E4;
+  font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.2em;cursor:pointer;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));position:relative;overflow:hidden;border-radius:999px}
+.tgo3::after{content:"";position:absolute;top:0;bottom:0;left:-40%;width:28%;background:linear-gradient(100deg,transparent,rgba(255,236,190,.28),transparent);transform:skewX(-18deg);animation:shine 5s ease-in-out infinite}
 .tgo3:active{transform:translateY(1px)}
-.tsub3{display:flex;gap:8px;width:100%;max-width:380px}
-.tsub3 button{flex:1;min-height:44px;border-radius:999px;border:1px solid #D9C59A;background:#FBF6EA;color:#233D62;font-family:var(--display);font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 6px 14px -8px rgba(5,10,25,.7)}
-.tsub3 button:active{transform:translateY(1px)}
-
+.tdock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;width:100%;margin-top:6px}
+.tdock button{display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:none;padding:2px 0;cursor:pointer;color:#F3E8CF;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;white-space:nowrap}
+.tdock .med{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#FFFCF4,#F1E6CF);
+  box-shadow:inset 0 0 0 1.5px #C9A365,inset 0 0 0 4px #FBF5E8,inset 0 0 0 5px rgba(201,163,101,.55),0 6px 12px -6px rgba(0,0,0,.6);transition:transform .2s}
+.title .tdock .med img{position:static;transform:none;width:30px;height:30px;aspect-ratio:auto;object-fit:contain;max-width:none}
+.tdock button:hover .med,.tdock button:focus-visible .med{transform:translateY(-2px)}
+.tdock button:active .med{transform:translateY(1px)}
+@media (max-height:700px){.tbot{padding-top:70px}.tbot h1 .en{font-size:36px}.title .tdiv{display:none}.tplate{gap:4px;padding:12px 14px 10px}.tdock .med{width:42px;height:42px}.title .tdock .med img{width:26px;height:26px}}
 /* 프롤로그 소품 층: 장면 위, 대사창 아래 */
 .pprop{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 56px);bottom:calc(var(--dlgh,230px) + 8px);z-index:3;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
 .pprop.on{opacity:1;transform:none}
@@ -926,10 +936,19 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
     <div class="tfill" id="tFill" aria-hidden="true"></div>
     <img id="tImg" src="a/s/title_night.webp" alt="보름달 아래 문이 열린 카페 메로페 외관">
     <div class="tbot">
-      <h1><span class="en">Merope</span></h1>
-      <p class="tko">문을 열면, 이야기가 시작돼요</p>
-      <button class="tgo3" data-v="cafe"><span>가게 문 열기</span></button>
-      <div class="tsub3"><button data-v="guests">손님 도감</button><button data-v="menu">메뉴 도감</button><button data-v="album">앨범</button></div>
+      <div class="tplate">
+        <img class="tmoon2" src="a/u/ic_moon.webp" alt="">
+        <h1><span class="en">Merope</span></h1>
+        <p class="tko">카페 메로페 · 만월의 과학 카페</p>
+        <img class="tdiv" src="a/u/divider.webp" alt="">
+        <button class="tgo3" data-v="cafe"><span>가게 문 열기</span></button>
+        <div class="tdock">
+          <button data-v="guests"><span class="med"><img src="a/u/st_merlin.webp" alt=""></span>손님 도감</button>
+          <button data-v="menu"><span class="med"><img src="a/u/st_coffee.webp" alt=""></span>메뉴 도감</button>
+          <button data-v="album"><span class="med"><img src="a/u/ic_star.webp" alt=""></span>앨범</button>
+          <button data-v="shop"><span class="med"><img src="a/u/ic_coin.webp" alt=""></span>룬 상점</button>
+        </div>
+      </div>
     </div>
   </section>
 </main>
