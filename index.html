@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102220705">
+<meta name="merope-ver" content="20261102220836">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1119,8 +1119,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102220705"></script>
-<script src="quiz.js?v=20261102220705"></script>
+<script src="data.js?v=20261102220836"></script>
+<script src="quiz.js?v=20261102220836"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2105,10 +2105,10 @@ function renderMenus(){
   $('mt1').setAttribute('aria-selected',mch===1);$('mt2').setAttribute('aria-selected',mch===2);document.querySelector('.mbstage').classList.toggle('ch2',mch===2);
   $('menus').hidden=mch!==1;$('spmenus').hidden=mch!==2;
   const sold=D.BOOK.filter(b=>b.play&&S.menuServed[b.play]>0).length,spn=Object.keys(S.special||{}).length;
-  $('menuSum').textContent=mch===1?`손님께 내 본 메뉴 ${sold}/40 · 눌러서 만들어 볼 수 있어요`:`보름달 밤의 손님이 남긴 특별 음료 ${spn}/${D.SPECIAL.length}`;
-  $('menus').innerHTML=D.BOOK.map(b=>{const n=b.play?S.menuServed[b.play]||0:0,open=true;
-    return `<div class="mcard ${open?'':'off'}" ${open?`data-no="${b.no}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/m/${pad(b.no)}.webp" alt="${open?b.name:b.name+', 아직 열리지 않은 메뉴'}"><span class="cc num">${pad(b.no)}</span><span class="nm">${b.name}</span><span class="cc">${b.concept}</span>
-    <span class="st ${n?'on':'off'}">${n?`${n}잔 판매`:`${stName(MENUS[b.play])} 작업대`}</span></div>`}).join('');
+  $('menuSum').textContent=mch===1?`손님께 내 본 메뉴 ${sold}/40 · 한 번 판매하면 열려요`:`보름달 밤의 손님이 남긴 특별 음료 ${spn}/${D.SPECIAL.length}`;
+  $('menus').innerHTML=D.BOOK.map(b=>{const n=b.play?S.menuServed[b.play]||0:0,open=n>0;
+    return `<div class="mcard ${open?'':'off'}" ${open?`data-no="${b.no}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/m/${pad(b.no)}.webp" alt="${open?b.name:b.name+', 아직 열리지 않은 메뉴'}"><span class="cc num">${pad(b.no)}</span><span class="nm">${open?b.name:'???'}</span><span class="cc">${open?b.concept:`${stName(MENUS[b.play])} 작업대`}</span>
+    <span class="st ${n?'on':'off'}">${n?`${n}잔 판매`:'판매하면 열려요'}</span></div>`}).join('');
   const SPOPEN=S.special||{};
   $('spmenus').innerHTML=D.SPECIAL.map(s=>{const v=SPOPEN[s.id]||0;const who=sciDone(30+ +s.id)?s.who:'보름달 손님';return `<div class="mcard sp ${v?'':'off'}" ${v?`data-sp="${s.id}" role="button" tabindex="0"`:''}><img loading="lazy" src="a/sp/${s.id}_${v>=2?2:1}.webp" alt="${v?s.name:s.name+', 아직 열리지 않은 특별 음료'}"><span class="cc num">${s.id}</span><span class="nm">${s.name}</span><span class="cc">${v?who:'보름달 손님'}</span>
     <span class="st ${v?'on':'off'}">${v>=2?'두 번째 방문':v?'첫 번째 방문':'보름달 밤에 열려요'}</span></div>`}).join('');
