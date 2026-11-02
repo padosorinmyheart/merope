@@ -714,6 +714,80 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .xbtn{width:44px;height:44px;background:url(a/u/x.webp) center/contain no-repeat!important;color:transparent!important;font-size:0!important;box-shadow:none!important;border:0!important}
 .xbtn:active{background-image:url(a/u/x_on.webp)!important}
 #gPrev.xbtn{background-image:url(a/u/prev.webp)!important}#gNext.xbtn{background-image:url(a/u/next.webp)!important}
+
+/* ---------- 카페 꾸미기 층 ---------- */
+.decor{position:absolute;inset:0;pointer-events:none;transition:opacity .5s ease,filter 2.4s ease}
+.world.nodecor .decor{opacity:0}
+.world[data-m=sunset] .decor{filter:sepia(.18) saturate(1.1) hue-rotate(-8deg) brightness(.95)}
+.world[data-m=rain] .decor,.world[data-m=fullmoon] .decor{filter:brightness(.8) saturate(.9)}
+.decor .dc{position:absolute;display:block}
+.decor .dc img{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 4px rgba(60,40,20,.28))}
+.decor .a-t{transform:translateX(-50%)}.decor .a-c{transform:translate(-50%,-50%)}.decor .a-b{transform:translate(-50%,-100%)}
+.decor .dchain{position:absolute;top:0;width:2px;margin-left:-1px;background:linear-gradient(#B48C4A,#D9B977)}
+.decor .pv img{animation:pvglow 1.6s ease-in-out infinite}
+@keyframes pvglow{50%{filter:drop-shadow(0 0 6px rgba(255,226,150,.95)) drop-shadow(0 3px 4px rgba(60,40,20,.28))}}
+/* ---------- 룬 상점 ---------- */
+.shopv{padding:0;background:#1E2A3D;overflow:hidden;display:block}
+.shw{position:relative;height:100%;max-width:520px;margin:0 auto;background:linear-gradient(#FBF6EA,#F6EEDC);display:flex;flex-direction:column;gap:8px;
+  padding:max(14px,env(safe-area-inset-top,0px)) 14px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:inset 0 0 0 1.5px #D9BC80,inset 0 0 0 6px #FBF6EA,inset 0 0 0 7px rgba(201,163,101,.5)}
+.shh{display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 50px}
+.shban{background:linear-gradient(180deg,#2B4A74,#1B3253);border-radius:16px;padding:4px 28px 6px;text-align:center;box-shadow:inset 0 0 0 1.5px rgba(214,184,120,.9),inset 0 0 0 4px #1F375A,inset 0 0 0 5px rgba(214,184,120,.4)}
+.shban small{display:block;font-family:"Cormorant Garamond",var(--display),serif;font-style:italic;color:#E7D5A3;font-size:14px;line-height:1.2}
+.shban h2{color:#FBF4E4;font-size:21px;letter-spacing:.2em;line-height:1.25}
+.shrow{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;max-width:420px;margin-top:2px}
+.shsub{margin:0;font-size:12.5px;color:#7B7468}
+.shcoin{display:flex;align-items:center;gap:4px;background:#FFFCF5;border-radius:999px;padding:2px 12px 2px 4px;font-family:var(--display);font-weight:700;color:var(--navy);font-size:14px;box-shadow:inset 0 0 0 1px #D9C59A}
+.shcoin img{width:24px;height:24px}
+.shtabs{display:flex;gap:6px}
+.shtabs button{flex:1;min-height:38px;border-radius:999px;border:1px solid #D9C59A;background:#FFFCF5;color:var(--navy);font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer}
+.shtabs button[aria-selected=true]{background:linear-gradient(180deg,#2B4A74,#1B3253);color:#FBF4E4;border-color:#C9A365}
+.shprev{flex:none}
+.shroom,.shgift{position:relative;height:clamp(170px,28vh,270px);border-radius:16px;overflow:hidden;background:#1E2A3D;box-shadow:inset 0 0 0 1.5px #C9A365,0 6px 16px -10px rgba(30,40,60,.6)}
+.shroom::before{content:"";position:absolute;inset:-20px;background:var(--rb) center/cover;filter:blur(14px) brightness(.85)}
+.shimg{position:absolute;left:50%;top:0;height:calc(100% / .78);aspect-ratio:1064/1394;transform:translateX(-50%);background:center/cover no-repeat}
+.shimg.zoom{transform:translateX(-50%) scale(var(--sz,1.7));transform-origin:var(--sx) var(--sy)}
+.shroom .chip,.shgift .chip{position:absolute;top:8px;font-size:11px;font-family:var(--display);font-weight:700;color:#FBF4E4;background:rgba(27,50,83,.85);border-radius:999px;padding:2px 10px;box-shadow:inset 0 0 0 1px rgba(214,184,120,.7)}
+.chip.l{left:8px}.chip.r{right:8px}
+.shgift{background:radial-gradient(circle at 70% 55%,#3A5582,#1B2C48 70%);display:flex;align-items:flex-end;justify-content:center}
+.shgift .gp{position:absolute;left:6%;bottom:-38%;height:150%;width:auto;max-width:none}
+.shgift .gp.lock{filter:brightness(0) opacity(.35)}
+.shgift .gi{position:absolute;right:10%;top:50%;transform:translateY(-44%);width:44%;aspect-ratio:1;border-radius:50%;background:radial-gradient(rgba(255,240,205,.5),rgba(255,240,205,0) 68%);display:grid;place-items:center}
+.shgift .gi img{width:82%;filter:drop-shadow(0 8px 12px rgba(0,0,0,.4))}
+.shempty{height:clamp(140px,22vh,200px);border-radius:16px;border:1.5px dashed #D9C59A;display:grid;place-items:center;text-align:center;color:#8A8270;font-size:13.5px;line-height:1.6}
+.shsel{display:flex;align-items:center;gap:10px;background:#FFFCF5;border-radius:14px;padding:6px 10px;box-shadow:inset 0 0 0 1px #E3D3B3}
+.shsel:empty{display:none}
+.shsel>img{width:46px;height:46px;flex:none}
+.shsel div{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35}
+.shsel b{font-family:var(--display);color:var(--navy);font-size:15.5px}
+.shsel span{font-size:12.5px;color:#7B7468;word-break:keep-all}
+.shsel em{font-style:normal;font-size:11.5px;color:var(--navy);border:1px solid #BDD5E9;background:#EEF4FA;border-radius:999px;padding:2px 10px;white-space:nowrap}
+.shgrid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start;padding:2px;scrollbar-width:thin}
+.shcount{grid-column:1/-1;margin:0;text-align:right;font-size:12px;color:#8A8270}
+.shgh{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin-top:6px;font-family:var(--display);font-weight:700;color:var(--navy);font-size:14.5px}
+.shgh img{width:34px;height:34px;object-fit:cover;object-position:50% 8%;border-radius:50%;background:#EAF0F8;box-shadow:inset 0 0 0 1px #D9C59A}
+.shgh img.lock{filter:brightness(0) opacity(.25)}
+.shgh small{font-family:var(--body);font-weight:400;font-size:11.5px;color:#8A8270}
+.shcard{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px;align-items:center;text-align:left;
+  background:#FFFCF5;border:0;border-radius:14px;padding:8px 10px;cursor:pointer;box-shadow:inset 0 0 0 1px #E3D3B3;min-height:66px}
+.shcard>img{grid-row:1/3;width:52px;height:52px}
+.shcard b{font-family:var(--display);color:var(--navy);font-size:13.5px;line-height:1.3;word-break:keep-all}
+.shcard .pr{display:flex;align-items:center;gap:3px;font-family:var(--display);font-weight:700;font-size:13px;color:#8A6A2E}
+.shcard .pr img{width:16px;height:16px}
+.shcard .own{font-size:11.5px;color:#4E7A5A}
+.shcard.sel{box-shadow:inset 0 0 0 2px #C9A365,0 4px 12px -6px rgba(120,90,30,.5);background:#FFF8E8}
+.shcard.lock{opacity:.55}.shcard.lock>img{filter:grayscale(1)}
+.shact{display:flex;flex-direction:column;gap:6px}
+.shbuy{min-height:50px;border-radius:999px;border:1.5px solid #C9A365;background:linear-gradient(180deg,#2B4A74,#1B3253);color:#FBF4E4;font-family:var(--display);font-weight:700;font-size:16.5px;letter-spacing:.06em;cursor:pointer;box-shadow:0 8px 18px -10px rgba(20,35,60,.8)}
+.shbuy.ghost{background:#FFFCF5;color:var(--navy)}
+.shbuy:disabled{background:#E8E1D2;color:#8A8270;border-color:#D9CDB2;box-shadow:none;cursor:default}
+.shback{min-height:40px;border-radius:999px;border:1px solid #D9C59A;background:#FFFCF5;color:var(--navy);font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer}
+.shopv .stx{top:max(14px,env(safe-area-inset-top,0px));right:max(12px,calc(50% - 248px))}
+.choice.gch{display:flex;align-items:center;gap:8px}.choice.gch::before{content:none}.choice.gch img{width:28px;height:28px}
+.pprop[data-k^="g/"]{align-items:flex-end;justify-content:flex-end;padding:0 7% 2%}
+.pprop[data-k^="g/"] .pp{height:auto;max-height:none;border-radius:50%;background:radial-gradient(rgba(255,244,214,.85),rgba(255,244,214,0) 70%);padding:10px}
+.pprop[data-k^="g/"] .pp img{max-width:min(30vw,128px)}
+.slines .sl.gift{padding-left:1.7em;color:#5C4A28}.slines .sl.gift::before{content:none}
+.slines .sl.gift img{position:absolute;left:0;top:-.05em;width:1.35em;height:1.35em}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -722,6 +796,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   <div class="wfill" id="wfill" aria-hidden="true"></div>
   <div class="world" id="world">
     <div class="bgl" id="bgA"></div><div class="bgl" id="bgB"></div>
+    <div class="decor" id="decor" aria-hidden="true"></div>
     <button class="cat" id="cat" aria-label="창가에서 자는 고양이 살펴보기"><img src="a/s/sleeping_merlin.webp" alt=""></button>
     <img class="actor away" id="actor" alt="">
     <div class="fgl" id="fgA"></div><div class="fgl" id="fgB"></div><div class="fgl matl" id="mtA"></div><div class="fgl matl" id="mtB"></div>
@@ -737,6 +812,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </div>
   <div class="menu" id="menu" hidden>
     <button data-v="market">장보기 · 과학 퀴즈</button>
+    <button data-v="shop">룬 상점</button>
     <button id="mJournal">오늘의 영업 일지</button>
     <button data-v="guests">손님 도감 <small id="nGuest"></small></button>
     <button data-v="menu">메뉴 도감</button>
@@ -785,6 +861,20 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
       </div>
     </div>
     <button class="xbtn stx" data-v="cafe" aria-label="장보기 닫기">✕</button>
+  </section>
+
+  <!-- 룬 상점 -->
+  <section class="cover shopv" id="v-shop" hidden aria-label="룬 상점">
+    <div class="shw">
+      <header class="shh"><div class="shban"><small>Merope</small><h2>룬 상점</h2></div>
+        <div class="shrow"><p class="shsub">나만의 메로페를 꾸며 보세요</p><div class="shcoin"><img src="a/u/ic_coin.webp" alt=""><b id="shCoins">0</b>룬</div></div></header>
+      <div class="shtabs" role="tablist"><button role="tab" data-t="decor">소품</button><button role="tab" data-t="gift">선물</button><button role="tab" data-t="box">보관함</button></div>
+      <div class="shprev" id="shPrev"></div>
+      <div class="shsel" id="shSel"></div>
+      <div class="shgrid" id="shGrid"></div>
+      <div class="shact"><button class="shbuy" id="shBuy"></button><button class="shback" data-v="cafe">카페로 돌아가기</button></div>
+    </div>
+    <button class="xbtn stx" data-v="cafe" aria-label="룬 상점 닫기">✕</button>
   </section>
 
   <!-- 영업 일지 -->
@@ -868,7 +958,7 @@ function batchim(w){const c=w.trim().charCodeAt(w.trim().length-1);if(c<0xAC00||
 function jo(w,pair){const [a,b]=pair.split('/'),f=batchim(w);if(f===null)return w+a;if(pair==='으로/로')return w+(f&&f!==8?'으로':'로');return w+(f?a:b)}
 
 /* ---------- 저장 ---------- */
-const DEF={s5:1,spent:0,album:[],sciDone:[],special:{},pick2:{},coins:50,stock:Object.fromEntries(D.INGS.map(i=>[i.id,10])),quizDay:0,quizCount:0,quizSeen:[],deliveryDay:0,served:0,stars:0,met:[],menuServed:{},appeared:[],oneVar:0,catTurns:[],combos:[],regServed:0,kai:false,turn:0,day:1,today:[],dayOne:0,perDay:5,visits:{},pick:{},
+const DEF={owned:[],placed:{},given:[],s5:1,spent:0,album:[],sciDone:[],special:{},pick2:{},coins:50,stock:Object.fromEntries(D.INGS.map(i=>[i.id,10])),quizDay:0,quizCount:0,quizSeen:[],deliveryDay:0,served:0,stars:0,met:[],menuServed:{},appeared:[],oneVar:0,catTurns:[],combos:[],regServed:0,kai:false,turn:0,day:1,today:[],dayOne:0,perDay:5,visits:{},pick:{},
   enabled:Object.fromEntries(Object.keys(MENUS).map(k=>[k,true])),showD:false};
 let S,SAVED={};try{SAVED=JSON.parse(localStorage.getItem('cafestry2')||'{}')||{};S={...structuredClone(DEF),...SAVED}}catch(e){S=structuredClone(DEF)}
 S.enabled={...DEF.enabled,...S.enabled};if(SAVED.coins!=null&&SAVED.unit!=='rune'){S.coins=Math.round((S.coins||0)/100);(S.today||[]).forEach(x=>x.pay=Math.round(x.pay/100))}S.unit='rune';S.stock={...DEF.stock,...(S.stock||{})};
@@ -880,11 +970,11 @@ function stats(){$('sCoins').textContent=S.coins.toLocaleString('ko-KR');if($('m
 stats();
 
 /* ---------- 화면 전환 ---------- */
-const VIEWS=['title','guests','menu','settings','market','journal','album'];let retV=null;
+const VIEWS=['title','guests','menu','settings','market','journal','album','shop'];let retV=null;
 function show(v){const k=VIMG[v];if(k&&typeof UIIMG!=='undefined'){preUI();if(!UIIMG[k].done){Promise.race([UIIMG[k].p,new Promise(r=>setTimeout(r,900))]).then(()=>{UIIMG[k].done=1;show(v)});return}}
   if(v==='cafe'&&retV){v=retV;retV=null}$('menu').hidden=true;$('gview').hidden=true;VIEWS.forEach(x=>$('v-'+x).hidden=x!==v);
   if(v==='market')renderMarket();if(v!=='market')$('mOpen').hidden=true;
-  if(v==='guests')renderGuests();if(v==='album')renderAlbum();if(v==='menu')renderMenus();if(v==='settings')renderSettings();if(v==='journal')renderJournal();
+  if(v==='guests')renderGuests();if(v==='album')renderAlbum();if(v==='menu')renderMenus();if(v==='settings')renderSettings();if(v==='journal')renderJournal();if(v==='shop')renderShop();
   if(v!=='title')requestAnimationFrame(layout);
   if(v==='cafe'&&!cur&&!busy){if(!S.prologue)prologue();else startCustomer()}}
 document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.v)));
@@ -936,17 +1026,18 @@ let mode='day',lastSlot=null;
 const TIME={day:['낮',''],sunset:['해 질 녘','해가 지기 시작했어요. 창밖이 노을빛으로 물들어요.'],rain:['밤','어느새 밤이 되었어요. 창밖 마을에 불빛이 하나둘 켜져요.'],
   fullmoon:['보름달 밤','보름달이 떴어요. 오늘 밤, 문이 조금 다른 곳으로 열려요.'],merlin:['달빛 관찰석',''],merlinEvent:['달빛 관찰석',''],elias:['달빛 문 앞',''],eliasEvent:['달빛 문 앞',''],closing:['영업 마감',''],prologue:['보름달 밤',''],prologueIn:['보름달 밤','']};
 const BGC={},curBg={id:null,el:'bgA'},curFg={id:null,el:'fgA'},curMt={id:null,el:'mtA'};
-Object.values(MODES).flatMap(m=>[m.bg,m.fg,m.mt]).filter(Boolean).forEach(k=>{if(BGC[k])return;const im=new Image();im.src=`a/s/${k}.webp`;BGC[k]=im.decode?im.decode().catch(()=>{}):Promise.resolve()});
+Object.values(MODES).flatMap(m=>[m.bg,m.fg,m.mt,m.bg.startsWith('room_')?m.bg+'_nf':null]).filter(Boolean).forEach(k=>{if(BGC[k])return;const im=new Image();im.src=`a/s/${k}.webp`;BGC[k]=im.decode?im.decode().catch(()=>{}):Promise.resolve()});
 function xfade(st,A,B,img,slow){if(st.id===img)return;st.id=img;const nx=st.el===A?B:A,el=$(nx),old=$(st.el);st.el=nx;
   if(!img){old.classList.remove('on');el.classList.remove('on');return}
   const go=()=>{if(st.id!==img)return;const d=slow?'2.8s':'.6s';el.style.setProperty('--fade',d);old.style.setProperty('--fade',d);
     el.style.backgroundImage=`url(a/s/${img}.webp)`;old.after(el);requestAnimationFrame(()=>{el.classList.add('on');setTimeout(()=>{if(st.el===nx)old.classList.remove('on')},slow?2900:700)})};
   (BGC[img]||Promise.resolve()).then(go)}
-function setBg(bg,slow,fg,mt){xfade(curBg,'bgA','bgB',bg,slow);xfade(curFg,'fgA','fgB',fg||null,slow);xfade(curMt,'mtA','mtB',mt||null,slow);$('wfill').style.backgroundImage=`url(a/s/${bg}.webp)`}
+const roomBg=b=>b&&b.startsWith('room_')&&S.placed&&S.placed.wall?b+'_nf':b;
+function setBg(bg,slow,fg,mt){bg=roomBg(bg);xfade(curBg,'bgA','bgB',bg,slow);xfade(curFg,'fgA','fgB',fg||null,slow);xfade(curMt,'mtA','mtB',mt||null,slow);$('wfill').style.backgroundImage=`url(a/s/${bg}.webp)`}
 function sceneMode(k){const prev=mode;mode=k;const m=MODES[k],sc=$('world');
   const timeShift=['day','sunset','rain'].includes(k)&&['day','sunset','rain','closing'].includes(prev)&&prev!==k;setBg(m.bg,timeShift,m.fg,m.mt);
   $('timeChip').textContent=(TIME[k]||[''])[0];$('timeIc').src=`a/u/ic_${k==='day'?'sun':k==='sunset'?'sunset':'moon'}.webp`;
-  const ct=$('ctr');ct.dataset.m=k;ct.classList.toggle('off',!m.c);
+  const ct=$('ctr');ct.dataset.m=k;ct.classList.toggle('off',!m.c);sc.dataset.m=k;sc.classList.toggle('nodecor',!m.bg.startsWith('room_'));
   if(m.c&&lastSlot&&lastSlot!==k&&TIME[k][1])setTimeout(()=>toast(TIME[k][1]),500);if(m.c)lastSlot=k;if(k==='closing')lastSlot=null;
   sc.classList.toggle('nocounter',!m.c);sc.classList.toggle('nocat',!m.c);sc.classList.toggle('noactor',m.a===0);
   layout();}
@@ -1045,7 +1136,7 @@ function prop(k,text){const P=$('pprop');clearInterval(ppT);ppT=null;
   if(!k){ppK=null;P.classList.remove('on');setTimeout(()=>{if(!ppK)P.hidden=true},250);return}
   const same=ppK===k;ppK=k;P.hidden=false;P.className='pprop';P.dataset.k=k;
   if(PPA[k]){const fr=PPA[k];let i=0;P.innerHTML=`<img src="a/p/${fr[0]}.webp" alt="">`;const im=P.firstChild;if(!RM)ppT=setInterval(()=>{i^=1;im.src=`a/p/${fr[i]}.webp`},550)}
-  else P.innerHTML=`<div class="pp"><img src="a/p/${PPF[k]}.webp" alt="">${text?`<p class="hand">${text}</p>`:''}</div>`;
+  else P.innerHTML=`<div class="pp"><img src="${PPF[k]?`a/p/${PPF[k]}.webp`:`a/${k}.webp`}" alt="">${text?`<p class="hand">${text}</p>`:''}</div>`;
   if(same)P.classList.add('on');else requestAnimationFrame(()=>requestAnimationFrame(()=>P.classList.add('on')))}
 
 function prologue(){busy=true;cur=null;sceneMode('prologue');
@@ -1118,7 +1209,7 @@ function reaction(st,pay,hints){
     next('▶',()=>{face('h');say(EP().bye,{then:()=>{
       if(cur.no===30&&cur.ep==='ep2')$('choices').innerHTML='<div class="note"><b>1장 · 플레이아데스에서 온 바리스타 · 끝</b><br>로페의 편지가 서른 해 만에 아빠에게 닿았어요. 이제 보름달이 뜨는 밤이면, 카페의 문이 다른 시대로 이어져요.<br><b>2장 · 보름달의 기록</b>이 시작돼요.</div>';
       if(cur.sci)sciFinish();
-      afterVisit()}})});
+      giftStep(afterVisit)}})});
   }});
 }
 function sciFinish(){const c=cur,v=cur.ep==='ep2'?2:1;S.special=S.special||{};S.special[c.sci]=Math.max(S.special[c.sci]||0,v);
@@ -1421,6 +1512,7 @@ function storyLines(c,v){
   if(v>=2)L.push(`<li class="sl ${br?'fork':''}">${two}</li>`);
   if(v>=3)L.push(`<li class="sl">${c.more.r}</li>`);
   if(v<3)L.push(`<li class="sl lock">다음 방문에 이어져요</li>`);
+  GIFTS.filter(g=>g.who===c.no&&(S.given||[]).includes(g.id)).forEach(g=>L.push(`<li class="sl gift"><img src="a/g/${g.id}.webp" alt="">${g.note}</li>`));
   return `<ul class="slines">${L.join('')}</ul>`;
 }
 function favName(c,m){if(!c.sci)return m.name;const sp=D.SPECIAL.find(x=>x.id===c.sci);return (S.special||{})[c.sci]&&sp?sp.name:'???'}
@@ -1475,6 +1567,96 @@ function openMdet(no){
   const close=()=>{m.hidden=true};
   m.onclick=e=>{if(e.target===m||e.target.closest('.mdx'))close()};
 }
+
+/* ---------- 룬 상점 · 카페 꾸미기 · 선물 ---------- */
+/* 소품 자리: 카페 배경 그림(1064×1394) 기준 %. a: t=위에 매달기, c=가운데, b=바닥에 세우기 */
+const SLOTS={ceil:{x:50,y:5.5,a:'t',nm:'천장'},sconce:{x:49.8,y:31.5,a:'c',nm:'벽등 자리'},wall:{x:49.8,y:44.7,a:'c',nm:'벽 액자'},
+  floor:{x:43.6,y:71.6,a:'b',nm:'문 옆 바닥'},sill:{x:71,y:58.9,a:'b',nm:'창턱'},bench:{x:66.5,y:64.2,a:'b',nm:'창가 벤치'}};
+const DECOR=[
+ {id:'interior_lamp_orbital',nm:'궤도 펜던트',slot:'ceil',w:9,price:200,desc:'행성이 궤도를 도는 듯한 펜던트 등이에요.'},
+ {id:'interior_lamp_lantern',nm:'별빛 랜턴',slot:'ceil',w:6.5,price:150,desc:'작은 별빛이 새어 나오는 랜턴이에요.'},
+ {id:'interior_lamp_crescent',nm:'초승달 벽등',slot:'sconce',w:4.6,price:120,desc:'벽에 거는 초승달 모양 등이에요.'},
+ {id:'interior_frame_moon',nm:'달빛 수채화',slot:'wall',w:8.5,price:100,desc:'은은한 달빛을 그린 수채화 액자예요.'},
+ {id:'interior_frame_constellation',nm:'별자리 액자',slot:'wall',w:11,price:100,desc:'별자리를 금빛 선으로 이은 액자예요.'},
+ {id:'interior_frame_pressed_flowers',nm:'압화 액자',slot:'wall',w:9,price:100,desc:'꽃잎을 눌러 말린 압화 액자예요.'},
+ {id:'interior_plant_rosemary',nm:'로즈메리 화분',slot:'floor',w:8,price:80,desc:'문 옆을 지키는 향긋한 허브 화분이에요.'},
+ {id:'interior_plant_pothos',nm:'스킨답서스 화분',slot:'floor',w:10,price:80,desc:'잎이 길게 늘어지는 덩굴 화분이에요.'},
+ {id:'interior_plant_terrarium',nm:'달빛 테라리움',slot:'sill',w:5.5,price:120,desc:'유리 안에 작은 달빛 숲이 들어 있어요.'},
+ {id:'interior_counter_hourglass',nm:'모래시계',slot:'sill',w:3.6,price:110,desc:'모래가 천천히 떨어지며 시간을 재요.'},
+ {id:'interior_counter_tray',nm:'자카드 트레이',slot:'bench',w:7.5,price:90,desc:'자카드 무늬 찻잔 트레이예요.'},
+ {id:'interior_counter_inkstand',nm:'만년필 받침',slot:'bench',w:6.5,price:90,desc:'만년필과 잉크병을 올려 두는 받침이에요.'}];
+const GIFTS=[
+ {id:'gift_10_leon_01_prism',who:10,nm:'무지개 프리즘',price:50,desc:'햇빛을 작은 무지개로 나눠요.',lines:[['…이거 프리즘이죠? 햇빛에 비추면 무지개가 생기는.','t'],['이제 하늘만 쳐다보지 않아도 무지개를 만들 수 있겠네요. 예보 틀릴 걱정 없이요.','h']],note:'프리즘을 받았다. 스튜디오 창가에 두고, 맑은 날 오후마다 작은 무지개를 만든다.'},
+ {id:'gift_10_leon_02_handkerchief',who:10,nm:'별빛 손수건',price:30,desc:'비 오는 날 꺼내기 좋은 손수건이에요.',lines:[['손수건이요? 비 맞을 일이 많은 사람한테 딱이네요.','h'],['예보가 틀린 날엔 이걸로 헤이즐 머리부터 닦아 줄게요.','h']],note:'별빛 손수건을 늘 주머니에 넣고 다닌다. 비 예보가 있는 날엔 두 장.'},
+ {id:'gift_10_leon_03_rainbow_frame',who:10,nm:'무지개 액자',price:60,desc:'좋아하는 사진을 넣기 좋은 액자예요.',lines:[['액자네요. 아, 그 사진 넣으면 되겠다.','t'],['헤이즐이랑 처음으로 같이 본 무지개 사진이요. 방송국 책상 위에 둘게요.','h']],note:'헤이즐과 함께 본 무지개 사진을 액자에 넣어 방송국 책상에 두었다.'},
+ {id:'gift_11_hazel_01_cookie_tin',who:11,nm:'별 쿠키 틴',price:40,desc:'별 모양 쿠키가 든 틴 상자예요.',lines:[['우와, 별 쿠키다!','h'],['반은 고양이 마법사님 거예요. …고양이도 쿠키 먹어요?','t']],note:'별 쿠키를 고양이와 나눠 먹으려다 아빠가 말렸다. 빈 틴은 크레용 상자가 됐다.'},
+ {id:'gift_11_hazel_02_crayons',who:11,nm:'무지개 크레용',price:30,desc:'일곱 빛깔 크레용이에요.',lines:[['크레용이다! 빨강, 주황, 노랑…','h'],['이걸로 고양이 마법사님 안경 그려 줄래요. 금색이 있어서 다행이다.','h']],note:'무지개 크레용으로 그린 고양이 그림에는 이제 꼭 금색 안경이 있다.'},
+ {id:'gift_11_hazel_03_cat_plush',who:11,nm:'고양이 인형',price:50,desc:'창가 고양이를 닮은 검은 고양이 인형이에요.',lines:[['…이거 창가 고양이랑 똑같아요!','h'],['진짜 고양이는 안으면 도망가니까, 얘는 제가 매일 안아 줄 거예요.','h']],note:'검은 고양이 인형에 "작은 마법사"라는 이름을 붙였다.'},
+ {id:'gift_12_finn_01_explorer_book',who:12,nm:'탐험 수첩',price:30,desc:'단서를 적기 좋은 튼튼한 수첩이에요.',lines:[['새 수첩! 사건 기록장이 딱 다 찼거든요.','h'],['첫 페이지에 적을게요. 사건 번호 3번, 바리스타님이 탐정을 도와줌.','h']],note:'새 탐험 수첩의 첫 기록은 "사건 번호 3번: 바리스타의 협조".'},
+ {id:'gift_12_finn_02_compass',who:12,nm:'작은 나침반',price:40,desc:'주머니에 쏙 들어가는 나침반이에요.',lines:[['나침반이다. 근데 왜 자꾸 창가 쪽을 가리키지?','t'],['…아, 거기가 북쪽이구나. 고양이 쪽인 줄 알았어요. 그래도 수상해요.','h']],note:'나침반을 들고 카페를 한 바퀴 돌았다. 결론: 창가 고양이는 북쪽에 산다.'},
+ {id:'gift_12_finn_03_star_mobile',who:12,nm:'달과 별 모빌',price:50,desc:'천장에 매다는 달과 별 모빌이에요.',lines:[['모빌이요? 저 이제 열 살인데…','t'],['…근데 달이 돌아가는 거 보니까 좀 멋있네요. 방 천장에 달게요. 잠복 연습용으로요.','h']],note:'달과 별 모빌을 방 천장에 달았다. 공식적으로는 "잠복 연습용"이다.'},
+ {id:'gift_19_alex_01_gloves',who:19,nm:'작업 장갑',price:40,desc:'손에 꼭 맞는 튼튼한 장갑이에요.',lines:[['장갑이네요. 손에 딱 맞아요.','h'],['지붕 위 고양이 구할 때 이게 있었으면 안 긁혔을 텐데. 하하, 다음엔 끼고 갈게요.','h']],note:'새 작업 장갑을 출동 가방에 넣었다. 동료들에게는 고양이 구조용이라고 말했다.'},
+ {id:'gift_19_alex_02_headlamp',who:19,nm:'작은 헤드램프',price:60,desc:'어두운 곳을 비추는 작은 헤드램프예요.',lines:[['헤드램프요? 밤 출동 때 정말 필요한 거예요.','t'],['어두운 데서 제일 먼저 찾는 건 늘 작은 생명이거든요. 고마워요.','h']],note:'작은 헤드램프는 밤 출동 때마다 챙긴다. 어두운 데서 작은 생명부터 찾는다.'},
+ {id:'gift_19_alex_03_moon_keyring',who:19,nm:'초승달 키링',price:30,desc:'열쇠에 달기 좋은 초승달 키링이에요.',lines:[['초승달 키링이다. 소방서 사물함 열쇠에 달아야겠어요.','h'],['이거 보면 여기 생각나서, 출동 끝나고 자꾸 들르게 될 것 같아요.','h']],note:'사물함 열쇠에 초승달 키링을 달았다. 출동이 끝나면 키링을 보고 이 카페로 온다.'},
+ {id:'gift_22_hugo_01_pouch',who:22,nm:'방수 파우치',price:40,desc:'비 오는 날에도 안이 젖지 않는 파우치예요.',lines:[['방수 파우치요? 비 오는 금요일에 딱이네요.','h'],['할머니 댁에 가는 편지는 이제 여기 넣어서 배달할게요. 한 장도 안 젖게요.','h']],note:'비 오는 금요일엔 할머니께 드릴 편지를 방수 파우치에 넣어 간다.'},
+ {id:'gift_22_hugo_02_hand_warmer',who:22,nm:'작은 손난로',price:30,desc:'주머니에 넣는 작은 손난로예요.',lines:[['손난로네요. 겨울 배달은 손이 제일 시려요.','t'],['…하나는 할머니 댁에 두고 올게요. 그 집 거실, 생각보다 춥더라고요.','h']],note:'손난로 하나는 아녜스 할머니 댁 거실에 두고 왔다.'},
+ {id:'gift_22_hugo_03_letters',who:22,nm:'달빛 편지 묶음',price:50,desc:'달 무늬 편지지와 봉투 묶음이에요.',lines:[['편지지요? 저 글씨 잘 못 쓰는데…','t'],['그래도 써 볼게요. 매주 배달만 했으니, 이번엔 제가 할머니께 보내는 거예요.','h']],note:'처음으로 배달하는 사람이 아니라 보내는 사람이 되어, 할머니께 편지를 부쳤다.'},
+ {id:'gift_23_agnes_01_handkerchief',who:23,nm:'꽃 자수 손수건',price:40,desc:'가장자리에 꽃을 수놓은 손수건이에요.',lines:[['어머, 자수가 참 곱네요.','h'],['붓 닦기엔 아까워서… 수채화 시간에 무릎에 올려 둘게요.','h']],note:'꽃 자수 손수건은 붓 대신 무릎 위에 둔다. 아까워서 한 번도 안 썼다.'},
+ {id:'gift_23_agnes_02_bookmark',who:23,nm:'라벤더 책갈피',price:30,desc:'라벤더 향이 은은한 책갈피예요.',lines:[['라벤더 향이 나네요.','h'],['교실에선 아이들 책에만 꽂아 줬는데. 오랜만에 내 책에 꽂아 볼게요.','t']],note:'라벤더 책갈피를 오랜만에 자기 책에 꽂았다. 교실 냄새가 조금 난다고 했다.'},
+ {id:'gift_23_agnes_03_seeds',who:23,nm:'꽃씨 봉투',price:50,desc:'봄에 심으면 좋은 꽃씨예요.',lines:[['꽃씨네요. 봄에 심으면 되겠다.','h'],['꽃이 피면 그려서 여기 걸어 줄게요. 금요일에 택배 기사님이랑 같이 볼 거예요.','h']],note:'꽃씨를 창가 화분에 심었다. 꽃이 피면 그림으로 그려 카페에 걸어 주기로 했다.'},
+ {id:'gift_07_iris_01_fountain_pen',who:7,nm:'전용 만년필',price:60,desc:'손에 잘 맞는 만년필이에요.',lines:[['만년필이요? 이런 건 처음 받아 봐요.','t'],['학생들 쪽지에 답장 쓸 때 쓸게요. 한 장 한 장, 천천히요.','h']],note:'만년필로 학생들 쪽지에 하나하나 답장을 쓴다. 천천히.'},
+ {id:'gift_07_iris_02_bookmark',who:7,nm:'달 리본 책갈피',price:30,desc:'초승달 리본이 달린 책갈피예요.',lines:[['달 리본이 예쁘네요.','h'],['과학 교과서 82쪽에 꽂아 둘게요. 다음 주 실험 수업이 거기거든요.','h']],note:'달 리본 책갈피를 과학 교과서 82쪽에 꽂아 두었다.'},
+ {id:'gift_07_iris_03_notecards',who:7,nm:'별 봉인 카드',price:40,desc:'별 모양 봉인이 찍힌 카드 묶음이에요.',lines:[['별 봉인 카드… 이거 반 아이들한테 한 장씩 써 줘도 될까요?','t'],['스물아홉 장이면 딱인데. 아, 한 장 남네요. 이건 바리스타님 거예요.','h']],note:'별 봉인 카드에 반 아이들 스물아홉 명에게 한 장씩 편지를 썼다.'}];
+const SHOPI=id=>DECOR.find(d=>d.id===id)||GIFTS.find(g=>g.id===id);
+function decorHTML(placed,pv){const P={...(placed||{})};if(pv)P[pv.slot]=pv.id;
+  return Object.entries(P).map(([k,id])=>{const d=DECOR.find(x=>x.id===id),sl=SLOTS[k];if(!d||!sl)return '';
+    return `${sl.a==='t'?`<i class="dchain${pv&&pv.slot===k?' pv':''}" style="left:${sl.x}%;height:${sl.y}%"></i>`:''}<span class="dc a-${sl.a}${pv&&pv.slot===k?' pv':''}" style="left:${sl.x}%;top:${sl.y}%;width:${d.w}%"><img src="a/d/${d.id}.webp" alt=""></span>`}).join('')}
+function renderDecor(){$('decor').innerHTML=decorHTML(S.placed);if(MODES[mode]&&MODES[mode].bg.startsWith('room_'))setBg(MODES[mode].bg,false,MODES[mode].fg,MODES[mode].mt)}
+let shT='decor',shSel=null;
+function shItems(){if(shT==='decor')return DECOR;if(shT==='gift')return GIFTS;return [...DECOR,...GIFTS].filter(x=>S.owned.includes(x.id))}
+function renderShop(){
+  $('shCoins').textContent=S.coins.toLocaleString('ko-KR');
+  document.querySelectorAll('.shtabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===shT));
+  const list=shItems();if(!list.some(x=>x.id===shSel))shSel=list.length?(list.find(x=>!x.who||S.met.includes(x.who))||list[0]).id:null;
+  const it=shSel&&SHOPI(shSel),isG=it&&!!it.who,own=it&&S.owned.includes(it.id),met=!isG||S.met.includes(it.who),gname=isG?byNo(it.who).name:'';
+  /* 미리보기 */
+  if(!it){$('shPrev').innerHTML=`<div class="shempty">아직 보관함이 비어 있어요.<br>소품이나 선물을 사면 여기에 모여요.</div>`}
+  else if(!isG){const room=roomBgName();const pv={slot:it.slot,id:it.id};const placedNow=S.placed[it.slot]===it.id;
+    $('shPrev').innerHTML=`<div class="shroom" style="--rb:url(a/s/${room}.webp)"><div class="shimg zoom" style="--sx:${SLOTS[it.slot].x}%;--sy:${SLOTS[it.slot].y}%;background-image:url(a/s/${room}${S.placed.wall||it.slot==='wall'?'_nf':''}.webp)"><div class="decor">${decorHTML(S.placed,pv)}</div></div>
+      <span class="chip l">카페 미리보기</span><span class="chip r">${placedNow?'지금 놓여 있어요':'놓았을 때 모습'}</span></div>`}
+  else{$('shPrev').innerHTML=`<div class="shgift"><img class="gp ${met?'':'lock'}" src="${sprite(it.who,'h')}" alt=""><div class="gi"><img src="a/g/${it.id}.webp" alt=""></div>
+      <span class="chip l">${met?gname+'님께 줄 선물':'아직 만나지 못한 손님'}</span><span class="chip r">${S.given.includes(it.id)?'건넸어요':own?'다음 방문 때 건네요':'선물 미리보기'}</span></div>`}
+  /* 고른 물건 */
+  $('shSel').innerHTML=it?`<img src="a/g/${it.id}.webp" alt=""><div><b>${met?it.nm:'???'}</b><span>${met?it.desc:'손님을 만나면 열려요.'}</span></div><em>${isG?(S.given.includes(it.id)?'건넴':own?'보유 중':'미리보기 중'):own?(S.placed[it.slot]===it.id?'놓여 있음':'보유 중'):'미리보기 중'}</em>`:'';
+  /* 목록 */
+  let html='';const card=x=>{const o=S.owned.includes(x.id),m=!x.who||S.met.includes(x.who),st=x.who?(S.given.includes(x.id)?'건넴':o?'보유 중':''):(o?(S.placed[x.slot]===x.id?'놓여 있음':'보유 중'):'');
+    return `<button class="shcard${x.id===shSel?' sel':''}${o?' own':''}${m?'':' lock'}" data-id="${x.id}"><img src="a/g/${x.id}.webp" alt="" loading="lazy"><b>${m?x.nm:'???'}</b>${st?`<span class="own">✓ ${st}</span>`:`<span class="pr"><img src="a/u/ic_coin.webp" alt="">${x.price} 룬</span>`}</button>`};
+  if(shT==='gift'){[...new Set(GIFTS.map(g=>g.who))].forEach(w=>{const c=byNo(w),m=S.met.includes(w);html+=`<div class="shgh"><img src="${sprite(w,'n')}" alt="" class="${m?'':'lock'}">${m?c.name:'???'}<small>${m?c.role:'아직 만나지 못한 손님'}</small></div>`+GIFTS.filter(g=>g.who===w).map(card).join('')})}
+  else if(shT==='box'&&!list.length)html='';
+  else html=list.map(card).join('');
+  const tot=shT==='decor'?`<p class="shcount">모은 소품 ${DECOR.filter(d=>S.owned.includes(d.id)).length} / ${DECOR.length}</p>`:shT==='gift'?`<p class="shcount">건넨 선물 ${GIFTS.filter(g=>S.given.includes(g.id)).length} / ${GIFTS.length}</p>`:'';
+  $('shGrid').innerHTML=tot+html;
+  $('shGrid').querySelectorAll('.shcard').forEach(b=>b.addEventListener('click',()=>{shSel=b.dataset.id;renderShop()}));
+  /* 버튼 */
+  const B=$('shBuy');B.onclick=null;B.disabled=false;B.className='shbuy';
+  if(!it){B.textContent='소품 보러 가기';B.onclick=()=>{shT='decor';renderShop()}}
+  else if(!own){if(!met){B.disabled=true;B.textContent='손님을 만나면 살 수 있어요'}
+    else if(S.coins<it.price){B.disabled=true;B.textContent=`${it.price-S.coins} 룬이 모자라요`}
+    else{B.innerHTML=`${it.price} 룬으로 구매`;B.onclick=()=>{S.coins-=it.price;S.owned=[...S.owned,it.id];
+      if(!isG){S.placed={...S.placed,[it.slot]:it.id};toast(`${jo(it.nm,'을/를')} ${SLOTS[it.slot].nm}에 놓았어요`)}else toast(`${gname}님이 오면 ${jo(it.nm,'을/를')} 건넬 수 있어요`);
+      stats();renderShop();renderDecor()}}}
+  else if(isG){B.disabled=true;B.textContent=S.given.includes(it.id)?`${gname}님께 건넸어요`:`${gname}님이 오면 건넬 수 있어요`}
+  else if(S.placed[it.slot]===it.id){B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{const p={...S.placed};delete p[it.slot];S.placed=p;save();renderShop();renderDecor()}}
+  else{B.textContent=S.placed[it.slot]?`${SLOTS[it.slot].nm}에 바꿔 놓기`:'카페에 놓기';B.onclick=()=>{S.placed={...S.placed,[it.slot]:it.id};save();renderShop();renderDecor()}}
+}
+function roomBgName(){const m=MODES[mode];return m&&m.bg.startsWith('room_')?m.bg:'room_day'}
+document.querySelectorAll('.shtabs button').forEach(b=>b.addEventListener('click',()=>{shT=b.dataset.t;shSel=null;renderShop();$('shGrid').scrollTop=0}));
+function giftStep(fn){const gs=GIFTS.filter(g=>g.who===cur.no&&S.owned.includes(g.id)&&!S.given.includes(g.id));if(!gs.length)return fn();
+  $('who').innerHTML='<span class="np">나</span><small>바리스타</small>';$('line').className='line';$('line').textContent=`${cur.name}님께 드리려고 챙겨 둔 선물이 있어요.`;$('dctl').innerHTML='';
+  $('choices').innerHTML=gs.map(g=>`<button class="choice gch" data-id="${g.id}"><img src="a/g/${g.id}.webp" alt="">${jo(g.nm,'을/를')} 건넨다</button>`).join('')+'<button class="choice" data-id="">다음에 건네기</button>';
+  $('choices').querySelectorAll('.choice').forEach(b=>b.addEventListener('click',()=>{const g=GIFTS.find(x=>x.id===b.dataset.id);$('choices').innerHTML='';if(!g)return fn();
+    const pp='g/'+g.id;run([[`(포장한 ${jo(g.nm,'을/를')} 건넨다.)`,'x',0,pp],...g.lines.map(l=>[l[0],l[1],0,pp])],0,()=>{prop(null);S.given=[...S.given,g.id];save();toast(`손님 도감에 ${cur.name}의 이야기가 한 줄 늘었어요`);fn()})}))}
+renderDecor();
 
 /* ---------- 수업 설정 ---------- */
 function renderSettings(){
