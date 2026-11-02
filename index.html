@@ -811,6 +811,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .pdone .panel{border:1.5px solid var(--brass);align-items:flex-start}
 .pdone p{margin:0}
 .mdc .mtry{margin-top:.8cqh;border-radius:999px;font-size:max(13px,1.6cqh)}
+
+/* 프롤로그 멀린: 장면 속 창턱 자리 (배경 1064×1394 기준 %) */
+.pcat{position:absolute;left:65.4%;top:49.7%;width:15.5%;height:auto;aspect-ratio:1/1;object-fit:contain;max-width:none;pointer-events:none;filter:drop-shadow(0 3px 4px rgba(10,15,35,.45))}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -820,6 +823,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   <div class="world" id="world">
     <div class="bgl" id="bgA"></div><div class="bgl" id="bgB"></div>
     <div class="decor" id="decor" aria-hidden="true"></div>
+    <img class="pcat" id="pcat" src="a/p/merlin_tail_01.webp" alt="" hidden>
     <button class="cat" id="cat" aria-label="창가에서 자는 고양이 살펴보기"><img src="a/s/sleeping_merlin.webp" alt=""></button>
     <img class="actor away" id="actor" alt="">
     <div class="fgl" id="fgA"></div><div class="fgl" id="fgB"></div><div class="fgl matl" id="mtA"></div><div class="fgl matl" id="mtB"></div>
@@ -1364,10 +1368,13 @@ function next(label,fn){$('dctl').innerHTML='';const b=document.createElement('b
 function run(lines,i,end){if(i>=lines.length)return end();const [t,e,f,pp]=lines[i];if(f==='r'&&cur)cur.revealed=true;prop(pp||null,e==='note'?t:null);
   const o={then:()=>next('▶',()=>run(lines,i+1,end))};if(e==='x')o.nar=true;else if(e==='me')o.me=true;else if(e==='note'){o.note=true;if(pp==='journal')o.label='기록장'}else if(cur)face(e);say(t,o)}
 /* 프롤로그 소품: 장면 위에 쪽지·기록장·열쇠·멀린(꼬리 2프레임, 550ms) */
-const PPF={note:'note',journal:'journal_page',key:'key',cover:'journal_cover'},PPA={cat:['merlin_tail_01','merlin_tail_02'],catkey:['merlin_key_hint_01','merlin_key_hint_02']};
+const PPF={note:'note',journal:'journal_page',key:'key',cover:'journal_cover'},PPA={cat:['merlin_tail_01','merlin_tail_02'],catkey:['merlin_tail_01','merlin_tail_02']};
 Object.values(PPA).flat().concat(Object.values(PPF)).forEach(k=>{const im=new Image();im.src=`a/p/${k}.webp`});
 let ppT=null,ppK=null;
+let catT=null;
+function catShow(on){const c=$('pcat');clearInterval(catT);catT=null;c.hidden=!on;if(!on)return;let i=0;if(!RM)catT=setInterval(()=>{i^=1;c.src=`a/p/${PPA.cat[i]}.webp`},550)}
 function prop(k,text){const P=$('pprop');clearInterval(ppT);ppT=null;
+  if(k&&PPA[k]){if($('pcat').hidden)catShow(true);k=null}
   if(!k){ppK=null;P.classList.remove('on');setTimeout(()=>{if(!ppK)P.hidden=true},250);return}
   const same=ppK===k;ppK=k;P.hidden=false;P.className='pprop';P.dataset.k=k;
   if(PPA[k]){const fr=PPA[k];let i=0;P.innerHTML=`<img src="a/p/${fr[0]}.webp" alt="">`;const im=P.firstChild;if(!RM)ppT=setInterval(()=>{i^=1;im.src=`a/p/${fr[i]}.webp`},550)}
@@ -1381,7 +1388,7 @@ function prologue(){busy=true;cur=null;sceneMode('prologue');
   const B=[['(문이 저절로 살짝 열린다. 안에는 먼지 쌓인 테이블, 그리고 창가에 검은 고양이 한 마리.)','x',0,'cat'],
     ['(고양이가 노란 눈으로 오래 나를 보다가, 카운터 위 낡은 열쇠 쪽으로 꼬리를 한 번 흔든다.)','x',0,'catkey']];
   const E=[['(카운터 서랍에는 누렇게 바랜 기록장이 한 권 있다. 첫 장을 펼치니 둥글둥글한 글씨.)','x',0,'cover'],['변인은 하나씩, 이야기는 끝까지.','note',0,'journal'],['(그날부터 나는 이 카페의 바리스타다.)','x']];
-  const done=()=>{prop(null);S.prologue=1;save();busy=false;sceneMode('day');startCustomer()};
+  const done=()=>{prop(null);catShow(false);S.prologue=1;save();busy=false;sceneMode('day');startCustomer()};
   const pick=()=>{$('who').innerHTML='<span class="np">나</span><small>바리스타</small>';$('line').className='line';$('line').textContent='어떻게 할까?';$('dctl').innerHTML='';
     const ch=[['열쇠를 집는다',[['(초승달 손잡이가 달린 낡은 황동 열쇠. 손에 쥐자 고양이가 만족한 듯 눈을 감고 다시 둥글게 눕는다.)','x',0,'key']]],['"안녕? 여기 주인이니?"',[['(고양이는 대답 대신 하품을 한다. 그리고 다시 열쇠 쪽으로 꼬리를 흔든다.)','x',0,'catkey'],['(열쇠를 집는다. 초승달 손잡이가 달린 낡은 황동 열쇠다.)','x',0,'key']]]];
     $('choices').innerHTML=ch.map((c,i)=>`<button class="choice" data-i="${i}">${c[0]}</button>`).join('');
