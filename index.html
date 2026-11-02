@@ -187,6 +187,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .gmeta{display:flex;gap:6px;flex-wrap:wrap}
 .title{position:absolute;inset:0;z-index:11;background:#1E2A3D;overflow:hidden;container-type:size}
 .tfill{position:absolute;inset:0;background:center/cover no-repeat;filter:blur(24px) brightness(.8);transform:scale(1.1)}
+.title.il #tImg{left:0;right:0;width:100%;height:auto;max-height:100%;aspect-ratio:1536/1024;top:clamp(56px,14%,22%);transform:none;object-fit:contain;filter:drop-shadow(0 12px 30px rgba(0,0,0,.45))}
+@container (min-aspect-ratio:1/1){.title.il #tImg{top:0;height:100%;width:100%;object-fit:cover;object-position:50% 40%}}
+.ilview .ibg{margin-top:8px;font-size:13px}
 .title img{position:absolute;top:0;left:50%;height:100%;width:auto;aspect-ratio:1418/2512;object-fit:cover;object-position:50% 0;transform:translateX(-50%);max-width:none}
 .title .card{position:absolute;left:var(--gx);right:var(--gxr);bottom:max(16px,env(safe-area-inset-bottom,0px));margin-inline:auto;max-width:440px;
   background:linear-gradient(180deg,rgba(255,252,244,.5),rgba(255,250,238,.64));backdrop-filter:blur(10px) saturate(1.15);-webkit-backdrop-filter:blur(10px) saturate(1.15);
@@ -862,8 +865,32 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .hzoom{position:absolute;right:var(--gxr);bottom:8px;display:flex;flex-direction:column;gap:6px;z-index:1}
 .hzoom button{width:34px;height:34px;border-radius:50%;border:0;cursor:pointer;font:700 18px/1 var(--display);color:#1B3253;background:radial-gradient(circle at 50% 35%,#FFFCF4,#F1E6CF);box-shadow:0 0 0 1.5px #C9A365,0 3px 8px rgba(10,20,40,.3)}
 .hzoom button:active{transform:translateY(1px)}
-.hhint{position:absolute;left:0;right:0;bottom:10px;text-align:center;font:600 11.5px var(--body,inherit);color:rgba(243,232,207,.85);text-shadow:0 1px 4px rgba(8,14,28,.8);pointer-events:none;transition:opacity .6s}
+.hhint{position:absolute;left:0;right:0;top:6px;text-align:center;font:600 11.5px var(--body,inherit);color:rgba(243,232,207,.85);text-shadow:0 1px 4px rgba(8,14,28,.8);pointer-events:none;transition:opacity .6s}
 .hall[data-sc="day"] .hhint{color:rgba(42,69,112,.75);text-shadow:none}
+.hinv{position:absolute;left:var(--gx);bottom:8px;z-index:1;display:flex;align-items:center;gap:6px;border:0;cursor:pointer;padding:5px 12px 5px 6px;border-radius:999px;font:700 12.5px var(--display);color:#1B3253;background:linear-gradient(#FFFCF4,#F1E6CF);box-shadow:0 0 0 1.5px #C9A365,0 3px 8px rgba(10,20,40,.3)}
+.hinv img{width:24px;height:24px;object-fit:contain}.hinv b{font-size:11px;color:#8A6E3C}
+.htok{position:absolute;width:6.6%;aspect-ratio:1;transform:translate(-50%,-100%);border:0;padding:0;background:none;cursor:pointer;z-index:2;animation:tokin .5s ease both}
+.htok .hf{position:absolute;inset:0;border-radius:50%;background:#FBF4E4 no-repeat;background-size:290% auto;background-position:50% 5%;box-shadow:0 0 0 2px #C9A365,0 3px 6px rgba(10,20,40,.35)}
+.htok::after{content:"";position:absolute;left:50%;bottom:-16%;width:22%;aspect-ratio:1;background:#C9A365;transform:translateX(-50%) rotate(45deg);z-index:-1;border-radius:2px}
+.htok.today .hf{box-shadow:0 0 0 2px #E7C77A,0 0 10px 2px rgba(255,220,140,.7),0 3px 6px rgba(10,20,40,.35)}
+.htok .hn{position:absolute;left:50%;top:104%;transform:translateX(-50%);margin-top:12%;white-space:nowrap;font:700 max(8px,1.25cqw) var(--display);color:#FBF4E4;background:rgba(27,50,83,.85);border-radius:999px;padding:1px 6px;display:none}
+.hroom .rbox{container-type:inline-size}
+.htok:hover .hn,.htok:focus-visible .hn,.htok.say .hn{display:block}
+@keyframes tokin{from{opacity:0;translate:0 6px}to{opacity:1;translate:0 0}}
+.hsay{position:absolute;z-index:3;transform:translate(-50%,calc(-100% - 8px));width:max-content;max-width:min(260px,70vw);background:#FFFCF4;color:#1B3253;font-size:12.5px;line-height:1.45;padding:7px 11px;border-radius:12px;box-shadow:0 0 0 1.5px #C9A365,0 6px 16px rgba(10,20,40,.3);pointer-events:none;animation:tokin .25s ease both}
+.hsay b{display:block;font-family:var(--display);font-size:11.5px;color:#8A6E3C}
+.invv{position:absolute;inset:0;z-index:14;background:rgba(10,16,30,.7);display:flex;align-items:flex-end;justify-content:center}
+.invv .ip{width:min(520px,100%);max-height:78%;display:flex;flex-direction:column;background:linear-gradient(#FFFCF4,#FAF3E4);border-radius:22px 22px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.3);padding:16px 16px max(16px,env(safe-area-inset-bottom,0px))}
+.invv h3{margin:0;font-family:var(--display);font-size:18px;color:#1B3253;text-align:center}
+.invv .is{margin:4px 0 10px;text-align:center;font-size:12.5px;color:#6B6F78}
+.invv .ig{overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;padding:2px}
+.invv .ic{position:relative;border:0;cursor:pointer;background:#F3EAD7;border-radius:12px;padding:4px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;font:700 11.5px var(--display);color:#1B3253;box-shadow:inset 0 0 0 1px rgba(201,163,101,.5)}
+.invv .ic .hf{width:52px;height:52px;border-radius:50%;background:#FBF4E4 no-repeat;background-size:290% auto;background-position:50% 5%;box-shadow:0 0 0 1.5px #C9A365}
+.invv .ic[aria-pressed="true"]{background:#1B3253;color:#FBF4E4;box-shadow:inset 0 0 0 2px #E7C77A}
+.invv .ic[aria-pressed="true"]::after{content:"✓";position:absolute;top:3px;right:6px;color:#E7C77A;font-size:13px}
+.invv .ic.td{opacity:.75}.invv .ic.td small{font-size:10px;color:#C9A365}
+.invv .ic:disabled{opacity:.4;cursor:default}
+.invv .ia{display:flex;gap:8px;margin-top:12px}.invv .ia button{flex:1}
 .hroom .rbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 @media (prefers-reduced-motion:reduce){.hall{animation:none}}
 .hbot{display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px var(--gxr) max(16px,env(safe-area-inset-bottom,0px)) var(--gx);max-width:420px;width:100%;margin:0 auto}
@@ -892,6 +919,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   <section class="hall" id="hall" hidden aria-label="카페 메로페 홀">
     <div class="hroom" id="hView"><div class="rbox" id="hRoom"></div>
       <div class="hzoom"><button id="hZin" aria-label="확대">+</button><button id="hZout" aria-label="축소">−</button></div>
+      <button class="hinv" id="hInv"><img src="a/u/st_merlin.webp" alt=""><span>손님 초대</span><b id="hInvN"></b></button>
       <p class="hhint" id="hHint">두 손가락으로 확대하고, 끌어서 둘러보세요</p></div>
     <div class="hbot">
       <p class="hst" id="hSt"></p>
@@ -1380,13 +1408,35 @@ function afterVisit(){
   next('배웅하기',toHall)}
 /* 홀: 손님 사이의 기본 화면 */
 function toHall(){actor.classList.add('away');actor.classList.remove('idle');$('served').hidden=true;sheet(null);cur=null;busy=false;goHall()}
-function goHall(){const st=roomState(),h=$('hall');h.dataset.sc=st.scenery;$('hRoom').innerHTML=roomHTML(st);
+function goHall(){const st=roomState(),h=$('hall');h.dataset.sc=st.scenery;$('hRoom').innerHTML=roomHTML(st)+hallTokens();
+  $('hRoom').querySelectorAll('.htok').forEach(b=>b.addEventListener('click',()=>{if(HV.moved>8)return;hallSay(b)}));
   const end=S.today.length>=S.perDay,hid=!end&&hiddenReady();
   const n=S.today.length;$('hSt').textContent=end?'오늘 만날 손님을 모두 배웅했어요':hid?'창밖에 낯선 그림자가 어른거려요':n?`손님 ${n}명을 배웅했어요. 다음 손님을 맞을까요?`:'문을 열었어요. 첫 손님을 맞아 볼까요?';
   $('hGo').querySelector('span').textContent=end?'영업 마감하기':hid?'문 앞에 누가 서 있어요…':S.today.length?'다음 손님 받기':'손님 받기';
   h.hidden=false;stats();requestAnimationFrame(()=>{if(!HV.init){HV.init=true;hvReset()}else hvApply()})}
+/* 홀 손님: 오늘 온 손님 + 초대한 손님이 자리에 앉아요 */
+const SEATS=[[306,700],[432,644],[622,642],[763,664],[478,770],[616,800],[703,492],[768,522]],INVMAX=6;
+function hallGuests(){const td=[...new Set((S.today||[]).map(t=>t.no))].filter(n=>n&&byNo(n)),pk=(S.hallPick||[]).filter(n=>S.met.includes(n)&&!td.includes(n));
+  return [...td.map(n=>[n,1]),...pk.map(n=>[n,0])].slice(0,SEATS.length)}
+function hallTokens(){const g=hallGuests();$('hInvN').textContent=(S.hallPick||[]).length?`${(S.hallPick||[]).length}/${INVMAX}`:'';
+  return g.map(([n,td],i)=>{const c=byNo(n),[x,y]=SEATS[i];return `<button class="htok ${td?'today':''}" data-no="${n}" style="left:${x/10.24}%;top:${y/10.24}%;animation-delay:${i*80}ms" aria-label="${dn(c)}"><span class="hf" style="background-image:url(${sprite(n,td?'h':'n')})"></span><span class="hn">${dn(c)}</span></button>`}).join('')}
+function hallSay(btn){document.querySelectorAll('.hsay').forEach(e=>e.remove());document.querySelectorAll('.htok.say').forEach(e=>e.classList.remove('say'));
+  const c=byNo(+btn.dataset.no),t=(S.today||[]).some(x=>x.no===c.no),line=c.sci?(sciDone(c.no)?'달이 차는 밤이면, 이 자리가 그리워질 거예요.':'…이 카페, 어딘가 익숙한 향이 나요.'):t?(c.ep2&&c.ep2.bye||c.ep1.bye||'잘 마셨어요.'):(c.again||c.ep1.bye||'');
+  const el=document.createElement('div');el.className='hsay';el.innerHTML=`<b>${dn(c)}</b>${line}`;const v=$('hView'),vr=v.getBoundingClientRect(),br=btn.getBoundingClientRect();
+  el.style.left=clamp(br.left+br.width/2-vr.left,120,Math.max(120,vr.width-120))+'px';el.style.top=(br.top-vr.top)+'px';
+  btn.classList.add('say');v.appendChild(el);clearTimeout(hallSay.t);hallSay.t=setTimeout(()=>{el.remove();btn.classList.remove('say')},3800)}
+function openInvite(){const el=document.createElement('div');el.className='invv';el.setAttribute('role','dialog');el.setAttribute('aria-label','손님 초대');
+  const td=new Set((S.today||[]).map(t=>t.no)),list=C.filter(c=>S.met.includes(c.no));let pick=[...(S.hallPick||[])].filter(n=>S.met.includes(n));
+  const draw=()=>{el.innerHTML=`<div class="ip"><h3>손님 초대</h3><p class="is">만난 손님 중 ${INVMAX}명까지 홀에 앉힐 수 있어요 · 오늘 온 손님은 먼저 자리에 앉아요</p>
+    <div class="ig">${list.map(c=>{const on=pick.includes(c.no),t=td.has(c.no);return `<button class="ic ${t?'td':''}" data-no="${c.no}" aria-pressed="${on||t}" ${t||(!on&&pick.length>=INVMAX)?'disabled':''}><span class="hf" style="background-image:url(${sprite(c.no,'n')})"></span>${dn(c)}${t?'<small>오늘 손님</small>':''}</button>`}).join('')||'<p class="is">아직 만난 손님이 없어요</p>'}</div>
+    <div class="ia"><button class="btn" id="iClr">모두 내보내기</button><button class="btn go" id="iOk">${pick.length}명 초대하기</button></div></div>`;
+    el.querySelectorAll('.ic').forEach(b=>b.addEventListener('click',()=>{const n=+b.dataset.no;pick=pick.includes(n)?pick.filter(x=>x!==n):[...pick,n].slice(0,INVMAX);draw()}));
+    el.querySelector('#iClr').addEventListener('click',()=>{pick=[];draw()});
+    el.querySelector('#iOk').addEventListener('click',()=>{S.hallPick=pick;save();el.remove();goHall()})};
+  draw();el.addEventListener('click',e=>{if(e.target===el)el.remove()});$('shell').appendChild(el)}
+$('hInv').addEventListener('click',openInvite);
 /* 홀 카메라: 확대·끌어서 둘러보기 */
-const HV={z:1.55,x:0,y:0,cx:500,cy:600,init:false};
+const HV={z:1.55,x:0,y:0,cx:500,cy:600,init:false,moved:0};
 function hvApply(ease){const v=$('hView'),b=$('hRoom'),W=v.clientWidth,H=v.clientHeight,Rs=b.offsetHeight;if(!Rs)return;
   HV.z=clamp(HV.z,1,3.2);const g=HV.z>1.05?1:0,mx=Math.max(0,(Rs*HV.z-W)/2+W*0.08*g),my=Math.max(0,(Rs*HV.z-H)/2+H*0.08*g);
   HV.x=clamp(HV.x,-mx,mx);HV.y=clamp(HV.y,-my,my);b.classList.toggle('ease',!!ease);
@@ -1396,10 +1446,10 @@ function hvZoom(f,px,py,ease){const v=$('hView').getBoundingClientRect(),ox=(px?
   HV.z=clamp(HV.z*f,1,3.2);const k=HV.z/z0;HV.x=ox-(ox-HV.x)*k;HV.y=oy-(oy-HV.y)*k;hvApply(ease)}
 (()=>{const v=$('hView'),P=new Map();let last=null,dist0=0,moved=0;
   const hide=()=>{if(!moved){moved=1;$('hHint').style.opacity=0}};
-  v.addEventListener('pointerdown',e=>{if(e.target.closest('.hzoom'))return;v.setPointerCapture(e.pointerId);P.set(e.pointerId,[e.clientX,e.clientY]);v.classList.add('drag');
+  v.addEventListener('pointerdown',e=>{if(e.target.closest('.hzoom,.hinv'))return;HV.moved=0;if(!e.target.closest('.htok'))v.querySelectorAll('.hsay').forEach(x=>x.remove());if(!e.target.closest('.htok'))v.setPointerCapture(e.pointerId);P.set(e.pointerId,[e.clientX,e.clientY]);v.classList.add('drag');
     if(P.size===2){const [a,b]=[...P.values()];dist0=Math.hypot(a[0]-b[0],a[1]-b[1])}last=null});
   v.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;const pr=P.get(e.pointerId);P.set(e.pointerId,[e.clientX,e.clientY]);
-    if(P.size===1){HV.x+=e.clientX-pr[0];HV.y+=e.clientY-pr[1];hvApply();if(Math.abs(e.clientX-pr[0])+Math.abs(e.clientY-pr[1])>2)hide()}
+    if(P.size===1){HV.moved+=Math.abs(e.clientX-pr[0])+Math.abs(e.clientY-pr[1]);HV.x+=e.clientX-pr[0];HV.y+=e.clientY-pr[1];hvApply();if(Math.abs(e.clientX-pr[0])+Math.abs(e.clientY-pr[1])>2)hide()}
     else if(P.size===2){const [a,b]=[...P.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(dist0){hvZoom(d/dist0,(a[0]+b[0])/2,(a[1]+b[1])/2);hide()}dist0=d}});
   const up=e=>{P.delete(e.pointerId);if(!P.size)v.classList.remove('drag');dist0=0};
   v.addEventListener('pointerup',up);v.addEventListener('pointercancel',up);
@@ -1918,8 +1968,10 @@ function renderAlbum(){const have=S.album||[],n=have.length;
   $('albums').querySelectorAll('.acard.open').forEach(b=>b.addEventListener('click',()=>showIllust(ALBUM.find(x=>x.id===b.dataset.id))));
 }
 function showIllust(a,fresh){const el=document.createElement('div');el.className='ilview'+(fresh?' fresh':'');el.setAttribute('role','dialog');el.setAttribute('aria-label',a.title);
-  el.innerHTML=`<figure><img src="a/il/${a.id}.webp" alt="${a.title}" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.closest('figure').classList.add('ph')"><figcaption>${fresh?'<small>새 일러스트가 열렸어요</small>':''}<b>${a.title}</b><span>${a.names||dn(byNo(a.who))}</span><em class="phn">일러스트 준비 중이에요</em></figcaption></figure><button class="xbtn" aria-label="닫기">✕</button>`;
-  $('shell').appendChild(el);const close=()=>el.remove();el.querySelector('.xbtn').addEventListener('click',close);el.addEventListener('click',e=>{if(e.target===el)close()});}
+  el.innerHTML=`<figure><img src="a/il/${a.id}.webp" alt="${a.title}" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.closest('figure').classList.add('ph')"><figcaption>${fresh?'<small>새 일러스트가 열렸어요</small>':''}<b>${a.title}</b><span>${a.names||dn(byNo(a.who))}</span><em class="phn">일러스트 준비 중이에요</em><button class="btn ibg" hidden></button></figcaption></figure><button class="xbtn" aria-label="닫기">✕</button>`;
+  $('shell').appendChild(el);const bg=el.querySelector('.ibg'),im=el.querySelector('figure img'),setL=()=>{bg.textContent=S.titleBg===a.id?'✓ 첫 화면 배경으로 쓰는 중 · 기본으로 되돌리기':'첫 화면 배경으로 쓰기'};
+  const okImg=()=>{if(!el.querySelector('figure.ph')&&(S.album||[]).includes(a.id)){bg.hidden=false;setL()}};if(im.complete&&im.naturalWidth)okImg();else im.addEventListener('load',okImg);
+  bg.addEventListener('click',e=>{e.stopPropagation();S.titleBg=S.titleBg===a.id?null:a.id;save();titleBg();setL();toast(S.titleBg?'첫 화면 배경을 바꿨어요':'첫 화면을 기본 배경으로 되돌렸어요')});const close=()=>el.remove();el.querySelector('.xbtn').addEventListener('click',close);el.addEventListener('click',e=>{if(e.target===el)close()});}
 let gch=1;
 document.querySelectorAll('.gtabs button').forEach(b=>b.addEventListener('click',()=>{gch=+b.dataset.ch;renderGuests();const l=document.querySelector('.gstage .blist');if(l)l.scrollTop=0}));
 function renderGuests(){
@@ -2149,7 +2201,9 @@ function bindReset(){
 }
 bindReset();
 
-$('tFill').style.backgroundImage='url(a/s/title_night.webp)';
+function titleBg(){const id=S.titleBg&&(S.album||[]).includes(S.titleBg)?S.titleBg:null,src=id?`a/il/${id}.webp`:'a/s/title_night.webp';
+  $('tImg').src=src;$('tFill').style.backgroundImage=`url(${src})`;$('v-title').classList.toggle('il',!!id)}
+titleBg();
 sceneMode('day');show('title');
 $('mJournal').addEventListener('click',peekJournal);
 $('stl').addEventListener('click',peekJournal);$('stl').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();peekJournal()}});
