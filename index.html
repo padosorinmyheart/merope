@@ -848,6 +848,25 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .shroom2 .rbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .shroom2 .rbox img.pv{animation:pvglow 1.6s ease-in-out infinite}
 .shroom2 .chip{position:absolute;top:8px;font-size:11px;font-family:var(--display);font-weight:700;color:#FBF4E4;background:rgba(27,50,83,.85);border-radius:999px;padding:2px 10px;box-shadow:inset 0 0 0 1px rgba(214,184,120,.7);z-index:2}
+/* 홀: 기본 화면 */
+.hall{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;overflow:hidden;background:radial-gradient(ellipse 80% 55% at 50% 45%,#3A5A86 0%,#1F3558 55%,#141F36 100%);animation:hin .5s ease}
+.hall[data-sc="day"]{background:radial-gradient(ellipse 80% 55% at 50% 45%,#F7EEDC 0%,#DCE6EF 55%,#A9BED3 100%)}
+.hall[data-sc="sunset"]{background:radial-gradient(ellipse 80% 55% at 50% 45%,#F6D9B8 0%,#D9A4A0 55%,#6E5F86 100%)}
+.hall[hidden]{display:none}
+@keyframes hin{from{opacity:0}to{opacity:1}}
+.hroom{position:relative;flex:1;min-height:0;margin-top:calc(max(10px,env(safe-area-inset-top,0px)) + 52px)}
+.hroom .rbox{position:absolute;left:50%;top:50%;height:min(100%,calc(var(--stw,100vw) * 1.14));aspect-ratio:1;transform:translate(-50%,-50%);animation:hfloat 6s ease-in-out infinite}
+.hroom .rbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@keyframes hfloat{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@media (prefers-reduced-motion:reduce){.hroom .rbox,.hall{animation:none}}
+.hbot{display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px var(--gxr) max(16px,env(safe-area-inset-bottom,0px)) var(--gx);max-width:420px;width:100%;margin:0 auto}
+.hst{margin:0;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.06em;color:#F3E8CF;text-shadow:0 1px 6px rgba(8,14,28,.8)}
+.hall[data-sc="day"] .hst,.hall[data-sc="day"] .hdock button{color:#2A4570;text-shadow:0 1px 4px rgba(255,255,255,.8)}
+.hall[data-sc="sunset"] .hdock button{text-shadow:0 1px 5px rgba(40,30,60,.9)}
+.hgo{position:relative;overflow:hidden;font-family:var(--display);font-weight:700;font-size:15px;cursor:pointer}
+.hdock{margin-top:2px}
+.hdock .med img{width:30px;height:30px;object-fit:contain}
+@media (max-height:700px){.hdock .med{width:42px;height:42px}.hdock .med img{width:26px;height:26px}}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -863,6 +882,19 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
     <div class="fgl" id="fgA"></div><div class="fgl" id="fgB"></div><div class="fgl matl" id="mtA"></div><div class="fgl matl" id="mtB"></div>
   </div>
   <div class="ctr" id="ctr"><div class="cclip"><img class="cimg" src="a/u/counter.webp" alt=""><div class="cfill"></div></div><img class="pmat" src="a/u/placemat.webp" alt=""><img class="served" id="served" alt="" hidden></div>
+  <section class="hall" id="hall" hidden aria-label="카페 메로페 홀">
+    <div class="hroom"><div class="rbox" id="hRoom"></div></div>
+    <div class="hbot">
+      <p class="hst" id="hSt"></p>
+      <button class="tgo3 hgo" id="hGo"><span>손님 받기</span></button>
+      <div class="tdock hdock">
+        <button data-v="market"><span class="med"><img src="a/u/ic_coin.webp" alt=""></span>장보기</button>
+        <button data-v="shop"><span class="med"><img src="a/r/i/starlight_prism.webp" alt=""></span>룬 상점</button>
+        <button data-v="guests"><span class="med"><img src="a/u/st_merlin.webp" alt=""></span>손님 도감</button>
+        <button data-v="menu"><span class="med"><img src="a/u/st_coffee.webp" alt=""></span>메뉴 도감</button>
+      </div>
+    </div>
+  </section>
   <div id="fx" aria-live="polite"></div>
 
   <!-- HUD -->
@@ -1249,7 +1281,7 @@ function show(v){const k=VIMG[v];if(k&&typeof UIIMG!=='undefined'){preUI();if(!U
   if(v==='market')renderMarket();if(v!=='market')$('mOpen').hidden=true;
   if(v==='guests')renderGuests();if(v==='album')renderAlbum();if(v==='menu')renderMenus();if(v==='settings')renderSettings();if(v==='journal')renderJournal();if(v==='shop')renderShop();
   if(v!=='title')requestAnimationFrame(layout);
-  if(v==='cafe'&&!cur&&!busy){if(!S.prologue)prologue();else startCustomer()}}
+  if(v==='cafe'&&!cur&&!busy){if(!S.prologue)prologue();else if(!inClose)goHall()}}
 document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.v)));
 $('menuBtn').addEventListener('click',e=>{e.stopPropagation();$('menu').hidden=!$('menu').hidden});
 document.addEventListener('click',e=>{if(!$('menu').hidden&&!e.target.closest('#menu'))$('menu').hidden=true});
@@ -1334,16 +1366,24 @@ function noStock(list,n){const lack=[...new Set(list)].filter(r=>(S.stock[r]||0)
 function clearWarn(){if($('warn'))$('warn').innerHTML='';if($('brew')&&!$('brew').dataset.done)$('brew').disabled=false;if($('pour')&&typeof seq!=='undefined')$('pour').disabled=!seq.length;if($('prepGo'))$('prepGo').disabled=false}
 function apologize(){sheet(null);S.today.push({no:cur.no,menu:cur.menu,st:0,pay:0,isNew:!!cur.isNew});stats();face('d');
   say('재료가 없다니 아쉽네요. 다음에 또 올게요.',{then:()=>afterVisit()})}
-function afterVisit(){if(S.today.length>=S.perDay){next('영업 마감하기',closing);return}
-  if(S.deliveryDay!==S.day&&S.today.length>=1&&Math.random()<0.3){next('▶',delivery);return}
-  const h=hiddenReady();next(h?'문 앞에 누가 서 있어요…':'다음 손님 받기',startCustomer)}
+function afterVisit(){
+  if(S.today.length<S.perDay&&S.deliveryDay!==S.day&&S.today.length>=1&&Math.random()<0.3){next('▶',delivery);return}
+  next('배웅하기',toHall)}
+/* 홀: 손님 사이의 기본 화면 */
+function toHall(){actor.classList.add('away');actor.classList.remove('idle');$('served').hidden=true;sheet(null);cur=null;busy=false;goHall()}
+function goHall(){const st=roomState(),h=$('hall');h.dataset.sc=st.scenery;$('hRoom').innerHTML=roomHTML(st);
+  const end=S.today.length>=S.perDay,hid=!end&&hiddenReady();
+  const n=S.today.length;$('hSt').textContent=end?'오늘 만날 손님을 모두 배웅했어요':hid?'창밖에 낯선 그림자가 어른거려요':n?`손님 ${n}명을 배웅했어요. 다음 손님을 맞을까요?`:'문을 열었어요. 첫 손님을 맞아 볼까요?';
+  $('hGo').querySelector('span').textContent=end?'영업 마감하기':hid?'문 앞에 누가 서 있어요…':S.today.length?'다음 손님 받기':'손님 받기';
+  h.hidden=false;stats()}
+$('hGo').addEventListener('click',()=>{if(busy)return;const end=S.today.length>=S.perDay;$('hall').hidden=true;if(end)closing();else startCustomer()});
 
 /* ---------- 장보기 · 과학 퀴즈 ---------- */
 let mTab='buy';
 function renderMarket(){stats();$('tabBuy').setAttribute('aria-selected',mTab==='buy');$('tabQuiz').setAttribute('aria-selected',mTab==='quiz');$('mBuy').hidden=mTab!=='buy';$('mQuiz').hidden=mTab!=='quiz';
   if(mTab==='buy')renderBuy();else renderQuiz()}
 $('tabBuy').addEventListener('click',()=>{mTab='buy';renderMarket()});$('tabQuiz').addEventListener('click',()=>{mTab='quiz';renderMarket()});
-$('mOpen').addEventListener('click',()=>{show('cafe');startCustomer()});
+$('mOpen').addEventListener('click',()=>show('cafe'));
 const INGIC={cocoa:'cocoa',vanilla:'vanilla',honey:'honey',oat:'oat_milk',hazelnut:'hazelnut',herb:'herb',lemon:'lemon',ice:'ice',gelatin:'gelatin',beans:'coffee_beans',blacktea:'black_tea',greentea:'green_tea',matchap:'matcha',dalgonamix:'dalgona',milk:'milk',cream:'whipped_cream',condensed:'condensed_milk',caramel:'caramel',straw:'strawberry',red:'pomegranate_syrup',blue:'blue_syrup',yellow:'mango_puree',green:'kiwi_juice',violet:'purple_syrup',orange:'orange_juice',yuzu:'yuzu_soda',soda:'sparkling_water'};
 function renderBuy(){const cats=[...new Set(D.INGS.map(i=>i.cat))];
   $('mBuy').innerHTML=cats.map(c=>`<div class="mcat"><h3><img class="mci" src="a/m/${({'커피·차':'01','라떼':'02','에이드':'12','스무디·디저트':'36'})[c]||'01'}.webp" alt="">${c}</h3>${D.INGS.filter(i=>i.cat===c).map(i=>{const n=S.stock[i.id]||0,full=n+20>CAP,poor=S.coins<i.price;
@@ -1376,7 +1416,7 @@ function delivery(){S.deliveryDay=S.day;save();actor.classList.remove('idle');ac
           const low=[...D.INGS].sort((x,y)=>(S.stock[x.id]||0)-(S.stock[y.id]||0))[0],amt=ok?20:10;S.stock[low.id]=Math.min(CAP,(S.stock[low.id]||0)+amt);save();
           face(ok?'h':'d');say(ok?`정답이에요! ${q.ex}`:`아쉽네요. 정답은 “${q.c[q.a]}”${batchim(q.c[q.a])?'이에요':'예요'}. ${q.ex}`,{then:()=>{toast(`${low.nm} ${J(amt)}을 받았어요`);
             next('▶',()=>{face('h');say(ok?`보너스 상자는 ${jo(low.nm,'이에요/예요')}. 그럼 저는 다음 배달 갑니다!`:`그래도 반 상자는 두고 갈게요. ${jo(low.nm,'이에요/예요')}!`,{then:()=>{
-              const h=hiddenReady();if(S.today.length>=S.perDay){next('영업 마감하기',closing);return}next(h?'문 앞에 누가 서 있어요…':'다음 손님 받기',startCustomer)}})})}})}))}})})},RM?0:420)}
+              next('▶',toHall)}})})}})}))}})})},RM?0:420)}
 
 /* ---------- 작업대 시트 ---------- */
 function sheet(state){const s=$('sheet');s.classList.toggle('open',state==='open');s.classList.toggle('peek',state==='peek');s.setAttribute('aria-hidden',state?'false':'true');
@@ -1422,7 +1462,7 @@ function prologue(){busy=true;cur=null;sceneMode('prologue');
   const B=[['(문이 저절로 살짝 열린다. 안에는 먼지 쌓인 테이블, 그리고 창가에 검은 고양이 한 마리.)','x',0,'cat'],
     ['(고양이가 노란 눈으로 오래 나를 보다가, 카운터 위 낡은 열쇠 쪽으로 꼬리를 한 번 흔든다.)','x',0,'catkey']];
   const E=[['(카운터 서랍에는 누렇게 바랜 기록장이 한 권 있다. 첫 장을 펼치니 둥글둥글한 글씨.)','x',0,'cover'],['변인은 하나씩, 이야기는 끝까지.','note',0,'journal'],['(그날부터 나는 이 카페의 바리스타다.)','x']];
-  const done=()=>{prop(null);catShow(false);S.prologue=1;save();busy=false;sceneMode('day');startCustomer()};
+  const done=()=>{prop(null);catShow(false);S.prologue=1;save();busy=false;sceneMode('day');goHall()};
   const pick=()=>{$('who').innerHTML='<span class="np">나</span><small>바리스타</small>';$('line').className='line';$('line').textContent='어떻게 할까?';$('dctl').innerHTML='';
     const ch=[['열쇠를 집는다',[['(초승달 손잡이가 달린 낡은 황동 열쇠. 손에 쥐자 고양이가 만족한 듯 눈을 감고 다시 둥글게 눕는다.)','x',0,'key']]],['"안녕? 여기 주인이니?"',[['(고양이는 대답 대신 하품을 한다. 그리고 다시 열쇠 쪽으로 꼬리를 흔든다.)','x',0,'catkey'],['(열쇠를 집는다. 초승달 손잡이가 달린 낡은 황동 열쇠다.)','x',0,'key']]]];
     $('choices').innerHTML=ch.map((c,i)=>`<button class="choice" data-i="${i}">${c[0]}</button>`).join('');
@@ -1507,7 +1547,8 @@ const UIIMG={};
 function preUI(){['journal','market','pen_icon','book_guests_v2','book_guests','book_guests2','book_menu','book_profile'].forEach(n=>{if(UIIMG[n])return;const im=new Image();im.src=`a/s/${n}.webp`;UIIMG[n]={im,p:(im.decode?im.decode().catch(()=>{}):new Promise(r=>{im.onload=im.onerror=r})).then(()=>{UIIMG[n].done=1})}})}
 setTimeout(()=>{preUI();C.forEach(c=>{if(S.met.includes(c.no)){const i=new Image();i.src=sprite(c.no,'n')}})},1200);
 const VIMG={album:'book_guests2',guests:'book_guests_v2',menu:'book_menu',market:'market',journal:'journal'};
-function closing(){preUI();
+let inClose=false;
+function closing(){preUI();inClose=true;
   actor.classList.add('away');$('served').hidden=true;sceneMode('closing');
   sheet(null);
   say(`${S.day}일째 영업을 마쳤어요. 불을 하나씩 끄고, 오늘 만난 손님들을 기록해 볼까요?`,{sys:true,then:()=>next('영업 일지 쓰기',journal)});
@@ -1529,7 +1570,7 @@ function renderJournal(){
     <div class="jq">${h?'문 닫을 무렵, 창밖에 누군가 서 있었던 것 같다.<br>내일 다시 와 줄까?':avg>=4?'오늘의 기록을 차곡차곡,<br>내일의 한 잔을 더 다정하게.':'오늘의 실패도 차곡차곡,<br>내일은 변인을 하나씩 바꿔 봐야지.'}</div>
     <button class="btn go big jgo" id="nextDay">${S.day+1}일째 장보러 가기 <span aria-hidden="true">→</span></button>
     <button class="jlink" id="jGuests">손님 보기</button></div><button class="jmoon" id="jMoon" aria-label="장보러 가기"></button>`;
-  const goMarket=jMode==='peek'?()=>show('cafe'):()=>{S.day++;S.today=[];S.dayOne=S.oneVar;stats();mTab='buy';show('market');$('mOpen').hidden=false};
+  const goMarket=jMode==='peek'?()=>show('cafe'):()=>{inClose=false;S.day++;S.today=[];S.dayOne=S.oneVar;stats();mTab='buy';show('market');$('mOpen').hidden=false};
   if(jMode==='peek'){$('nextDay').innerHTML='카페로 돌아가기 <span aria-hidden="true">→</span>';$('jMoon').setAttribute('aria-label','카페로 돌아가기')}
   $('nextDay').addEventListener('click',goMarket);$('jMoon').addEventListener('click',goMarket);
   $('jGuests').addEventListener('click',()=>{retV='journal';show('guests')});
@@ -1823,7 +1864,7 @@ function practiceDone(st,h){const el=document.createElement('div');el.className=
     <div class="row"><button class="btn go" id="pAgain">한 번 더</button><button class="btn" id="pEnd">연습 끝내기</button></div></div>`;
   $('sheetBody').appendChild(el);el.scrollIntoView({behavior:RM?'auto':'smooth',block:'nearest'});
   $('pAgain').addEventListener('click',()=>{const k=cur.menu;cur=setOrder({name:'연습',no:0,practice:true,revealed:true},k);tastes=0;openStation()});
-  $('pEnd').addEventListener('click',()=>{cur=pracPrev;pracPrev=null;sheet(null);if(!cur&&!busy){if(!S.prologue)prologue();else startCustomer()}})}
+  $('pEnd').addEventListener('click',()=>{cur=pracPrev;pracPrev=null;sheet(null);if(!cur&&!busy){if(!S.prologue)prologue();else goHall()}})}
 
 /* ---------- 도감 ---------- */
 let sel=null;
