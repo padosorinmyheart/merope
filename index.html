@@ -190,6 +190,32 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .title.il #tImg{left:0;right:0;width:100%;height:auto;max-height:100%;aspect-ratio:1536/1024;top:clamp(56px,14%,22%);transform:none;object-fit:contain;filter:drop-shadow(0 12px 30px rgba(0,0,0,.45))}
 @container (min-aspect-ratio:1/1){.title.il #tImg{top:0;height:100%;width:100%;object-fit:cover;object-position:50% 40%}}
 .ilview .ibg{margin-top:8px;font-size:13px}
+/* 결말 장면 */
+.endv{position:absolute;inset:0;z-index:13;background:#05080f;overflow:hidden;cursor:pointer;user-select:none}
+.endv .eimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;opacity:0;transform:scale(1.14);transition:opacity 3.2s ease,transform 40s linear,object-position 5s ease-in-out}
+.endv.on .eimg{opacity:1;transform:scale(1)}
+.endv .eblur{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(26px) brightness(.55);opacity:0;transition:opacity 1.5s}.endv.fin .eblur{opacity:1}
+.endv .eimg.whole{object-fit:contain;object-position:50% 30%;transform:none}
+.endv .eti.fin{justify-content:flex-end;padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.endv::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(transparent,rgba(5,8,15,.82));pointer-events:none;opacity:0;transition:opacity 2s}
+.endv.on::after{opacity:1}
+.endv .eti{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:#F3E8CF;z-index:2;transition:opacity 1.6s ease;pointer-events:none}
+.endv .eti small{font-family:var(--display);letter-spacing:.5em;font-size:12px;color:#C9A365}
+.endv .eti b{font-family:var(--display);font-size:clamp(22px,3.4vw,30px);color:#F6E2AE;letter-spacing:.06em}
+.endv .eti span{font-size:13px;color:#B9C3D6}
+.endv .eti.out{opacity:0}
+.endv .eti.fin{background:linear-gradient(transparent 45%,rgba(5,8,15,.75));pointer-events:auto}
+.endv .ecap{position:absolute;left:50%;bottom:max(34px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(620px,calc(100% - 40px));z-index:2;color:#FBF4E4;font-family:var(--display);font-size:clamp(15px,2vw,18px);line-height:1.75;text-align:center;text-shadow:0 2px 10px rgba(0,0,0,.85);min-height:5.4em;display:flex;align-items:flex-end;justify-content:center}
+.endv.fin .ecap{display:none}
+.endv .ecap{pointer-events:none}
+.endv .ecap p{margin:0;opacity:0;transform:translateY(6px);transition:opacity 1.4s ease,transform 1.4s ease}
+.endv .ecap p.in{opacity:1;transform:none}
+.endv .enext{position:absolute;right:18px;bottom:max(10px,env(safe-area-inset-bottom,0px));z-index:3;font-size:12px;color:rgba(243,232,207,.7);opacity:0;transition:opacity .8s;pointer-events:none}
+.endv .enext.in{opacity:1;animation:blink 1.8s ease-in-out infinite}
+@keyframes blink{50%{opacity:.35}}
+.endv .eskip{position:absolute;top:max(14px,env(safe-area-inset-top,0px));right:14px;z-index:3;border:0;background:rgba(10,16,30,.5);color:#E7D5A3;font:600 12px var(--display);padding:6px 12px;border-radius:999px;cursor:pointer}
+.endv .eact{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center}
+@media (prefers-reduced-motion:reduce){.endv .eimg{transition:opacity 1s;transform:none}}
 .title img{position:absolute;top:0;left:50%;height:100%;width:auto;aspect-ratio:1418/2512;object-fit:cover;object-position:50% 0;transform:translateX(-50%);max-width:none}
 .title .card{position:absolute;left:var(--gx);right:var(--gxr);bottom:max(16px,env(safe-area-inset-bottom,0px));margin-inline:auto;max-width:440px;
   background:linear-gradient(180deg,rgba(255,252,244,.5),rgba(255,250,238,.64));backdrop-filter:blur(10px) saturate(1.15);-webkit-backdrop-filter:blur(10px) saturate(1.15);
@@ -1408,7 +1434,8 @@ function afterVisit(){
   next('배웅하기',toHall)}
 /* 홀: 손님 사이의 기본 화면 */
 function toHall(){actor.classList.add('away');actor.classList.remove('idle');$('served').hidden=true;sheet(null);cur=null;busy=false;goHall()}
-function goHall(){const st=roomState(),h=$('hall');h.dataset.sc=st.scenery;$('hRoom').innerHTML=roomHTML(st)+hallTokens();
+function goHall(){const ea=endReady();if(ea){$('hall').hidden=true;playEnding(ea,goHall);return}
+  const st=roomState(),h=$('hall');h.dataset.sc=st.scenery;$('hRoom').innerHTML=roomHTML(st)+hallTokens();
   $('hRoom').querySelectorAll('.htok').forEach(b=>b.addEventListener('click',()=>{if(HV.moved>8)return;hallSay(b)}));
   const end=S.today.length>=S.perDay,hid=!end&&hiddenReady();
   const n=S.today.length;$('hSt').textContent=end?'오늘 만날 손님을 모두 배웅했어요':hid?'창밖에 낯선 그림자가 어른거려요':n?`손님 ${n}명을 배웅했어요. 다음 손님을 맞을까요?`:'문을 열었어요. 첫 손님을 맞아 볼까요?';
@@ -1967,9 +1994,35 @@ function renderAlbum(){const have=S.album||[],n=have.length;
     S.spent=(S.spent||0)+a.cost;S.album=[...(S.album||[]),a.id];stats();save();renderAlbum();showIllust(a,true)}));
   $('albums').querySelectorAll('.acard.open').forEach(b=>b.addEventListener('click',()=>showIllust(ALBUM.find(x=>x.id===b.dataset.id))));
 }
+/* 결말: 한 무리의 이야기를 모두 들으면 홀로 돌아올 때 천천히 펼쳐져요 */
+const ENDS={
+ end1:[[50,'비가 그친 저녁, 창가 자리에 네 사람이 모였다.'],[36,'레온은 이번 주 예보를 전부 맞혔다며, 오늘만큼은 하늘 대신 딸을 본다.'],[46,'헤이즐이 무지개 그림을 펼쳤다. “고양이한테 줄 거예요. 마법사니까요.”'],[62,'핀이 프리즘을 창에 대자 햇빛이 일곱 빛깔로 갈라져 창틀 위로 쏟아졌다. “사건 번호 1번, 해결!”'],[22,'알렉스는 지붕 위에서 본 금테 안경을 떠올리며 웃었다. 오늘은 출동이 한 건도 없다.'],[86,'멀린은 무지개를 한참 바라보다가 안경을 슬쩍 고쳐 썼다. 관측 기록을 남기는 사람처럼.'],[55,'창가의 수상한 고양이는, 오늘도 아무 말이 없었다.']],
+ end2:[[50,'금요일 저녁. 이번에는 택배 상자가 카페로 왔다.'],[20,'휴고가 리본 묶인 상자를 내밀었다. “보낸 사람이 있는 택배예요. 저요.”'],[42,'아녜스가 리본을 풀었다. 안에는 새 수채화 물감과 귤 다섯 개.'],[40,'“빈 상자를 보내던 금요일이 있었지요.” 그녀가 웃었다. “이제는 문을 열면 누가 와요.”'],[70,'건너편의 아이리스는 반 아이들이 준 쿠폰을 만지작거렸다. 첫 담임의 금요일도, 생각보다 따뜻했다.'],[50,'금요일마다 누군가 문 앞에 와 준다는 것. 그게 이 골목에서 가장 오래된 택배였다.']],
+ end3:[[50,'촛불이 낮게 흔들리는 밤, 세 사람이 한 테이블에 앉았다.'],[26,'아서의 휴대폰에서 또 알림이 울렸다. 손주가 보낸 하트. 이제 그는 답장할 줄 안다.'],[50,'베아트리스가 시집에서 꺼내 온 손글씨 시를 소리 내어 읽었다. 서른 해 동안 한 사람에게 쓰인 시.'],[80,'테오가 그 시 위에 조용히 기타 코드를 얹었다. 바다 건너 친구에게 보낼 두 번째 노래가 될 것이다.'],[30,'“말이라는 건 말이야, 늦어도 도착은 하더군.” 아서가 웃었다.'],[52,'전하지 못한 말은 사라지지 않는다. 시가 되고, 노래가 되고, 하트 하나가 되어 결국 누군가에게 닿는다.']],
+ end4:[[45,'시험이 끝난 오후, 교복 차림의 넷이 테이블 하나를 차지했다.'],[12,'엘리가 72점짜리 시험지를 꺼냈다. 이번엔 진짜 엄마 사인이 있다.'],[56,'릴리는 ‘작전명 L’ 이야기를 하다가 또 얼굴이 빨개졌다.'],[32,'노아가 휴대폰을 내밀었다. “내 게임 3탄. 이 카페가 나와.” 다들 머리를 맞대고 들여다봤다.'],[80,'루카는 형과의 1대1 결과를 끝까지 말하지 않았다. 대신 아이스크림을 샀다.'],[46,'주머니마다 하나씩 숨겨 두었던 비밀들. 꺼내 놓고 보니, 생각보다 무겁지 않았다.']]};
+function endReady(){return ALBUM.find(a=>a.end&&ENDS[a.id]&&a.ok()&&!(S.endSeen||[]).includes(a.id))}
+function playEnding(a,done){const L=ENDS[a.id];if(!L){done&&done();return}
+  if(!(S.endSeen||[]).includes(a.id))S.endSeen=[...(S.endSeen||[]),a.id];if(!(S.album||[]).includes(a.id))S.album=[...(S.album||[]),a.id];save();stats();
+  const el=document.createElement('div');el.className='endv';el.setAttribute('role','dialog');el.setAttribute('aria-label','결말 · '+a.title);
+  el.innerHTML=`<div class="eblur" style="background-image:url(a/il/${a.id}.webp)"></div><img class="eimg" src="a/il/${a.id}.webp" alt="${a.title}"><div class="eti"><small>결 말</small><b>${a.title}</b><span>${a.names}</span></div><div class="ecap" aria-live="polite"></div><span class="enext">눌러서 계속 ▸</span><button class="eskip">건너뛰기</button>`;
+  $('shell').appendChild(el);const img=el.querySelector('.eimg'),cap=el.querySelector('.ecap'),ti=el.querySelector('.eti'),nx=el.querySelector('.enext');
+  let i=-1,ready=false,timer=null,fin=false;const T=RM?0:1;
+  const finish=()=>{if(fin)return;fin=true;clearTimeout(timer);cap.innerHTML='';nx.classList.remove('in');el.querySelector('.eskip').remove();el.classList.add('fin');
+    img.style.transition='opacity 1.2s ease';img.style.opacity=0;setTimeout(()=>{img.classList.add('whole');img.style.opacity=1},T?1200:0);
+    ti.className='eti fin';ti.innerHTML=`<small>결 말</small><b>${a.title}</b><span>${a.names}</span><span style="color:#C9A365;margin-top:6px">앨범에 담았어요</span><div class="eact"><button class="btn" id="eBg">${S.titleBg===a.id?'✓ 첫 화면 배경':'첫 화면 배경으로 쓰기'}</button><button class="btn go" id="eOk">${done?'카페로 돌아가기':'닫기'}</button></div>`;
+    ti.querySelector('#eBg').addEventListener('click',e=>{e.stopPropagation();S.titleBg=S.titleBg===a.id?null:a.id;save();titleBg();e.target.textContent=S.titleBg===a.id?'✓ 첫 화면 배경':'첫 화면 배경으로 쓰기'});
+    ti.querySelector('#eOk').addEventListener('click',e=>{e.stopPropagation();el.remove();done&&done()})};
+  const step=()=>{if(fin)return;if(!ready)return;i++;if(i>=L.length){finish();return}ready=false;nx.classList.remove('in');clearTimeout(timer);
+    const [x,t]=L[i];img.style.objectPosition=`${x}% 50%`;cap.innerHTML=`<p>${t}</p>`;const p=cap.firstChild;requestAnimationFrame(()=>requestAnimationFrame(()=>p.classList.add('in')));
+    setTimeout(()=>{ready=true;nx.classList.add('in')},T?1800:0);timer=setTimeout(step,T?8500:4000)};
+  el.addEventListener('click',e=>{if(e.target.closest('.eskip')){finish();return}if(!fin)step()});
+  setTimeout(()=>ti.classList.add('out'),T?2600:0);
+  setTimeout(()=>{el.classList.add('on')},T?1800:0);
+  setTimeout(()=>{ready=true;step()},T?4600:0)}
 function showIllust(a,fresh){const el=document.createElement('div');el.className='ilview'+(fresh?' fresh':'');el.setAttribute('role','dialog');el.setAttribute('aria-label',a.title);
-  el.innerHTML=`<figure><img src="a/il/${a.id}.webp" alt="${a.title}" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.closest('figure').classList.add('ph')"><figcaption>${fresh?'<small>새 일러스트가 열렸어요</small>':''}<b>${a.title}</b><span>${a.names||dn(byNo(a.who))}</span><em class="phn">일러스트 준비 중이에요</em><button class="btn ibg" hidden></button></figcaption></figure><button class="xbtn" aria-label="닫기">✕</button>`;
-  $('shell').appendChild(el);const bg=el.querySelector('.ibg'),im=el.querySelector('figure img'),setL=()=>{bg.textContent=S.titleBg===a.id?'✓ 첫 화면 배경으로 쓰는 중 · 기본으로 되돌리기':'첫 화면 배경으로 쓰기'};
+  el.innerHTML=`<figure><img src="a/il/${a.id}.webp" alt="${a.title}" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.closest('figure').classList.add('ph')"><figcaption>${fresh?'<small>새 일러스트가 열렸어요</small>':''}<b>${a.title}</b><span>${a.names||dn(byNo(a.who))}</span><em class="phn">일러스트 준비 중이에요</em>${ENDS[a.id]?'<button class="btn go ibg" id="iReplay">결말 다시 보기</button>':''}<button class="btn ibg" hidden></button></figcaption></figure><button class="xbtn" aria-label="닫기">✕</button>`;
+  $('shell').appendChild(el);const bg=el.querySelector('.ibg[hidden]'),im=el.querySelector('figure img'),setL=()=>{bg.textContent=S.titleBg===a.id?'✓ 첫 화면 배경으로 쓰는 중 · 기본으로 되돌리기':'첫 화면 배경으로 쓰기'};
+  if(el.querySelector('#iReplay'))el.querySelector('#iReplay').addEventListener('click',e=>{e.stopPropagation();el.remove();playEnding(a,null)});
   const okImg=()=>{if(!el.querySelector('figure.ph')&&(S.album||[]).includes(a.id)){bg.hidden=false;setL()}};if(im.complete&&im.naturalWidth)okImg();else im.addEventListener('load',okImg);
   bg.addEventListener('click',e=>{e.stopPropagation();S.titleBg=S.titleBg===a.id?null:a.id;save();titleBg();setL();toast(S.titleBg?'첫 화면 배경을 바꿨어요':'첫 화면을 기본 배경으로 되돌렸어요')});const close=()=>el.remove();el.querySelector('.xbtn').addEventListener('click',close);el.addEventListener('click',e=>{if(e.target===el)close()});}
 let gch=1;
