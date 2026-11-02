@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102215610">
+<meta name="merope-ver" content="20261102220009">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -188,6 +188,8 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .gmeta{display:flex;gap:6px;flex-wrap:wrap}
 .title{position:absolute;inset:0;z-index:11;background:#1E2A3D;overflow:hidden;container-type:size}
 .tfill{position:absolute;inset:0;background:center/cover no-repeat;filter:blur(24px) brightness(.8);transform:scale(1.1)}
+.title .tchar{position:absolute;top:auto;left:calc(50% - 30cqh);bottom:22cqh;height:48cqh;width:auto;aspect-ratio:4/5;transform:none;max-width:none;object-fit:contain;-webkit-mask-image:linear-gradient(#000 80%,transparent 100%);mask-image:linear-gradient(#000 80%,transparent 100%);filter:drop-shadow(0 0 18px rgba(255,226,150,.45)) drop-shadow(0 10px 18px rgba(0,0,0,.45));animation:tokin 1.2s ease both}
+.title .tchar[hidden]{display:none}
 .title.il #tImg{left:0;right:0;width:100%;height:auto;max-height:100%;aspect-ratio:1536/1024;top:clamp(56px,14%,22%);transform:none;object-fit:contain;filter:drop-shadow(0 12px 30px rgba(0,0,0,.45))}
 @container (min-aspect-ratio:1/1){.title.il #tImg{top:0;height:100%;width:100%;object-fit:cover;object-position:50% 40%}}
 .ilview .ibg{margin-top:8px;font-size:13px}
@@ -1097,6 +1099,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   <section class="title" id="v-title" aria-label="카페 메로페 시작">
     <div class="tfill" id="tFill" aria-hidden="true"></div>
     <img id="tImg" src="a/s/title_night.webp" alt="보름달 아래 문이 열린 카페 메로페 외관">
+    <img id="tChar" class="tchar" alt="" hidden>
     <div class="tbot">
       <div class="tplate">
         <img class="tmoon2" src="a/u/ic_moon.webp" alt="">
@@ -1115,8 +1118,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102215610"></script>
-<script src="quiz.js?v=20261102215610"></script>
+<script src="data.js?v=20261102220009"></script>
+<script src="quiz.js?v=20261102220009"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2044,7 +2047,7 @@ function showIllust(a,fresh){const el=document.createElement('div');el.className
   el.innerHTML=`<figure><img src="a/il/${a.id}.webp" alt="${a.title}" onerror="this.onerror=null;this.src='${sprite(a.spr,'h')}';this.closest('figure').classList.add('ph')"><figcaption>${fresh?'<small>새 일러스트가 열렸어요</small>':''}<b>${a.title}</b><span>${a.names||dn(byNo(a.who))}</span><em class="phn">일러스트 준비 중이에요</em>${ENDS[a.id]?'<button class="btn go ibg" id="iReplay">결말 다시 보기</button>':''}<button class="btn ibg" hidden></button></figcaption></figure><button class="xbtn" aria-label="닫기">✕</button>`;
   $('shell').appendChild(el);const bg=el.querySelector('.ibg[hidden]'),im=el.querySelector('figure img'),setL=()=>{bg.textContent=S.titleBg===a.id?'✓ 첫 화면 배경으로 쓰는 중 · 기본으로 되돌리기':'첫 화면 배경으로 쓰기'};
   if(el.querySelector('#iReplay'))el.querySelector('#iReplay').addEventListener('click',e=>{e.stopPropagation();el.remove();playEnding(a,null)});
-  const okImg=()=>{if(!el.querySelector('figure.ph')&&(S.album||[]).includes(a.id)){bg.hidden=false;setL()}};if(im.complete&&im.naturalWidth)okImg();else im.addEventListener('load',okImg);
+  if((S.album||[]).includes(a.id)){bg.hidden=false;setL()}
   bg.addEventListener('click',e=>{e.stopPropagation();S.titleBg=S.titleBg===a.id?null:a.id;save();titleBg();setL();toast(S.titleBg?'첫 화면 배경을 바꿨어요':'첫 화면을 기본 배경으로 되돌렸어요')});const close=()=>el.remove();el.querySelector('.xbtn').addEventListener('click',close);el.addEventListener('click',e=>{if(e.target===el)close()});}
 let gch=1;
 document.querySelectorAll('.gtabs button').forEach(b=>b.addEventListener('click',()=>{gch=+b.dataset.ch;renderGuests();const l=document.querySelector('.gstage .blist');if(l)l.scrollTop=0}));
@@ -2278,8 +2281,12 @@ function bindReset(){
 }
 bindReset();
 
-function titleBg(){const id=S.titleBg&&(S.album||[]).includes(S.titleBg)?S.titleBg:null,src=id?`a/il/${id}.webp`:'a/s/title_night.webp';
-  $('tImg').src=src;$('tFill').style.backgroundImage=`url(${src})`;$('v-title').classList.toggle('il',!!id)}
+/* 첫 화면 배경: 일러스트가 있으면 일러스트, 아직 준비 중인 칸은 그 손님이 메로페 문 앞에 서 있는 모습 */
+function titleBg(){const id=S.titleBg&&(S.album||[]).includes(S.titleBg)?S.titleBg:null,a=id&&ALBUM.find(x=>x.id===id),T=$('v-title'),ch=$('tChar');
+  const night=()=>{$('tImg').src='a/s/title_night.webp';$('tFill').style.backgroundImage='url(a/s/title_night.webp)';T.classList.remove('il')};
+  ch.hidden=true;if(!a){night();return}
+  const im=new Image();im.onload=()=>{if(S.titleBg!==id)return;const src=`a/il/${id}.webp`;$('tImg').src=src;$('tFill').style.backgroundImage=`url(${src})`;T.classList.add('il')};
+  im.onerror=()=>{if(S.titleBg!==id)return;night();ch.src=sprite(a.spr,'h');ch.alt=a.title;ch.hidden=false};im.src=`a/il/${id}.webp`}
 titleBg();
 /* 새 버전 알림: 휴대폰 브라우저가 예전 화면을 붙잡고 있을 때 새로고침을 권해요 */
 (()=>{const m=document.querySelector('meta[name="merope-ver"]');if(!m||!window.fetch)return;const mine=m.content;let shown=false;
