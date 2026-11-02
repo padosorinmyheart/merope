@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
+<meta name="merope-ver" content="20261102204351">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -191,6 +192,8 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 @container (min-aspect-ratio:1/1){.title.il #tImg{top:0;height:100%;width:100%;object-fit:cover;object-position:50% 40%}}
 .ilview .ibg{margin-top:8px;font-size:13px}
 /* 결말 장면 */
+.newver{position:absolute;left:50%;top:calc(max(10px,env(safe-area-inset-top,0px)) + 56px);transform:translateX(-50%);z-index:20;border:0;cursor:pointer;white-space:nowrap;font:600 13px var(--display);color:#FBF4E4;background:#1B3253;padding:8px 16px;border-radius:999px;box-shadow:0 0 0 1.5px #E7C77A,0 8px 20px rgba(10,20,40,.4);animation:tokin .4s ease both}
+.newver b{color:#F6E2AE}
 .endv{position:absolute;inset:0;z-index:13;background:#05080f;overflow:hidden;cursor:pointer;user-select:none}
 .endv .eimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;opacity:0;transform:scale(1.14);transition:opacity 3.2s ease,transform 40s linear,object-position 5s ease-in-out}
 .endv.on .eimg{opacity:1;transform:scale(1)}
@@ -1101,8 +1104,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js"></script>
-<script src="quiz.js"></script>
+<script src="data.js?v=20261102204351"></script>
+<script src="quiz.js?v=20261102204351"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2264,6 +2267,11 @@ bindReset();
 function titleBg(){const id=S.titleBg&&(S.album||[]).includes(S.titleBg)?S.titleBg:null,src=id?`a/il/${id}.webp`:'a/s/title_night.webp';
   $('tImg').src=src;$('tFill').style.backgroundImage=`url(${src})`;$('v-title').classList.toggle('il',!!id)}
 titleBg();
+/* 새 버전 알림: 휴대폰 브라우저가 예전 화면을 붙잡고 있을 때 새로고침을 권해요 */
+(()=>{const m=document.querySelector('meta[name="merope-ver"]');if(!m||!window.fetch)return;const mine=m.content;let shown=false;
+  const chk=()=>{if(shown||document.hidden)return;fetch('version.txt?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=(v||'').trim();if(!v||v===mine||shown)return;shown=true;
+    const b=document.createElement('button');b.className='newver';b.innerHTML='새 버전이 나왔어요 · <b>눌러서 새로고침</b>';b.addEventListener('click',()=>location.reload());$('shell').appendChild(b)}).catch(()=>{})};
+  setTimeout(chk,1500);document.addEventListener('visibilitychange',chk);setInterval(chk,10*60*1000)})();
 setTimeout(()=>{try{preRoom()}catch(e){}},200);
 sceneMode('day');show('title');
 $('mJournal').addEventListener('click',peekJournal);
