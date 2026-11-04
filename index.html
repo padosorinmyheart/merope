@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261102231351">
+<meta name="merope-ver" content="20261104093823">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -497,7 +497,7 @@ td.k{font-family:var(--body)}
 .sim{position:relative;height:210px;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#FFFDF7,#F1E7D3);box-shadow:inset 0 0 0 1px #E3D3B3;touch-action:none;user-select:none;-webkit-user-select:none}
 .sim.ok{box-shadow:inset 0 0 0 2px #7FA987}
 .simcv{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
-.simcup{position:absolute;left:58%;top:57%;width:42%;height:70%;transform:translate(-50%,-50%);display:grid;place-items:center;transition:transform .2s}
+.simcup{position:absolute;left:58%;top:56%;width:40%;height:60%;transform:translate(-50%,-50%);display:grid;place-items:center;transition:transform .2s}
 .simcup img,.simcup svg{width:100%;height:100%;object-fit:contain;pointer-events:none}
 .simcup img{opacity:.7;filter:saturate(.7);transition:opacity .5s,filter .5s}.sim.ok .simcup img{opacity:1;filter:none}
 .simcup.bump{animation:hkbump .25s ease}
@@ -527,7 +527,25 @@ td.k{font-family:var(--body)}
 .simcup.pouring::before{content:"";position:absolute;left:46%;top:-30%;width:6%;height:60%;background:linear-gradient(#C9A365,rgba(201,163,101,.6));border-radius:4px;animation:pourflow .3s linear infinite}
 @keyframes pourflow{50%{opacity:.7}}
 .k-heat .simcup::after{content:"♨";position:absolute;top:-8%;left:50%;transform:translateX(-50%);font-size:34px;color:#C9A365;opacity:var(--steam,0);transition:opacity .2s}
-.sim.clock .simcup::after{content:"🕰";position:absolute;top:-6%;right:-6%;font-size:30px}.sim.clock.run .simcup::after{animation:spin .8s linear infinite}
+.simcup .clk{position:absolute;top:-12%;right:-18%;width:46%!important;height:auto!important;opacity:1!important;filter:none!important}.sim.clock.run .clk{animation:wob .35s ease-in-out infinite}
+@keyframes wob{50%{transform:rotate(8deg) scale(1.05)}}
+.cupw{position:relative;width:100%;height:100%;display:grid;place-items:center}
+.cupw .cupimg{position:relative;z-index:2;width:100%;height:100%;object-fit:contain;opacity:1!important;filter:none!important}
+.cupw .liq{position:absolute;z-index:1;overflow:hidden;display:flex;align-items:flex-end}
+.cupw .liq i{display:block;width:100%;height:0;opacity:.92;box-shadow:inset 0 4px 0 rgba(255,255,255,.55),inset 0 -24px 30px rgba(60,30,10,.12);transition:height .25s,background .4s}
+.c-tumbler .liq{left:21%;right:21%;top:14%;bottom:12%;clip-path:polygon(0 0,100% 0,90% 100%,10% 100%)}
+.c-aide .liq{left:22%;right:22%;top:9%;bottom:44%;clip-path:polygon(0 0,100% 0,85% 85%,50% 100%,15% 85%)}
+.c-bowl .liq{left:14%;right:14%;top:22%;bottom:52%;clip-path:polygon(0 0,100% 0,78% 100%,22% 100%)}
+.c-mug .liq{left:16%;right:30%;top:12%;bottom:84%;border-radius:50%}
+.c-mug .liq i{height:100%!important;opacity:0;transition:opacity .4s}.c-mug.has .liq i{opacity:.9}
+.c-pot .liq{left:22%;right:22%;top:18%;bottom:70%;border-radius:50%}.c-pot .liq i{height:100%!important;opacity:.0}
+.simcup .stm{position:absolute;left:30%;top:-34%;width:40%!important;height:auto!important;opacity:0;pointer-events:none;transition:opacity .3s;animation:stm 2.4s ease-in-out infinite;filter:none!important}
+@keyframes stm{50%{transform:translateY(-6px) scaleX(1.08)}}
+.simcup .stc{position:absolute;left:14%;top:2%;width:72%!important;height:auto!important;opacity:.92!important;filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))!important;transition:transform .6s,opacity .6s}
+.simcup .stc.lift{transform:translateY(-60%) rotate(-12deg);opacity:0!important}
+.simcup .tieon{position:absolute;left:52%;top:30%;width:46%!important;height:auto!important;opacity:1!important;filter:none!important;animation:tokin .5s ease both}
+.simcup .tieon.wrapon{left:0;top:0;width:100%!important;height:100%!important;object-fit:contain}
+.simtool{position:absolute;width:54px;transform:translate(-30%,-85%) rotate(-20deg);z-index:6;pointer-events:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 .sim.clock{cursor:pointer}
 .sheet .rcp{background:#FFFCF5;border-radius:14px;padding:8px 14px;box-shadow:inset 0 0 0 1px #E3D3B3;margin:0 0 10px}
@@ -1212,9 +1230,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261102231351"></script>
-<script src="quiz.js?v=20261102231351"></script>
-<script src="recipes.js?v=20261102231351"></script>
+<script src="data.js?v=20261104093823"></script>
+<script src="quiz.js?v=20261104093823"></script>
+<script src="recipes.js?v=20261104093823"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2278,22 +2296,44 @@ const SIMIC=[[/레몬/,'lemon'],[/딸기/,'strawberry'],[/꿀/,'honey'],[/민트
   [/카라멜|캐러멜/,'caramel'],[/시럽|청/,'vanilla'],[/얼음/,'ice'],[/우유/,'milk'],[/달고나/,'dalgona'],[/젤라틴|젤리/,'gelatin'],[/오렌지|금귤|자몽|유자|살구/,'orange_juice'],
   [/헤이즐넛|견과|피스타치오|밤/,'hazelnut'],[/원두|커피/,'coffee_beans'],[/홍차|찻잎|녹차|차를/,'black_tea'],[/말차/,'matcha'],[/키위|청포도/,'kiwi_juice'],[/망고|바나나|단호박/,'mango_puree'],
   [/블루베리|보라/,'purple_syrup'],[/석류|체리|히비스커스/,'pomegranate_syrup'],[/귀리/,'oat_milk']];
+const CUPT=n=>[3,5,10,17,31,32,35,36,37].includes(n)?'tumbler':(n>=11&&n<=20)?'aide':[38,39,40].includes(n)?'bowl':'mug';
+const SPCUP={'01':'aide','06':'tumbler','07':'aide','09':'tumbler'};
+const LIQC={1:'#5A3420',2:'#C9A57A',3:'#EFE3CC',4:'#C9A57A',5:'#C7955E',6:'#A7A39C',7:'#D2B48C',8:'#BFE3CF',9:'#8A5A3C',10:'#4A2A18',11:'#F2C94C',12:'#F4A6A0',13:'#F7E07A',14:'#C9E57A',15:'#F28A8A',16:'#8E7CF0',17:'#E8964A',18:'#F2A93B',19:'#4A8CF0',20:'#F1C27A',
+ 21:'#6A5CD9',22:'#B9CF7A',23:'#D9C2A0',24:'#C2283C',25:'#F2D46A',26:'#CFE08A',27:'#E0602A',28:'#B79CE0',29:'#F4C542',30:'#9A6A3A',31:'#F6C9CF',32:'#A9C46A',33:'#C9A9E0',34:'#F2B84A',35:'#F2E3B0',36:'#F6B83A',37:'#7A5AB0',38:'#B9D96A',39:'#FBF5E8',40:'#9AC0F0',
+ '01':'#F4E3A0','02':'#EFE2C8','03':'#8A5A3C','04':'#D98A3A','05':'#D9792A','06':'#CDE0B0','07':'#F3EBC8','08':'#D9C2A0','09':'#E8B04A','10':'#5A1E3A','11':'#C9A57A'};
+const mixC=(a,b,f)=>{const h=x=>[1,3,5].map(i=>parseInt(x.slice(i,i+2),16)),A=h(a),B=h(b);return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*f)).join(',')})`};
+function simTool(kind,lb,t){const T=x=>`a/t/${x}.webp`;
+  if(kind==='stir')return T('whisk');if(kind==='grind')return T(/블렌더|곱게/.test(lb)?'blender':'mortar');if(kind==='shake')return T('shaker');if(kind==='wait')return T('clock');
+  if(kind==='tie')return T(/보자기|감싸|풀기/.test(lb+t)?'wrap':'ribbon');
+  if(kind==='place'){const st=/스텐실/.test(t)&&(/트리/.test(t)?'tree':/태양/.test(t)?'sun':/별/.test(t)&&!/초승달/.test(t)?'star':'moon');if(st)return T('stencil_'+st);
+    if(/크림|휘핑|거품/.test(t+lb))return T('cream');if(/얼음/.test(lb))return T('ice');if(/말차|체 치/.test(t))return T('powder');
+    const ic=simIcon(t)||simIcon(lb);if(ic)return ic;if(/넣기|큰술|시럽|담기/.test(lb))return T('spoons');}
+  if(kind==='slice')return simIcon(t)||simIcon(lb);return null}
 const simIcon=t=>{const h=SIMIC.find(([r])=>r.test(t));return h?`a/i/${h[1]}.webp`:null};
 function simKind(type,lb,t){if(type==='whisk')return 'stir';if(type!=='tap')return type;const s=(lb||'')+' '+t;
+  if(/스텐실/.test(t)&&/그리기|뿌리/.test(lb))return 'shake';
   if(/뿌리|흔들|체 치/.test(lb))return 'shake';if(/썰|자르|저미|깎|깍둑/.test(lb))return 'slice';if(/갈기|으깨|비비|두드리|볶|뒤적/.test(lb))return 'grind';
   if(/그리기|물결|꼬리|소용돌이|고리/.test(lb))return 'draw';if(/묶|매기|매듭|감싸|풀기/.test(lb))return 'tie';return 'place'}
 function hkAct(m,code,next,text,ph){const box=$('hka'),[type,a1,a2,a3]=code.split(':'),lb=type==='tap'?(a2||'넣기'):'',kind=simKind(type,lb,text||'');let fin=false;
-  const done=()=>{if(fin)return;fin=true;box.classList.add('fin');sim.classList.add('ok');setTimeout(next,RM?0:650)};
-  const n=Math.max(1,+a1||1),cupImg=ph==='B'?drinkImg(m):null,ic=simIcon(text||'')||simIcon(lb);
+  const done=()=>{if(fin)return;fin=true;box.classList.add('fin');sim.classList.add('ok');
+    if(kind==='tie'){const o=document.createElement('img');o.className='tieon'+(/wrap/.test(tool||'')?' wrapon':'');o.src=tool;cup.appendChild(o)}
+    if(stc)stc.classList.add('lift');setTimeout(next,RM?0:900)};
+  const n=Math.max(1,+a1||1),cupImg=ph==='B'?drinkImg(m):null,tool=simTool(kind,lb,text||''),ic=tool,dno=m.special?cur.menu.slice(2):(m.no||(D.BOOK.find(b=>b.play===cur.menu)||{}).no),
+    ct=m.special?(SPCUP[dno]||'mug'):CUPT(dno),lc=LIQC[dno]||'#C9A365',cupSrc=kind==='heat'?'pot':'cup_'+ct,stencil=/스텐실/.test(text||'')&&kind==='shake'?(/트리/.test(text)?'tree':/태양/.test(text)?'sun':'moon'):null;
   const HINT={place:n>1?`재료를 컵으로 끌어다 놓아요 (${n}번)`:'재료를 컵으로 끌어다 놓아요',stir:'컵 위에서 손가락으로 빙글빙글 원을 그려요',grind:'재료 위에서 동그랗게 문질러 갈아요',
     shake:'통을 컵 위에서 좌우로 흔들어 뿌려요',slice:`재료를 위에서 아래로 쓱 그어 썰어요 (${n}번)`,draw:'컵 위에 손가락으로 그려요',tie:'컵 둘레를 따라 한 바퀴 감아요',
     pour:'꾹 누르고 있다가 초록 칸에서 손을 떼요',heat:'꾹 누르면 데워져요. 초록 칸에서 손을 떼요',steep:'눌러서 우리기 시작, 초록 칸에서 한 번 더 눌러 건져요',wait:'눌러서 시간을 흘려보내요'}[kind];
   box.innerHTML=`<div class="sim k-${kind}" id="sim"><canvas class="simcv"></canvas>
-     <div class="simcup">${cupImg?`<img src="${cupImg}" alt="">`:`<svg viewBox="0 0 100 110" class="glass"><defs><clipPath id="gcl"><path d="M14 8 L86 8 L78 104 Q50 110 22 104 Z"/></clipPath></defs><g clip-path="url(#gcl)"><rect id="gliq" x="0" y="110" width="100" height="110" fill="#C9A365" opacity=".85"/></g><path d="M14 8 L86 8 L78 104 Q50 110 22 104 Z" fill="none" stroke="#9AA9BC" stroke-width="2.5"/><path d="M22 14 L20 90" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/></svg>`}<div class="swirl"></div></div>
+     <div class="simcup">${cupImg?`<img src="${cupImg}" alt="">`:`<div class="cupw c-${kind==='heat'?'pot':ct}"><div class="liq"><i style="background:${lc}"></i></div><img class="cupimg" src="a/t/${cupSrc}.webp" alt=""></div>`}${stencil?`<img class="stc" src="a/t/stencil_${stencil}.webp" alt="">`:''}${kind==='heat'||kind==='steep'?'<img class="stm" src="a/t/steam.webp" alt="">':''}<div class="swirl"></div></div><img class="simtool" alt="" hidden>
      <div class="simit">${ic?`<img src="${ic}" alt="">`:'<span>✦</span>'}<small>${lb||''}</small></div>
      <p class="simhint">${HINT}</p><div class="simdots">${kind==='place'||kind==='slice'?Array.from({length:n},()=>'<i></i>').join(''):''}</div><div class="simbar"><i></i></div></div>
      <button class="simalt" type="button">버튼으로 하기</button>`;
-  const sim=box.querySelector('.sim'),cv=box.querySelector('.simcv'),cup=box.querySelector('.simcup'),it=box.querySelector('.simit'),bar=box.querySelector('.simbar i'),hint=box.querySelector('.simhint'),alt=box.querySelector('.simalt'),liq=box.querySelector('#gliq');
+  const sim=box.querySelector('.sim'),cv=box.querySelector('.simcv'),cup=box.querySelector('.simcup'),it=box.querySelector('.simit'),bar=box.querySelector('.simbar i'),hint=box.querySelector('.simhint'),alt=box.querySelector('.simalt'),lqi=box.querySelector('.liq i'),stm=box.querySelector('.stm'),stc=box.querySelector('.stc'),simtool=box.querySelector('.simtool');
+  /* 액체: 컵 속에서 높이·색이 변해요 (옛 SVG와 같은 setAttribute 방식으로) */
+  const liq=lqi?{setAttribute:(k,v)=>{if(k==='y'){lqi.style.height=Math.max(0,Math.min(100,110-+v))+'%';lqi.closest('.cupw').classList.toggle('has',110-+v>8)}if(k==='fill')lqi.style.background=v}}:null;
+  if(it&&ic)it.querySelector('img,span').outerHTML=`<img src="${ic}" alt="">`;
+  const follow=p=>{if(!simtool)return;simtool.hidden=false;simtool.style.left=p.x+'px';simtool.style.top=p.y+'px'};
+  if(kind==='stir'&&simtool){simtool.src='a/t/whisk.webp'}
   const R=()=>sim.getBoundingClientRect(),C=()=>{const r=cup.getBoundingClientRect(),o=R();return {x:r.left-o.left+r.width/2,y:r.top-o.top+r.height/2,w:r.width,h:r.height}};
   const fit=()=>{const r=R();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;cv.getContext('2d').setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};requestAnimationFrame(fit);
   const ctx=()=>cv.getContext('2d');const prog=f=>{bar.style.width=Math.min(100,f*100)+'%'};
@@ -2302,7 +2342,8 @@ function hkAct(m,code,next,text,ph){const box=$('hka'),[type,a1,a2,a3]=code.spli
   const base=cur.simLv||0,level=f=>{if(liq){const v=Math.max(base,Math.min(1,f));cur.simLv=v;liq.setAttribute('y',String(110-100*v))}};requestAnimationFrame(()=>level(base));
   const particles=(x,y,col,k=6)=>{for(let q=0;q<k;q++){const d=document.createElement('i');d.className='simp';d.style.left=x+(Math.random()*24-12)+'px';d.style.top=y+'px';d.style.background=col;d.style.setProperty('--dy',(30+Math.random()*40)+'px');sim.appendChild(d);setTimeout(()=>d.remove(),700)}};
   let cnt=0;
-  if(kind==='place'||kind==='shake'||kind==='slice'||kind==='grind'){it.classList.add('on')}
+  if(kind==='place'||kind==='shake'||kind==='slice'||kind==='grind'){it.classList.add('on')}if(kind==='grind')it.classList.add('big');
+  if(kind==='wait'&&ic){const ck=document.createElement('img');ck.className='clk';ck.src=ic;cup.appendChild(ck)}
   if(kind==='place'){let drag=null,home=null;
     const reset=()=>{it.style.transform='';it.classList.remove('drag')};
     const hit=p=>{const c=C();return Math.abs(p.x-c.x)<c.w*.55&&Math.abs(p.y-c.y)<c.h*.6};
@@ -2320,7 +2361,7 @@ function hkAct(m,code,next,text,ph){const box=$('hka'),[type,a1,a2,a3]=code.spli
     sim.addEventListener('pointerdown',e=>{if(fin)return;e.preventDefault();sim.setPointerCapture(e.pointerId);down=true;const c=centre(),p=pt(e);prev=Math.atan2(p.y-c.y,p.x-c.x);last=p;sim.classList.add('act')});
     sim.addEventListener('pointermove',e=>{if(!down)return;const c=centre(),p=pt(e),a=Math.atan2(p.y-c.y,p.x-c.x);let d=a-prev;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;prev=a;
       const g=ctx();g.strokeStyle=kind==='tie'?'rgba(170,40,50,.85)':'rgba(255,255,255,.7)';g.lineWidth=kind==='tie'?5:3;g.lineCap='round';g.beginPath();g.moveTo(last.x,last.y);g.lineTo(p.x,p.y);g.stroke();last=p;
-      if(Math.hypot(p.x-c.x,p.y-c.y)>12)add(d)});
+      if(kind==='stir')follow(p);if(Math.hypot(p.x-c.x,p.y-c.y)>12)add(d)});
     const up=()=>{down=false;sim.classList.remove('act');setTimeout(()=>{if(!down&&!fin){const g=ctx();g.clearRect(0,0,cv.width,cv.height)}},500)};sim.addEventListener('pointerup',up);sim.addEventListener('pointercancel',up);
     alt.onclick=()=>add(Math.PI/2);return}
   if(kind==='shake'){const need=n*3;let down=false,lastX=null,dir=0;it.classList.add('shaker');
@@ -2353,13 +2394,13 @@ function hkAct(m,code,next,text,ph){const box=$('hka'),[type,a1,a2,a3]=code.spli
   const span=max-min,dur=kind==='steep'?3600:3200;
   sim.insertAdjacentHTML('beforeend',`<div class="simband"><b style="left:${(lo-min)/span*100}%;width:${(hi-lo)/span*100}%"></b><i></i></div><div class="simv"><span class="num">${fmt(min)}</span><span class="simm">${kind==='pour'?`${fmt(lo)}~${fmt(hi)}`:kind==='heat'?`${lo}~${hi}°C`:`${fmtS(lo)}~${fmtS(hi)}`}</span></div>`);
   const bi=sim.querySelector('.simband i'),vv=sim.querySelector('.simv .num'),mm=sim.querySelector('.simm');
-  if(kind==='heat'&&liq)liq.setAttribute('y','40');if(kind==='steep'&&liq){liq.setAttribute('y','30');liq.setAttribute('fill','#F3E8D2')}
+  if(kind==='heat'&&liq){liq.setAttribute('y','45');liq.setAttribute('fill','#F3EEE4')}if(kind==='steep'&&liq){liq.setAttribute('y','30');liq.setAttribute('fill','#F3E8D2')}
   const b=document.createElement('button');b.className='btn go hkb';b.textContent=kind==='pour'?'꾹 눌러 붓기':kind==='heat'?'꾹 눌러 데우기':'우리기 시작';box.appendChild(b);
   let v=min,t0=0,raf=0,on=false;const tea=['#F3E8D2','#E8C27A','#C77F3A','#8A4A22'];
   const paint=()=>{const f=(v-min)/span;bi.style.width=f*100+'%';vv.textContent=fmt(v);
     if(kind==='pour'){level(f*.9);cup.classList.toggle('pouring',on)}
-    if(kind==='heat'){sim.style.setProperty('--steam',Math.max(0,(v-45)/55));cup.querySelector('svg')&&(liq.setAttribute('fill',`hsl(${30-20*f},${40+40*f}%,${70-15*f}%)`))}
-    if(kind==='steep'&&liq){const k=Math.min(tea.length-1,f*(tea.length-1)),a=Math.floor(k);liq.setAttribute('fill',tea[Math.min(tea.length-1,a+(k-a>.5?1:0))])}};
+    if(kind==='heat'&&stm)stm.style.opacity=Math.max(0,(v-40)/60);
+    if(kind==='steep'&&liq){liq.setAttribute('fill',mixC('#F3E8D2',lc,Math.min(1,f*1.1)));if(stm)stm.style.opacity=.5}};
   const tick=ts=>{if(!t0)t0=ts;v=Math.min(max,min+span*(ts-t0)/dur);paint();if(v>=max){stop();return}raf=requestAnimationFrame(tick)};
   const start=()=>{if(on||b.disabled)return;on=true;t0=0;v=min;b.classList.add('on');sim.classList.add('act');if(kind==='steep')b.textContent='건져내기';raf=requestAnimationFrame(tick)};
   const stop=()=>{if(!on)return;on=false;cancelAnimationFrame(raf);b.classList.remove('on');sim.classList.remove('act');cup.classList.remove('pouring');
