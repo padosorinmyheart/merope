@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261104213255">
+<meta name="merope-ver" content="20261104220947">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1288,9 +1288,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261104213255"></script>
-<script src="quiz.js?v=20261104213255"></script>
-<script src="recipes.js?v=20261104213255"></script>
+<script src="data.js?v=20261104220947"></script>
+<script src="quiz.js?v=20261104220947"></script>
+<script src="recipes.js?v=20261104220947"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -1657,7 +1657,7 @@ function goHall(){const ea=endReady();if(ea){$('hall').hidden=true;playEnding(ea
   h.hidden=false;stats();requestAnimationFrame(()=>{if(!HV.init){HV.init=true;hvReset()}else hvApply()})}
 /* 홀 손님: 오늘 온 손님 + 초대한 손님이 자리에 앉아요 */
 /* 손님 자리: 붙박이 벤치 + 놓인 가구의 의자 */
-const FSEAT={two_seat_table:[[612,668],[748,690]],three_seat_table:[[690,598],[588,672],[768,684]],bar_stool:[[406,612]],writing_desk:[[398,682]],navy_ottoman:[[360,722]]};
+const FSEAT={two_seat_table:[[615,674],[751,696]],three_seat_table:[[693,604],[591,678],[771,690]],bar_stool:[[406,606],[476,578]],writing_desk:[[488,792]],navy_ottoman:[[450,832]]};
 const SEATS_BASE=[[625,438],[690,468],[752,498],[808,524]],INVMAX=6;
 const SEATS={get length(){return seatList().length}};
 function seatList(){const st=roomState();const f=Object.values(st.furn).flatMap(k=>FSEAT[k]||[]);return [...f,...SEATS_BASE,[540,760],[470,700]]}
@@ -2577,7 +2577,7 @@ const FDEF={main_table:'two_seat_table',side_table:'side_table',bar_stool:'bar_s
 function propWho(who){if(!who)return '';const ns=who.split('·').map(t=>{const c=C.find(x=>x.name.includes(t));return c&&S.met.includes(c.no)&&(!c.sci||sciDone(c.no))?t:null});
   const known=ns.filter(Boolean),unk=ns.length-known.length;if(!known.length)return ' 어울리는 손님: ???';return ' 어울리는 손님: '+known.join('·')+(unk?' 외 ???':'')}
 /* 소품: [id, 이름, 값, 설명, 어울리는 손님, 놓는 자리, 필요한 가구, 기준점] */
-const RPROPS=[["letter_box", "편지 보관함", 0, "별 도장 편지를 모아 두는 상자예요.", "베아트리스", "main_center", "two_seat_table", [672, 681]], ["starlight_prism", "별빛 프리즘", 800, "햇빛을 작은 무지개로 나눠요.", "보어·리비트", "display_left", "low_bookcase", [342, 668]], ["moon_hourglass", "달빛 모래시계", 600, "모래가 천천히 떨어지며 시간을 재요.", "장영실", "counter_back", "", [431, 448]], ["constellation_frame", "별자리 액자", 1000, "별자리를 금선으로 이은 액자예요.", "스텔라·케플러", "constellation_frame", "", [182, 388]], ["brass_telescope", "놋쇠 망원경", 1500, "창가에서 하늘을 보는 놋쇠 망원경이에요.", "케플러", "brass_telescope", "", [868, 731]], ["honcheonui", "혼천의", 1600, "하늘의 움직임을 본뜬 조선의 천문 기구예요.", "장영실", "display_right", "low_bookcase", [377, 646]], ["small_balance", "작은 저울", 900, "카운터 위에서 무게를 재는 작은 저울이에요.", "라부아지에·마리안", "small_balance", "", [258, 490]], ["seed_pot", "씨앗 화분", 700, "싹이 돋기를 기다리는 작은 화분이에요.", "우장춘", "seed_pot", "side_table", [834, 594]], ["christmas_candle", "크리스마스 촛불", 700, "손님 테이블을 밝히는 작은 촛불이에요.", "패러데이", "main_candle", "two_seat_table", [696, 674]], ["blue_porcelain", "호수빛 유리병과 도자기", 900, "호수빛 유리병과 도자기를 선반에 올려요.", "", "blue_porcelain", "", [384, 310]], ["books_and_pen", "책과 만년필 기록 세트", 900, "책과 만년필을 늘어놓은 기록 세트예요.", "", "display_left", "low_bookcase", [356, 657]], ["coffee_server", "황동 드리퍼와 커피 서버", 1200, "황동 드리퍼와 커피 서버예요.", "", "coffee_server", "", [390, 488]], ["pocket_watch", "가을빛 회중시계", 1000, "가을빛 회중시계예요.", "", "counter_back", "", [438, 447]], ["star_chart", "펼친 별 지도", 1100, "테이블 위에 펼친 별 지도예요.", "케플러", "main_center", "two_seat_table", [675, 679]], ["sealed_letters", "별 봉인 편지 묶음", 800, "별 봉인을 찍은 편지 묶음이에요.", "", "main_center", "two_seat_table", [673, 681]], ["mail_parcels", "남색 리본 소포", 900, "남색 리본을 묶은 소포예요.", "", "display_left", "low_bookcase", [343, 671]], ["wax_seal_tools", "황동 봉인 도구", 1000, "봉인을 찍는 황동 도구예요.", "", "display_right", "low_bookcase", [383, 643]], ["dessert_cloche", "작은 디저트 돔", 900, "디저트를 덮어 두는 작은 유리 돔이에요.", "", "main_center", "two_seat_table", [674, 682]]];
+const RPROPS=[["letter_box", "편지 보관함", 0, "별 도장 편지를 모아 두는 상자예요.", "베아트리스", "main_center", "two_seat_table", [672, 681]], ["starlight_prism", "별빛 프리즘", 800, "햇빛을 작은 무지개로 나눠요.", "보어·리비트", "display_left", "low_bookcase", [342, 668]], ["moon_hourglass", "달빛 모래시계", 600, "모래가 천천히 떨어지며 시간을 재요.", "장영실", "moon_hourglass", "", [431, 448]], ["constellation_frame", "별자리 액자", 1000, "별자리를 금선으로 이은 액자예요.", "스텔라·케플러", "constellation_frame", "", [182, 388]], ["brass_telescope", "놋쇠 망원경", 1500, "창가에서 하늘을 보는 놋쇠 망원경이에요.", "케플러", "brass_telescope", "", [868, 731]], ["honcheonui", "혼천의", 1600, "하늘의 움직임을 본뜬 조선의 천문 기구예요.", "장영실", "display_right", "low_bookcase", [377, 646]], ["small_balance", "작은 저울", 900, "카운터 위에서 무게를 재는 작은 저울이에요.", "라부아지에·마리안", "small_balance", "", [258, 490]], ["seed_pot", "씨앗 화분", 700, "싹이 돋기를 기다리는 작은 화분이에요.", "우장춘", "seed_pot", "side_table", [834, 594]], ["christmas_candle", "크리스마스 촛불", 700, "손님 테이블을 밝히는 작은 촛불이에요.", "패러데이", "main_candle", "two_seat_table", [696, 674]], ["blue_porcelain", "호수빛 유리병과 도자기", 900, "호수빛 유리병과 도자기를 선반에 올려요.", "", "blue_porcelain", "", [384, 310]], ["books_and_pen", "책과 만년필 기록 세트", 900, "책과 만년필을 늘어놓은 기록 세트예요.", "", "display_left", "low_bookcase", [356, 657]], ["coffee_server", "황동 드리퍼와 커피 서버", 1200, "황동 드리퍼와 커피 서버예요.", "", "coffee_server", "", [390, 488]], ["pocket_watch", "가을빛 회중시계", 1000, "가을빛 회중시계예요.", "", "pocket_watch", "", [438, 447]], ["star_chart", "펼친 별 지도", 1100, "테이블 위에 펼친 별 지도예요.", "케플러", "main_center", "two_seat_table", [675, 679]], ["sealed_letters", "별 봉인 편지 묶음", 800, "별 봉인을 찍은 편지 묶음이에요.", "", "main_center", "two_seat_table", [673, 681]], ["mail_parcels", "남색 리본 소포", 900, "남색 리본을 묶은 소포예요.", "", "display_left", "low_bookcase", [343, 671]], ["wax_seal_tools", "황동 봉인 도구", 1000, "봉인을 찍는 황동 도구예요.", "", "display_right", "low_bookcase", [383, 643]], ["dessert_cloche", "작은 디저트 돔", 900, "디저트를 덮어 두는 작은 유리 돔이에요.", "", "main_center", "two_seat_table", [674, 682]]];
 const RPOS=Object.fromEntries(RPROPS.map(p=>[p[0],p[7]]));
 const FNAME=id=>(RFURN.find(f=>f[0]===id)||[])[1];
 const RITEMS=[...Object.entries(ROOM_OPT).flatMap(([cat,o])=>o.it.map(([k,nm,price,desc])=>({id:`${cat}:${k}`,cat,key:k,nm,price,desc,ic:`${cat}_${k}`,room:1}))),
@@ -2591,24 +2591,37 @@ function roomOwned(id){const it=RI(id);return it&&(it.price===0||S.owned.include
 function roomDecor(){return ''}
 const RDEC={};
 /* 그림 조각: 큰 레이어는 파일, 가구·소품은 한 장(아틀라스)에서 잘라 써요 */
-function R3L(name,cls='',sty=''){const b=R3.layers[name];if(!b)return '';const [x0,y0,x1,y1]=b;
+function R3L(name,cls='',sty=''){const b=R3.layers[name];if(!b)return '';let [x0,y0,x1,y1]=b;
+  if(name.startsWith('rg_')){const t=RUGT,f=v=>v;x0=t.cx+t.dx-(t.cx-x0)*t.sc;x1=t.cx+t.dx+(x1-t.cx)*t.sc;y0=t.cy+t.dy-(t.cy-y0)*t.sc;y1=t.cy+t.dy+(y1-t.cy)*t.sc}
   return `<img src="a/r3/${name}.webp" alt="" class="lay ${cls}" style="left:${x0/10.24}%;top:${y0/10.24}%;width:${(x1-x0)/10.24}%;height:${(y1-y0)/10.24}%;${sty}">`}
-function R3S(name,cls=''){const q=R3.sprites[name];if(!q)return '';const [x,y,w,h,ax,ay]=q,[AW,AH]=R3.atlas;
-  return `<i class="spr ${cls}" data-src="a/r3/atlas.webp" style="left:${x/10.24}%;top:${y/10.24}%;width:${w/10.24}%;height:${h/10.24}%;background-size:${AW/w*100}% ${AH/h*100}%;background-position:${AW>w?ax/(AW-w)*100:0}% ${AH>h?ay/(AH-h)*100:0}%"></i>`}
+function R3S(name,cls='',pl){const q=R3.sprites[name];if(!q)return '';let [x,y,w,h,ax,ay]=q;const [AW,AH]=R3.atlas,bw=w,bh=h;
+  if(pl&&pl.length===3){const [bx,by,sc]=pl;w=bw*sc;h=bh*sc;x=bx-w/2;y=by-h}else if(pl){x+=pl[0]||0;y+=pl[1]||0}
+  return `<i class="spr ${cls}" data-src="a/r3/atlas.webp" style="left:${x/10.24}%;top:${y/10.24}%;width:${w/10.24}%;height:${h/10.24}%;background-size:${AW/bw*100}% ${AH/bh*100}%;background-position:${AW>bw?ax/(AW-bw)*100:0}% ${AH>bh?ay/(AH-bh)*100:0}%"></i>`}
+/* 배치 다듬기: 앞쪽 가구는 바닥 앞으로 내려 작은 코너를 만들고, 테이블은 러그 한가운데에 */
+const FOFF={foreground:[90,110],main_table:[3,6]};
+const RUGT={sc:.78,cx:633,cy:730,dx:47,dy:-18};
+/* 소품 자리 [바닥 가운데 x, 바닥 y, 크기] — 걸치지 않게, 조금 작게 */
+const PPL={blue_porcelain:[384,253,.7],pocket_watch:[384,324,.8],constellation_frame:[388,360,.8],
+  moon_hourglass:[252,383,.68],small_balance:[292,370,.6],coffee_server:[334,356,.62],
+  seed_pot:[833,610,.9],brass_telescope:[305,786,.95],
+  _display_left:[338,633,.72],_display_right:[392,609,.72],_main_center:[687,681,.85],_main_candle:[657,688,.8]};
+function propPlace(st,k){const p=RPROPS.find(x=>x[0]===k),ps=p&&p[5];let q=PPL[k]||PPL['_'+ps];if(!q)return null;q=[...q];
+  if(ps==='display_left'||ps==='display_right'){const o=FOFF.foreground;q[0]+=o[0];q[1]+=o[1]}
+  if(ps==='main_center'||ps==='main_candle'){const o=FOFF.main_table;q[0]+=o[0];q[1]+=o[1]+(st.furn.main_table==='three_seat_table'?-39:0)}
+  return q}
 const R3ICN=k=>{const i=R3IC[k];if(i==null)return '';const rows=Math.ceil(Object.keys(R3IC).length/8);return `<i class="aic" style="background-size:800% ${rows*100}%;background-position:${(i%8)/7*100}% ${Math.floor(i/8)/(rows-1)*100}%"></i>`};
 function propShown(st,k){const p=RPROPS.find(x=>x[0]===k);return p&&st.props[k]&&(!p[6]||propBase(st,p[6]))}
 /* 소품 놓기: 같은 자리의 소품은 치우고, 받침 가구가 없으면 함께 놓아요 */
 function propPut(st,it){Object.keys(st.props).forEach(k=>{const q=RPROPS.find(x=>x[0]===k);if(q&&q[5]===it.ps&&k!==it.key)delete st.props[k]});st.props[it.key]=1;
   if(it.req&&!propBase(st,it.req)){const f=RFURN.find(x=>x[0]===it.req);st.furn[f[4]]=f[0]}}
 /* 바 스툴과 앞쪽 큰 가구는 같은 자리에 겹쳐요 (오토만만 함께 둘 수 있어요) */
-function furnPut(st,slot,key){st.furn[slot]=key;if(slot==='bar_stool'&&key&&st.furn.foreground&&st.furn.foreground!=='navy_ottoman')st.furn.foreground='';
-  if(slot==='foreground'&&key&&key!=='navy_ottoman'&&st.furn.bar_stool)st.furn.bar_stool='';
+function furnPut(st,slot,key){st.furn[slot]=key;
   Object.keys(st.props).forEach(k=>{if(!propShown(st,k))delete st.props[k]})}
 const propBase=(st,req)=>Object.values(st.furn).includes(req)||(req==='two_seat_table'&&st.furn.main_table==='three_seat_table');
 function roomHTML(st){const gl={day:.3,sunset:.6,night:1,rain:.75,autumn:.6,snow:.55}[st.scenery]??.6;
   return R3L('sc_'+st.scenery)+R3L('fl_'+st.floor)+R3L('wp_'+st.wallpaper)+R3L('rg_'+st.rug)+R3L('fixed')
-   +Object.entries(st.furn).filter(([,k])=>k).sort((a,b)=>(RFURN.find(f=>f[0]===a[1])||[])[5][1]-(RFURN.find(f=>f[0]===b[1])||[])[5][1]).map(([sl,k])=>R3S('fu_'+k,st.pvF===k?'pv':'')).join('')
-   +RPROPS.filter(([k])=>propShown(st,k)).map(([k])=>R3S('pr_'+k,st.pv===k?'pv':'')).join('')
+   +Object.entries(st.furn).filter(([,k])=>k).sort((a,b)=>(RFURN.find(f=>f[0]===a[1])||[])[5][1]-(RFURN.find(f=>f[0]===b[1])||[])[5][1]).map(([sl,k])=>{const o=FOFF[sl],c=st.pvF===k?'pv':'';return R3S('fu_'+k,c,o)+(k==='bar_stool'?R3S('fu_'+k,c,[70,-28]):'')}).join('')
+   +RPROPS.filter(([k])=>propShown(st,k)).map(([k])=>R3S('pr_'+k,st.pv===k?'pv':'',propPlace(st,k))).join('')
    +R3L('lf_'+st.lighting)+R3L('am_'+st.scenery)+R3L('lg_'+st.lighting,'',`opacity:${gl}`)}
 const SHTABS=[['prop','소품'],['furn','가구'],['floor','바닥'],['wallpaper','벽지'],['rug','러그'],['lighting','조명'],['scenery','풍경'],['gift','선물'],['box','보관함']];
 let shT='prop',shSel=null;
@@ -2622,7 +2635,7 @@ function renderShop(){
   /* 미리보기 */
   if(!it){$('shPrev').innerHTML=`<div class="shempty">아직 보관함이 비어 있어요.<br>소품이나 선물을 사면 여기에 모여요.</div>`}
   else if(isR){const st=roomState();if(it.cat==='prop'){propPut(st,it);st.pv=it.key}else if(it.cat==='furn'){furnPut(st,it.slot,it.key);st.pvF=it.key}else st[it.cat]=it.key;
-    const z=it.cat==='prop'?RPOS[it.key]:it.cat==='furn'?[it.anc[0],it.anc[1]-90]:null;
+    const pq=it.cat==='prop'&&propPlace(st,it.key),fo=it.cat==='furn'&&FOFF[it.slot]||[0,0],z=pq?[pq[0],pq[1]-10]:it.cat==='furn'?[it.anc[0]+fo[0],it.anc[1]+fo[1]-90]:null;
     $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox${z?' zoom':''}" style="${z?`--zx:${z[0]/10.24}%;--zy:${(z[1]-30)/10.24}%`:''}">${roomHTML(st)}</div>
       <span class="chip l">나의 메로페</span><span class="chip r">${isOn(it)?'지금 적용 중':'구매 전 미리보기'}</span></div>`}
   else if(!isG){const st=roomState(),r=RDEC[it.slot];st.pvDec={slot:it.slot,id:it.id};
