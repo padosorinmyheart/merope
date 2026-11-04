@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261104222724">
+<meta name="merope-ver" content="20261104223052">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1151,6 +1151,34 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
 .gstage.ch2 .gtabs,.mbstage.ch2 .mbtabs{top:16.4%!important}
 .gstage.ch2 .bsub,.mbstage.ch2 .bsub{top:21.8%!important}
 .gstage.ch2 .blist,.mbstage.ch2 .blist{top:24.6%!important}
+/* 룬 상점 머리: 장식 제목 + 룬 표시 + 보관함 */
+.shh{gap:6px!important;padding:0 52px!important}
+.shban{background:url(a/u/fr_title.webp) center/100% 100% no-repeat!important;box-shadow:none!important;border-radius:0!important;width:min(230px,62vw);aspect-ratio:560/187;padding:0!important;display:flex;flex-direction:column;align-items:center;justify-content:center;filter:drop-shadow(0 5px 8px rgba(35,61,98,.3))}
+.shban small{font-size:13px!important;line-height:1!important;margin-top:2px}
+.shban h2{font-size:20px!important;line-height:1.2!important;margin:0}
+.shsub{text-align:center}
+.shrow{justify-content:center!important;gap:8px!important;margin-top:0!important}
+.shcoin,.shboxb{--bh:38px;height:var(--bh);display:inline-flex;align-items:center;gap:5px;background:none!important;box-shadow:none!important;border:0 solid transparent;border-radius:0;
+  border-image:url(a/u/fr_paper.webp) 62 76 fill / 19px 24px stretch;padding:0 22px 0 18px!important;font-family:var(--display);font-weight:700;font-size:14.5px;color:#233D62;filter:drop-shadow(0 3px 5px rgba(35,61,98,.2))}
+.shcoin img{width:22px!important;height:22px!important}
+.shboxb{cursor:pointer}.shboxb img{width:18px;height:18px}
+.shboxb[aria-selected=true]{border-image-source:url(a/u/fr_navy.webp);color:#FBF4E4}
+.shtabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+/* 상태 칩: 금빛 톤으로 */
+.shsel em{color:#8A6A2E!important;background:linear-gradient(#FFFDF6,#F6ECD6)!important;border:1px solid #D6B776!important;box-shadow:inset 0 0 0 1.5px #FFFCF4;font-family:var(--display);font-weight:700}
+/* 장보기 지갑: 상단과 같은 금빛 테 */
+.mpurse{background:linear-gradient(180deg,#FFFDF6,#F7EEDC)!important;border:1.5px solid #D9B46A!important;box-shadow:inset 0 0 0 3px #FFFCF4,inset 0 0 0 4px #E8D4A6,0 4px 10px -6px rgba(35,61,98,.3)}
+.mrow1{align-items:center!important}
+.mcoinp{display:inline-flex;align-items:center;gap:5px;--bh:38px;height:var(--bh);border:0 solid transparent;border-image:url(a/u/fr_paper.webp) 62 76 fill / 19px 24px stretch;padding:0 20px 0 14px;font-size:max(16px,2cqh)!important}
+.mcoinp img{width:22px;height:22px}
+/* 메뉴 패널: 종이 + 금테, 항목 사이 금선 */
+.menu{background:linear-gradient(180deg,#FFFDF6,#F6ECD8)!important;border:2px solid #D2A957!important;border-radius:18px!important;padding:6px!important;
+  box-shadow:inset 0 0 0 3px #FFFCF4,inset 0 0 0 4px #E8D4A6,0 14px 30px -12px rgba(20,32,56,.55)!important}
+.menu button{position:relative;border-radius:10px!important;font-family:var(--display)!important;font-weight:700!important;color:#233D62!important;padding:11px 14px 11px 30px!important}
+.menu button::before{content:"";position:absolute;left:11px;top:50%;width:9px;height:9px;transform:translateY(-50%);background:var(--u-stard) center/contain no-repeat}
+.menu button+button{box-shadow:0 -1px 0 rgba(201,163,101,.35)}
+.menu button:hover,.menu button:focus-visible{background:rgba(233,214,168,.35)!important}
+.menu button small{color:#A9813E!important}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -1235,7 +1263,7 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
     <div class="stg mstage">
       <h2 class="mtitle">장보기</h2>
       <div class="mbody">
-        <div class="mpurse"><div class="mrow1"><span>가진 룬</span><b class="num"><span id="mCoins">0</span>룬</b></div><div class="msub">한 묶음은 4잔 분량 · 맛볼 때마다 조금씩, 손님께 드리면 한 잔 분량이 들어요</div></div>
+        <div class="mpurse"><div class="mrow1"><span>가진 룬</span><b class="num mcoinp"><img src="a/u/ic_coin.webp" alt=""><span id="mCoins">0</span>룬</b></div><div class="msub">한 묶음은 4잔 분량 · 맛볼 때마다 조금씩, 손님께 드리면 한 잔 분량이 들어요</div></div>
         <div class="mtabs" role="tablist"><button role="tab" id="tabBuy" aria-selected="true">재료 사기</button><button role="tab" id="tabQuiz" aria-selected="false">과학 퀴즈로 벌기</button></div>
         <div class="mlist"><div id="mBuy"></div><div id="mQuiz" hidden></div></div>
         <button class="btn go big mgo" id="mOpen" hidden>가게 열기 <span aria-hidden="true">→</span></button>
@@ -1248,8 +1276,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   <section class="cover shopv" id="v-shop" hidden aria-label="룬 상점">
     <div class="shw">
       <header class="shh"><div class="shban"><small>Merope</small><h2>룬 상점</h2></div>
-        <div class="shrow"><p class="shsub">나만의 메로페를 꾸며 보세요</p><div class="shcoin"><img src="a/u/ic_coin.webp" alt=""><b id="shCoins">0</b>룬</div></div></header>
-      <div class="shtabs" role="tablist"><button role="tab" data-t="prop">소품</button><button role="tab" data-t="furn">가구</button><button role="tab" data-t="floor">바닥</button><button role="tab" data-t="wallpaper">벽지</button><button role="tab" data-t="rug">러그</button><button role="tab" data-t="lighting">조명</button><button role="tab" data-t="scenery">풍경</button><button role="tab" data-t="gift">선물</button><button role="tab" data-t="box">보관함</button></div>
+        <p class="shsub">나만의 메로페를 꾸며 보세요</p>
+        <div class="shrow"><div class="shcoin"><img src="a/u/ic_coin.webp" alt=""><b id="shCoins">0</b>룬</div><button class="shboxb" data-t="box" role="tab"><img src="a/u/ic_star.webp" alt="">보관함</button></div></header>
+      <div class="shtabs" role="tablist"><button role="tab" data-t="prop">소품</button><button role="tab" data-t="furn">가구</button><button role="tab" data-t="floor">바닥</button><button role="tab" data-t="wallpaper">벽지</button><button role="tab" data-t="rug">러그</button><button role="tab" data-t="lighting">조명</button><button role="tab" data-t="scenery">풍경</button><button role="tab" data-t="gift">선물</button></div>
       <div class="shprev" id="shPrev"></div>
       <div class="shsel" id="shSel"></div>
       <div class="shgrid" id="shGrid"></div>
@@ -1326,9 +1355,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261104222724"></script>
-<script src="quiz.js?v=20261104222724"></script>
-<script src="recipes.js?v=20261104222724"></script>
+<script src="data.js?v=20261104223052"></script>
+<script src="quiz.js?v=20261104223052"></script>
+<script src="recipes.js?v=20261104223052"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2667,7 +2696,7 @@ function shItems(){if(shT==='gift')return GIFTS;if(shT==='box')return [...RITEMS
 function isOn(it){const st=roomState();return it.cat==='prop'?!!st.props[it.key]:it.cat==='furn'?st.furn[it.slot]===it.key:st[it.cat]===it.key}
 function renderShop(){
   $('shCoins').textContent=S.coins.toLocaleString('ko-KR');
-  document.querySelectorAll('.shtabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===shT));
+  document.querySelectorAll('.shtabs button,.shboxb').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===shT));
   const list=shItems();if(!list.some(x=>x.id===shSel))shSel=list.length?(list.find(x=>!x.who||S.met.includes(x.who))||list[0]).id:null;
   const it=shSel&&(RI(shSel)||SHOPI(shSel)),isG=it&&!!it.who,isR=it&&it.room,own=it&&(isR?roomOwned(it.id):S.owned.includes(it.id)),met=!isG||S.met.includes(it.who),gname=isG?byNo(it.who).name:'';
   /* 미리보기 */
@@ -2716,7 +2745,7 @@ function renderShop(){
   else{B.textContent=S.placed[it.slot]?`${SLOTS[it.slot].nm}에 바꿔 놓기`:'손님 맞는 자리에 놓기';B.onclick=()=>{S.placed={...S.placed,[it.slot]:it.id};done()}}
 }
 function roomBgName(){const m=MODES[mode];return m&&m.bg.startsWith('room_')?m.bg:'room_day'}
-document.querySelectorAll('.shtabs button').forEach(b=>b.addEventListener('click',()=>{shT=b.dataset.t;shSel=null;renderShop();$('shGrid').scrollTop=0}));
+document.querySelectorAll('.shtabs button,.shboxb').forEach(b=>b.addEventListener('click',()=>{shT=b.dataset.t;shSel=null;renderShop();$('shGrid').scrollTop=0}));
 function giftStep(fn){const gs=GIFTS.filter(g=>g.who===cur.no&&S.owned.includes(g.id)&&!S.given.includes(g.id));if(!gs.length)return fn();
   $('who').innerHTML='<span class="np">나</span><small>바리스타</small>';$('line').className='line';$('line').textContent=`${cur.name}님께 드리려고 챙겨 둔 선물이 있어요.`;$('dctl').innerHTML='';
   $('choices').innerHTML=gs.map(g=>`<button class="choice gch" data-id="${g.id}"><img src="a/g/${g.id}.webp" alt="">${jo(g.nm,'을/를')} 건넨다</button>`).join('')+'<button class="choice" data-id="">다음에 건네기</button>';
