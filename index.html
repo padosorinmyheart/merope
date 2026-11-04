@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261104094010">
+<meta name="merope-ver" content="20261104100144">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1233,9 +1233,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261104094010"></script>
-<script src="quiz.js?v=20261104094010"></script>
-<script src="recipes.js?v=20261104094010"></script>
+<script src="data.js?v=20261104100144"></script>
+<script src="quiz.js?v=20261104100144"></script>
+<script src="recipes.js?v=20261104100144"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -1652,7 +1652,8 @@ function renderMarket(){stats();$('tabBuy').setAttribute('aria-selected',mTab===
 $('tabBuy').addEventListener('click',()=>{mTab='buy';renderMarket()});$('tabQuiz').addEventListener('click',()=>{mTab='quiz';renderMarket()});
 $('mOpen').addEventListener('click',()=>show('cafe'));
 const INGIC={cocoa:'cocoa',vanilla:'vanilla',honey:'honey',oat:'oat_milk',hazelnut:'hazelnut',herb:'herb',lemon:'lemon',ice:'ice',gelatin:'gelatin',beans:'coffee_beans',blacktea:'black_tea',greentea:'green_tea',matchap:'matcha',dalgonamix:'dalgona',milk:'milk',cream:'whipped_cream',condensed:'condensed_milk',caramel:'caramel',straw:'strawberry',red:'pomegranate_syrup',blue:'blue_syrup',yellow:'mango_puree',green:'kiwi_juice',violet:'purple_syrup',orange:'orange_juice',yuzu:'yuzu_soda',soda:'sparkling_water'};
-const ingIcon=i=>i.img?`a/${i.img}${i.img.startsWith('sp/')?'_1':''}.webp`:`a/i/${INGIC[i.id]}.webp`;
+const ING2=new Set(["applecin", "apricot", "banana", "barley", "blueberry", "brownrice", "butterfly", "chamomile", "cherry", "chestnut", "cinnamon", "earlgrey", "elderflower", "ginger", "grapefruit", "greengrape", "hibiscus", "jasmine", "jujube", "kumquat", "lavender", "lemonjam", "lime", "lychee", "malt", "marshmallow", "mint", "mintsyrup", "oolong", "pear", "perilla", "pistachio", "pumpkin", "rooibos", "rosemary", "sesame", "sweetpotato", "toffee", "whitechoc", "whitegrape", "yuzujam"]);
+const ingIcon=i=>ING2.has(i.id)?`a/i2/${i.id}.webp`:i.img?`a/${i.img}${i.img.startsWith('sp/')?'_1':''}.webp`:`a/i/${INGIC[i.id]}.webp`;
 const ingShow=i=>!i.sp||S.met.includes(30+ +i.sp);
 function renderBuy(){const cats=[...new Set(D.INGS.filter(ingShow).map(i=>i.cat))];
   $('mBuy').innerHTML=cats.map(c=>`<div class="mcat"><h3><img class="mci" src="a/${({'커피·차':'m/01','라떼':'m/02','에이드':'m/12','스무디·디저트':'m/36','보름달 재료':'sp/02_1'})[c]||'m/01'}.webp" alt="">${c}</h3>${D.INGS.filter(i=>i.cat===c&&ingShow(i)).map(i=>{const n=S.stock[i.id]||0,full=n+20>CAP,poor=S.coins<i.price;
@@ -2312,7 +2313,8 @@ function simTool(kind,lb,t){const T=x=>`a/t/${x}.webp`;
     if(/거르|체로/.test(lb))return T('sieve');if(/크림|휘핑|거품/.test(t+lb))return T('cream');if(/얼음/.test(lb))return T('ice');if(/말차|체 치/.test(t))return T('powder');
     const ic=simIcon(t)||simIcon(lb);if(ic)return ic;if(/넣기|큰술|시럽|담기/.test(lb))return T('spoons');}
   if(kind==='slice')return simIcon(t)||simIcon(lb);return null}
-const simIcon=t=>{const h=SIMIC.find(([r])=>r.test(t));return h?`a/i/${h[1]}.webp`:null};
+const ING2NM=()=>D.INGS.filter(i=>ING2.has(i.id)).map(i=>[i.nm.replace(/ (가루|시럽|청|잎)$/,''),i.id]).sort((x,y)=>y[0].length-x[0].length);
+const simIcon=t=>{const hit=ING2NM().find(([nm])=>t.includes(nm));if(hit)return `a/i2/${hit[1]}.webp`;const h=SIMIC.find(([r])=>r.test(t));return h?`a/i/${h[1]}.webp`:null};
 function simKind(type,lb,t){if(type==='whisk')return 'stir';if(type!=='tap')return type;const s=(lb||'')+' '+t;
   if(/스텐실/.test(t)&&/그리기|뿌리/.test(lb))return 'shake';
   if(/뿌리|흔들|체 치/.test(lb))return 'shake';if(/썰|자르|저미|깎|깍둑/.test(lb))return 'slice';if(/갈기|으깨|비비|두드리|볶|뒤적/.test(lb))return 'grind';
