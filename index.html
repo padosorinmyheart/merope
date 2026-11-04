@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261104100752">
+<meta name="merope-ver" content="20261104101917">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1233,9 +1233,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261104100752"></script>
-<script src="quiz.js?v=20261104100752"></script>
-<script src="recipes.js?v=20261104100752"></script>
+<script src="data.js?v=20261104101917"></script>
+<script src="quiz.js?v=20261104101917"></script>
+<script src="recipes.js?v=20261104101917"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -1601,7 +1601,7 @@ function goHall(){const ea=endReady();if(ea){$('hall').hidden=true;playEnding(ea
   $('hGo').querySelector('span').textContent=end?'영업 마감하기':hid?'문 앞에 누가 서 있어요…':S.today.length?'다음 손님 받기':'손님 받기';
   h.hidden=false;stats();requestAnimationFrame(()=>{if(!HV.init){HV.init=true;hvReset()}else hvApply()})}
 /* 홀 손님: 오늘 온 손님 + 초대한 손님이 자리에 앉아요 */
-const SEATS=[[306,700],[432,644],[622,642],[763,664],[478,770],[616,800],[703,492],[768,522]],INVMAX=6;
+const SEATS=[[335, 615], [452, 571], [609, 642], [743, 663], [450, 782], [581, 811], [655, 445], [770, 500]],INVMAX=6;
 function hallGuests(){const td=[...new Set((S.today||[]).map(t=>t.no))].filter(n=>n&&byNo(n)),pk=(S.hallPick||[]).filter(n=>S.met.includes(n)&&!td.includes(n));
   return [...td.map(n=>[n,1]),...pk.map(n=>[n,0])].slice(0,SEATS.length)}
 function hallTokens(){const g=hallGuests();$('hInvN').textContent=(S.hallPick||[]).length?`${(S.hallPick||[]).length}/${INVMAX}`:'';
@@ -1622,7 +1622,7 @@ function openInvite(){const el=document.createElement('div');el.className='invv'
   draw();el.addEventListener('click',e=>{if(e.target===el)el.remove()});$('shell').appendChild(el)}
 $('hInv').addEventListener('click',openInvite);
 /* 홀 카메라: 확대·끌어서 둘러보기 */
-const HV={z:1.55,x:0,y:0,cx:500,cy:600,init:false,moved:0};
+const HV={z:1.5,x:0,y:0,cx:560,cy:640,init:false,moved:0};
 function hvApply(ease){const v=$('hView'),b=$('hRoom'),W=v.clientWidth,H=v.clientHeight,Rs=b.offsetHeight;if(!Rs)return;
   HV.z=clamp(HV.z,1,3.2);const g=HV.z>1.05?1:0,bot=$('hBot').offsetHeight,mx=Math.max(0,(Rs*HV.z-W)/2+W*0.08*g),my=Math.max(0,(Rs*HV.z-H)/2+H*0.08*g)+bot/2;
   HV.x=clamp(HV.x,-mx,mx);HV.y=clamp(HV.y,-my,my);b.classList.toggle('ease',!!ease);
@@ -2497,22 +2497,24 @@ const RPROPS=[
  ['small_balance','작은 저울',90,'카운터 위에서 무게를 재는 작은 저울이에요.','라부아지에·마리안'],['seed_pot','씨앗 화분',70,'싹이 돋기를 기다리는 작은 화분이에요.','우장춘'],
  ['christmas_candle','크리스마스 촛불',70,'손님 테이블을 밝히는 작은 촛불이에요.','패러데이']];
 /* 소품 밑변 중앙 (1024 기준) — 미리보기에서 그 자리를 확대 */
-const RPOS={starlight_prism:[330,784],moon_hourglass:[465,528],constellation_frame:[250,397],letter_box:[527,802],brass_telescope:[817,630],honcheonui:[272,764],small_balance:[178,608],seed_pot:[686,553],christmas_candle:[673, 665]};
+const RPOS={starlight_prism: [228, 668], honcheonui: [176, 636], moon_hourglass: [405, 455], small_balance: [205, 525], letter_box: [496, 813], christmas_candle: [657, 664], seed_pot: [567, 454], constellation_frame: [386, 300], brass_telescope: [862, 575]};
 const RITEMS=[...Object.entries(ROOM_OPT).flatMap(([cat,o])=>o.it.map(([k,nm,price,desc])=>({id:`${cat}:${k}`,cat,key:k,nm,price:price*10,desc,icon:`a/r/i/${cat}_${k}.webp`,room:1}))),
   ...RPROPS.map(([k,nm,price,desc,who])=>({id:'prop:'+k,cat:'prop',key:k,nm,price:price*10,get desc(){return desc+propWho(who)},icon:`a/r/i/${k}.webp`,room:1}))];
 const RI=id=>RITEMS.find(x=>x.id===id);
 function roomState(){const r={...Object.fromEntries(Object.entries(ROOM_OPT).map(([c,o])=>[c,o.def])),...(S.room||{})};r.props={...(S.rprops||{letter_box:1})};return r}
 function roomOwned(id){const it=RI(id);return it&&(it.price===0||S.owned.includes(id))}
 /* 예전 인테리어 소품(DECOR)도 방 그림 안 제자리에: [x, y, 기준(t 위·c 가운데·b 아래), 폭 배율] */
-const RDEC={ceil:[583,190,'t',50/9],sconce:[586,298,'c',26/4.6,26.5],wall:[584,372,'c',30/8.5,26.5],floor:[935,714,'b',5],sill:[876,600,'b',28/5.5],bench:[238,582,'b',40/6.5]};
+const RDEC={ceil:[486,188,'t',44/9],sconce:[182,322,'c',22/4.6,-17],wall:[182,395,'c',26/8.5,-17],floor:[556,414,'b',4.2],sill:[968,580,'b',24/5.5],bench:[282,512,'b',34/6.5]};
 function roomDecor(pv){const P={...(S.placed||{})};if(pv)P[pv.slot]=pv.id;
   return Object.entries(P).map(([k,id])=>{const d=DECOR.find(x=>x.id===id),r=RDEC[k];if(!d||!r)return '';const w=d.w*r[3];
     return `<img class="rdec${pv&&pv.slot===k?' pv':''}" src="a/d/${d.id}.webp" alt="" style="left:${(r[0]-w/2)/10.24}%;top:${r[1]/10.24}%;width:${w/10.24}%;transform:translateY(${r[2]==='t'?0:r[2]==='c'?-50:-100}%)${r[4]?` skewY(${r[4]}deg)`:''}">`}).join('')}
-function roomHTML(st){const L=(p,cls='',sty='')=>`<img src="a/r/${p}.webp" alt="" class="${cls}" style="${sty}">`,gl={day:.15,sunset:.6,night:1}[st.scenery];
-  return L('scenery/'+st.scenery)+L('floor/'+st.floor)+L('wallpaper/'+st.wallpaper)+L('rug/'+st.rug)+L('furniture/fixed_builtins')+L('furniture/dining_layout')
-   +RPROPS.filter(([k])=>st.props[k]).map(([k])=>L('props/'+k,st.pv===k?'pv':'')).join('')
+/* 넓어진 방(한 장 그림) 위에 바닥·벽·창밖 색, 러그, 가구, 소품, 조명을 같은 좌표로 겹쳐요 */
+function roomHTML(st){const L=(p,cls='',sty='')=>`<img src="a/r2/${p}.webp" alt="" class="${cls}" style="${sty}">`,gl={day:.25,sunset:.6,night:1}[st.scenery];
+  return L('base')+(st.floor!=='oak'?L('floor_'+st.floor):'')+(st.wallpaper!=='ivory'?L('wall_'+st.wallpaper):'')+(st.scenery!=='sunset'?L('glass_'+st.scenery):'')
+   +L('rug_'+st.rug)+L('furniture')
+   +RPROPS.filter(([k])=>st.props[k]).map(([k])=>L('prop_'+k,st.pv===k?'pv':'')).join('')
    +roomDecor(st.pvDec)
-   +L(`lighting/${st.lighting}_fixtures`)+L('ambient/'+st.scenery)+L(`lighting/${st.lighting}_glow`,'',`opacity:${gl}`)}
+   +L('light_'+st.lighting)+(st.scenery!=='day'?L('amb_'+st.scenery):'')+L('glow_'+st.lighting,'',`opacity:${gl}`)}
 const SHTABS=[['prop','소품'],['floor','바닥'],['wallpaper','벽지'],['rug','러그'],['lighting','조명'],['scenery','풍경'],['gift','선물'],['box','보관함']];
 let shT='prop',shSel=null;
 function shItems(){if(shT==='gift')return GIFTS;if(shT==='box')return [...RITEMS.filter(x=>x.price>0&&S.owned.includes(x.id)),...DECOR.filter(x=>S.owned.includes(x.id)),...GIFTS.filter(x=>S.owned.includes(x.id))];return RITEMS.filter(x=>x.cat===shT)}
