@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261104222200">
+<meta name="merope-ver" content="20261104222724">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1131,6 +1131,26 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
 /* 둥근 버튼: 메뉴 버튼처럼 금빛 링 */
 .hzoom button,.mdx{background:linear-gradient(180deg,#FFFDF6,#F2E7D0) padding-box,linear-gradient(145deg,#FBEAB6,#C8923A 42%,#F6DB92 68%,#A97A2C) border-box!important;
   border:3px solid transparent!important;box-shadow:inset 0 0 0 1.5px #E7CF95,0 4px 8px -3px rgba(35,61,98,.35)!important;color:#233D62!important}
+/* 첫 화면·홀 아래 버튼: 금빛 프레임 + 금테 메달 */
+.tgo3{background:none!important;aspect-ratio:auto!important;height:52px;border:0 solid transparent!important;border-radius:999px;
+  border-image:url(a/u/fr_navy.webp) 62 76 fill / 26px 32px stretch!important;filter:drop-shadow(0 6px 12px rgba(0,0,0,.42))!important}
+.tgo3 span{position:relative;z-index:1}
+.tdock .med{width:54px;height:54px;background:url(a/u/fr_round.webp) center/100% 100% no-repeat!important;box-shadow:0 6px 12px -5px rgba(0,0,0,.55)!important;border-radius:50%}
+.title .tdock .med img,.tdock .med img{width:31px;height:31px}
+.tdock .med .aic{width:31px!important;height:31px!important}
+@media (max-width:380px){.tdock .med{width:48px;height:48px}}
+@media (max-height:700px){.tdock .med{width:46px;height:46px}.tgo3{height:46px}}
+.hzoom button{background:url(a/u/fr_round.webp) center/100% 100% no-repeat!important;border:0!important;box-shadow:0 4px 8px -3px rgba(0,0,0,.4)!important;width:38px;height:38px}
+/* 장 탭: 글자 가운데, 위아래 여백 */
+.gtabs button{--bh:36px;height:var(--bh);display:inline-flex!important;align-items:center!important;justify-content:center;padding-top:0!important;padding-bottom:0!important;line-height:1!important;gap:.5em}
+.gtabs button small{line-height:1}
+.mtabs button,.shtabs button,.btn,.abuy{display:inline-flex;align-items:center;justify-content:center;line-height:1.2}
+.gstage:not(.ch2):not(.abstage) .gtabs,.mbstage:not(.ch2) .mbtabs{top:13%!important}
+.gstage:not(.ch2):not(.abstage) .bsub,.mbstage:not(.ch2) .bsub{top:18.5%!important}
+.gstage:not(.ch2):not(.abstage) .blist,.mbstage:not(.ch2) .blist{top:21.4%!important}
+.gstage.ch2 .gtabs,.mbstage.ch2 .mbtabs{top:16.4%!important}
+.gstage.ch2 .bsub,.mbstage.ch2 .bsub{top:21.8%!important}
+.gstage.ch2 .blist,.mbstage.ch2 .blist{top:24.6%!important}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -1306,9 +1326,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261104222200"></script>
-<script src="quiz.js?v=20261104222200"></script>
-<script src="recipes.js?v=20261104222200"></script>
+<script src="data.js?v=20261104222724"></script>
+<script src="quiz.js?v=20261104222724"></script>
+<script src="recipes.js?v=20261104222724"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
