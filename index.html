@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261104093823">
+<meta name="merope-ver" content="20261104094010">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -497,7 +497,7 @@ td.k{font-family:var(--body)}
 .sim{position:relative;height:210px;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#FFFDF7,#F1E7D3);box-shadow:inset 0 0 0 1px #E3D3B3;touch-action:none;user-select:none;-webkit-user-select:none}
 .sim.ok{box-shadow:inset 0 0 0 2px #7FA987}
 .simcv{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
-.simcup{position:absolute;left:58%;top:56%;width:40%;height:60%;transform:translate(-50%,-50%);display:grid;place-items:center;transition:transform .2s}
+.simcup{position:absolute;left:58%;top:54%;width:38%;height:56%;transform:translate(-50%,-50%);display:grid;place-items:center;transition:transform .2s}
 .simcup img,.simcup svg{width:100%;height:100%;object-fit:contain;pointer-events:none}
 .simcup img{opacity:.7;filter:saturate(.7);transition:opacity .5s,filter .5s}.sim.ok .simcup img{opacity:1;filter:none}
 .simcup.bump{animation:hkbump .25s ease}
@@ -536,6 +536,9 @@ td.k{font-family:var(--body)}
 .c-tumbler .liq{left:21%;right:21%;top:14%;bottom:12%;clip-path:polygon(0 0,100% 0,90% 100%,10% 100%)}
 .c-aide .liq{left:22%;right:22%;top:9%;bottom:44%;clip-path:polygon(0 0,100% 0,85% 85%,50% 100%,15% 85%)}
 .c-bowl .liq{left:14%;right:14%;top:22%;bottom:52%;clip-path:polygon(0 0,100% 0,78% 100%,22% 100%)}
+.c-teacup .liq{left:14%;right:30%;top:8%;bottom:80%;border-radius:50%}.c-teacup .liq i{height:100%!important;opacity:0;transition:opacity .4s}.c-teacup.has .liq i{opacity:.9}
+.c-plate .liq{display:none}
+.simit .onboard{position:absolute;left:22%;top:8%;width:46px!important;height:46px!important}
 .c-mug .liq{left:16%;right:30%;top:12%;bottom:84%;border-radius:50%}
 .c-mug .liq i{height:100%!important;opacity:0;transition:opacity .4s}.c-mug.has .liq i{opacity:.9}
 .c-pot .liq{left:22%;right:22%;top:18%;bottom:70%;border-radius:50%}.c-pot .liq i{height:100%!important;opacity:.0}
@@ -1230,9 +1233,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
   </section>
 </main>
 
-<script src="data.js?v=20261104093823"></script>
-<script src="quiz.js?v=20261104093823"></script>
-<script src="recipes.js?v=20261104093823"></script>
+<script src="data.js?v=20261104094010"></script>
+<script src="quiz.js?v=20261104094010"></script>
+<script src="recipes.js?v=20261104094010"></script>
 <script>
 (()=>{
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
@@ -2296,17 +2299,17 @@ const SIMIC=[[/레몬/,'lemon'],[/딸기/,'strawberry'],[/꿀/,'honey'],[/민트
   [/카라멜|캐러멜/,'caramel'],[/시럽|청/,'vanilla'],[/얼음/,'ice'],[/우유/,'milk'],[/달고나/,'dalgona'],[/젤라틴|젤리/,'gelatin'],[/오렌지|금귤|자몽|유자|살구/,'orange_juice'],
   [/헤이즐넛|견과|피스타치오|밤/,'hazelnut'],[/원두|커피/,'coffee_beans'],[/홍차|찻잎|녹차|차를/,'black_tea'],[/말차/,'matcha'],[/키위|청포도/,'kiwi_juice'],[/망고|바나나|단호박/,'mango_puree'],
   [/블루베리|보라/,'purple_syrup'],[/석류|체리|히비스커스/,'pomegranate_syrup'],[/귀리/,'oat_milk']];
-const CUPT=n=>[3,5,10,17,31,32,35,36,37].includes(n)?'tumbler':(n>=11&&n<=20)?'aide':[38,39,40].includes(n)?'bowl':'mug';
-const SPCUP={'01':'aide','06':'tumbler','07':'aide','09':'tumbler'};
+const CUPT=n=>[3,5,10,17,31,32,35,36,37].includes(n)?'tumbler':(n>=11&&n<=20)?'aide':n===39?'plate':[38,40].includes(n)?'bowl':(n>=21&&n<=30&&n!==23)?'teacup':'mug';
+const SPCUP={'01':'aide','04':'teacup','05':'teacup','06':'tumbler','07':'aide','09':'tumbler','10':'teacup'};
 const LIQC={1:'#5A3420',2:'#C9A57A',3:'#EFE3CC',4:'#C9A57A',5:'#C7955E',6:'#A7A39C',7:'#D2B48C',8:'#BFE3CF',9:'#8A5A3C',10:'#4A2A18',11:'#F2C94C',12:'#F4A6A0',13:'#F7E07A',14:'#C9E57A',15:'#F28A8A',16:'#8E7CF0',17:'#E8964A',18:'#F2A93B',19:'#4A8CF0',20:'#F1C27A',
  21:'#6A5CD9',22:'#B9CF7A',23:'#D9C2A0',24:'#C2283C',25:'#F2D46A',26:'#CFE08A',27:'#E0602A',28:'#B79CE0',29:'#F4C542',30:'#9A6A3A',31:'#F6C9CF',32:'#A9C46A',33:'#C9A9E0',34:'#F2B84A',35:'#F2E3B0',36:'#F6B83A',37:'#7A5AB0',38:'#B9D96A',39:'#FBF5E8',40:'#9AC0F0',
  '01':'#F4E3A0','02':'#EFE2C8','03':'#8A5A3C','04':'#D98A3A','05':'#D9792A','06':'#CDE0B0','07':'#F3EBC8','08':'#D9C2A0','09':'#E8B04A','10':'#5A1E3A','11':'#C9A57A'};
 const mixC=(a,b,f)=>{const h=x=>[1,3,5].map(i=>parseInt(x.slice(i,i+2),16)),A=h(a),B=h(b);return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*f)).join(',')})`};
 function simTool(kind,lb,t){const T=x=>`a/t/${x}.webp`;
-  if(kind==='stir')return T('whisk');if(kind==='grind')return T(/블렌더|곱게/.test(lb)?'blender':'mortar');if(kind==='shake')return T('shaker');if(kind==='wait')return T('clock');
+  if(kind==='stir')return T(/차선|말차/.test(t)?'chasen':'whisk');if(kind==='slice')return T('knife');if(kind==='grind')return T(/블렌더|곱게/.test(lb)?'blender':'mortar');if(kind==='shake')return T(/체/.test(lb)?'sieve':'shaker');if(kind==='wait')return T('clock');
   if(kind==='tie')return T(/보자기|감싸|풀기/.test(lb+t)?'wrap':'ribbon');
   if(kind==='place'){const st=/스텐실/.test(t)&&(/트리/.test(t)?'tree':/태양/.test(t)?'sun':/별/.test(t)&&!/초승달/.test(t)?'star':'moon');if(st)return T('stencil_'+st);
-    if(/크림|휘핑|거품/.test(t+lb))return T('cream');if(/얼음/.test(lb))return T('ice');if(/말차|체 치/.test(t))return T('powder');
+    if(/거르|체로/.test(lb))return T('sieve');if(/크림|휘핑|거품/.test(t+lb))return T('cream');if(/얼음/.test(lb))return T('ice');if(/말차|체 치/.test(t))return T('powder');
     const ic=simIcon(t)||simIcon(lb);if(ic)return ic;if(/넣기|큰술|시럽|담기/.test(lb))return T('spoons');}
   if(kind==='slice')return simIcon(t)||simIcon(lb);return null}
 const simIcon=t=>{const h=SIMIC.find(([r])=>r.test(t));return h?`a/i/${h[1]}.webp`:null};
@@ -2321,7 +2324,7 @@ function hkAct(m,code,next,text,ph){const box=$('hka'),[type,a1,a2,a3]=code.spli
   const n=Math.max(1,+a1||1),cupImg=ph==='B'?drinkImg(m):null,tool=simTool(kind,lb,text||''),ic=tool,dno=m.special?cur.menu.slice(2):(m.no||(D.BOOK.find(b=>b.play===cur.menu)||{}).no),
     ct=m.special?(SPCUP[dno]||'mug'):CUPT(dno),lc=LIQC[dno]||'#C9A365',cupSrc=kind==='heat'?'pot':'cup_'+ct,stencil=/스텐실/.test(text||'')&&kind==='shake'?(/트리/.test(text)?'tree':/태양/.test(text)?'sun':'moon'):null;
   const HINT={place:n>1?`재료를 컵으로 끌어다 놓아요 (${n}번)`:'재료를 컵으로 끌어다 놓아요',stir:'컵 위에서 손가락으로 빙글빙글 원을 그려요',grind:'재료 위에서 동그랗게 문질러 갈아요',
-    shake:'통을 컵 위에서 좌우로 흔들어 뿌려요',slice:`재료를 위에서 아래로 쓱 그어 썰어요 (${n}번)`,draw:'컵 위에 손가락으로 그려요',tie:'컵 둘레를 따라 한 바퀴 감아요',
+    shake:/체/.test(lb)?'체를 컵 위에서 좌우로 흔들어 쳐요':'통을 컵 위에서 좌우로 흔들어 뿌려요',slice:`재료를 위에서 아래로 쓱 그어 썰어요 (${n}번)`,draw:'컵 위에 손가락으로 그려요',tie:'컵 둘레를 따라 한 바퀴 감아요',
     pour:'꾹 누르고 있다가 초록 칸에서 손을 떼요',heat:'꾹 누르면 데워져요. 초록 칸에서 손을 떼요',steep:'눌러서 우리기 시작, 초록 칸에서 한 번 더 눌러 건져요',wait:'눌러서 시간을 흘려보내요'}[kind];
   box.innerHTML=`<div class="sim k-${kind}" id="sim"><canvas class="simcv"></canvas>
      <div class="simcup">${cupImg?`<img src="${cupImg}" alt="">`:`<div class="cupw c-${kind==='heat'?'pot':ct}"><div class="liq"><i style="background:${lc}"></i></div><img class="cupimg" src="a/t/${cupSrc}.webp" alt=""></div>`}${stencil?`<img class="stc" src="a/t/stencil_${stencil}.webp" alt="">`:''}${kind==='heat'||kind==='steep'?'<img class="stm" src="a/t/steam.webp" alt="">':''}<div class="swirl"></div></div><img class="simtool" alt="" hidden>
@@ -2333,7 +2336,8 @@ function hkAct(m,code,next,text,ph){const box=$('hka'),[type,a1,a2,a3]=code.spli
   const liq=lqi?{setAttribute:(k,v)=>{if(k==='y'){lqi.style.height=Math.max(0,Math.min(100,110-+v))+'%';lqi.closest('.cupw').classList.toggle('has',110-+v>8)}if(k==='fill')lqi.style.background=v}}:null;
   if(it&&ic)it.querySelector('img,span').outerHTML=`<img src="${ic}" alt="">`;
   const follow=p=>{if(!simtool)return;simtool.hidden=false;simtool.style.left=p.x+'px';simtool.style.top=p.y+'px'};
-  if(kind==='stir'&&simtool){simtool.src='a/t/whisk.webp'}
+  if(kind==='stir'&&simtool){simtool.src=tool}
+  if(kind==='slice'){const fr=[simIcon(text||''),simIcon(lb)].find(x=>x&&/lemon|strawberry/.test(x));it.innerHTML=`<img src="a/t/knife.webp" alt="">${fr?`<img class="onboard" src="${fr}" alt="">`:''}<small>${lb}</small>`}
   const R=()=>sim.getBoundingClientRect(),C=()=>{const r=cup.getBoundingClientRect(),o=R();return {x:r.left-o.left+r.width/2,y:r.top-o.top+r.height/2,w:r.width,h:r.height}};
   const fit=()=>{const r=R();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;cv.getContext('2d').setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};requestAnimationFrame(fit);
   const ctx=()=>cv.getContext('2d');const prog=f=>{bar.style.width=Math.min(100,f*100)+'%'};
