@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261104223052">
+<meta name="merope-ver" content="20261104223746">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -24,8 +24,8 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{height:100%;box-sizing:border-box;background:#2A3448}
-body{height:100%;margin:0;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;background:#2A3448;overflow:hidden}
+html{height:100%;height:100dvh;box-sizing:border-box;background:#2A3448}
+body{height:100%;height:100dvh;margin:0;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;background:#2A3448;overflow:hidden}
 h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;color:var(--navy)}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sky-deep);outline-offset:2px}
@@ -1179,6 +1179,28 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
 .menu button+button{box-shadow:0 -1px 0 rgba(201,163,101,.35)}
 .menu button:hover,.menu button:focus-visible{background:rgba(233,214,168,.35)!important}
 .menu button small{color:#A9813E!important}
+/* ===== 룬 상점 v2: 한 줄 머리 · 작은 탭 · 아래 고정 구매줄 ===== */
+.shw{gap:7px!important}
+.shh{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;padding:0 50px 0 0!important;flex-wrap:nowrap}
+.shban{width:auto!important;height:46px;aspect-ratio:560/187;flex:none}
+.shban small{font-size:10.5px!important}.shban h2{font-size:15.5px!important;letter-spacing:.14em!important}
+.shrow{flex:1;justify-content:flex-end!important;gap:5px!important;min-width:0}
+.shcoin,.shboxb{--bh:34px!important;font-size:13px!important;padding:0 15px 0 11px!important;border-image-width:17px 21px!important;white-space:nowrap}
+.shcoin img{width:19px!important;height:19px!important}.shboxb img{width:15px;height:15px}
+.shtabs button{--bh:31px!important;font-size:13px!important}
+.shtabs{gap:4px!important}
+.shprev{flex:none}
+.shroom2,.shgift{height:clamp(120px,23vh,220px)!important}
+.shgrid{flex:1;min-height:0!important}
+.shact{flex-direction:row!important;align-items:center;gap:8px!important;background:linear-gradient(180deg,#FFFDF6,#F6ECD8);border:1.5px solid #D9B46A;border-radius:18px;padding:7px 8px 7px 8px;box-shadow:inset 0 0 0 3px #FFFCF4,inset 0 0 0 4px #E8D4A6,0 -6px 14px -10px rgba(35,61,98,.35)}
+.shact .shsel{flex:1;min-width:0;background:none!important;box-shadow:none!important;padding:0 2px!important;gap:8px}
+.shact .shsel em{display:none}
+.shact .shsel b{font-size:14px!important}.shact .shsel span{font-size:11.5px!important}
+.shact .shsel>img,.shact .shsel>.aic{width:38px!important;height:38px}
+.shbuy{flex:none;width:44%;--bh:44px!important;min-height:44px!important;font-size:14px!important;letter-spacing:.02em!important;white-space:nowrap}
+@media (max-width:360px){.shban{height:40px}.shcoin,.shboxb{font-size:12px!important;padding:0 12px 0 9px!important}}
+.shdec{display:grid;place-items:center;height:100%;background:radial-gradient(circle at 50% 45%,#2A3E62,#14213A 75%)}.shdec img{width:40%;max-height:80%;object-fit:contain}
+.shbuy:disabled{white-space:normal!important;font-size:12px!important;line-height:1.25!important;letter-spacing:0!important}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -1276,13 +1298,11 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   <section class="cover shopv" id="v-shop" hidden aria-label="룬 상점">
     <div class="shw">
       <header class="shh"><div class="shban"><small>Merope</small><h2>룬 상점</h2></div>
-        <p class="shsub">나만의 메로페를 꾸며 보세요</p>
         <div class="shrow"><div class="shcoin"><img src="a/u/ic_coin.webp" alt=""><b id="shCoins">0</b>룬</div><button class="shboxb" data-t="box" role="tab"><img src="a/u/ic_star.webp" alt="">보관함</button></div></header>
       <div class="shtabs" role="tablist"><button role="tab" data-t="prop">소품</button><button role="tab" data-t="furn">가구</button><button role="tab" data-t="floor">바닥</button><button role="tab" data-t="wallpaper">벽지</button><button role="tab" data-t="rug">러그</button><button role="tab" data-t="lighting">조명</button><button role="tab" data-t="scenery">풍경</button><button role="tab" data-t="gift">선물</button></div>
       <div class="shprev" id="shPrev"></div>
-      <div class="shsel" id="shSel"></div>
       <div class="shgrid" id="shGrid"></div>
-      <div class="shact"><button class="shbuy" id="shBuy"></button></div>
+      <div class="shact"><div class="shsel" id="shSel"></div><button class="shbuy" id="shBuy"></button></div>
     </div>
     <button class="xbtn stx" data-v="cafe" aria-label="룬 상점 닫기">✕</button>
   </section>
@@ -1355,11 +1375,12 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261104223052"></script>
-<script src="quiz.js?v=20261104223052"></script>
-<script src="recipes.js?v=20261104223052"></script>
+<script src="data.js?v=20261104223746"></script>
+<script src="quiz.js?v=20261104223746"></script>
+<script src="recipes.js?v=20261104223746"></script>
 <script>
 (()=>{
+const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
 const D=window.CAFE_DATA,$=id=>document.getElementById(id);
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ---------- 새 작업대 6종 (녹이기·섞기·탄산·색·빛·거르기·굳히기) ---------- */
@@ -2705,6 +2726,7 @@ function renderShop(){
     const pq=it.cat==='prop'&&propPlace(st,it.key),fo=it.cat==='furn'&&FOFF[it.slot]||[0,0],z=pq?[pq[0],pq[1]-10]:it.cat==='furn'?[it.anc[0]+fo[0],it.anc[1]+fo[1]-90]:null;
     $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox${z?' zoom':''}" style="${z?`--zx:${z[0]/10.24}%;--zy:${(z[1]-30)/10.24}%`:''}">${roomHTML(st)}</div>
       <span class="chip l">나의 메로페</span><span class="chip r">${isOn(it)?'지금 적용 중':'구매 전 미리보기'}</span></div>`}
+  else if(!isG&&!RDEC[it.slot]){$('shPrev').innerHTML=`<div class="shroom2 shdec"><img src="${it.icon||`a/g/${it.id}.webp`}" alt=""><span class="chip l">예전 소품</span><span class="chip r">보관 중</span></div>`}
   else if(!isG){const st=roomState(),r=RDEC[it.slot];st.pvDec={slot:it.slot,id:it.id};
     $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox zoom" style="--zx:${r[0]/10.24}%;--zy:${(r[1]+(r[2]==='b'?-20:r[2]==='t'?30:0))/10.24}%">${roomHTML(st)}</div>
       <span class="chip l">나의 메로페</span><span class="chip r">${S.placed[it.slot]===it.id?'지금 놓여 있어요':'놓았을 때 모습'}</span></div>`}
@@ -2741,6 +2763,7 @@ function renderShop(){
     else if(isOn(it)){B.disabled=true;B.textContent='지금 적용 중이에요'}
     else{B.textContent='이걸로 바꾸기';B.onclick=()=>{applyR(it);done()}}}
   else if(isG){B.disabled=true;B.textContent=S.given.includes(it.id)?`${gname}님께 건넸어요`:`${gname}님이 오면 건넬 수 있어요`}
+  else if(!RDEC[it.slot]){B.disabled=true;B.textContent='보관 중이에요'}
   else if(S.placed[it.slot]===it.id){B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{const p={...S.placed};delete p[it.slot];S.placed=p;done()}}
   else{B.textContent=S.placed[it.slot]?`${SLOTS[it.slot].nm}에 바꿔 놓기`:'손님 맞는 자리에 놓기';B.onclick=()=>{S.placed={...S.placed,[it.slot]:it.id};done()}}
 }
