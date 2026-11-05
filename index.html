@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261105001651">
+<meta name="merope-ver" content="20261105101800">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -860,8 +860,6 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .hroom .rbox img.rdec,.shroom2 .rbox img.rdec{inset:auto;height:auto;object-fit:fill}
 .shroom2 .rbox img.pv{animation:pvglow 1.6s ease-in-out infinite}
 .rbox img.lay{position:absolute;right:auto;bottom:auto;object-fit:fill}
-.rbox .spr{position:absolute;background:url(a/r3/atlas.webp) no-repeat;pointer-events:none}
-.shroom2 .rbox .spr.pv{animation:pvglow 1.6s ease-in-out infinite}
 .shcard>.aic{grid-row:1/3;width:52px}
 .shgrid .shcard>.aic{width:50px;grid-row:auto}
 .shsel>.aic{width:46px;flex:none}
@@ -1036,6 +1034,26 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
 @media (max-width:360px){.shban{height:40px}.shcoin,.shboxb{font-size:12px!important;padding:0 12px 0 9px!important}}
 .shdec{display:grid;place-items:center;height:100%;background:radial-gradient(circle at 50% 45%,#2A3E62,#14213A 75%)}
 .shdec img{width:40%;max-height:80%;object-fit:contain}
+
+/* ===================== 나의 메로페 v4: 자유 배치 ===================== */
+.rbox canvas.rcv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.aic.a4{position:relative}.aic.a4 b{position:absolute;background:url(a/r4/atlas.webp) no-repeat}
+.shcard>.aic.a4,.shgrid .shcard>.aic.a4{aspect-ratio:1}
+.hrl{display:flex;gap:6px}
+.hall.edit .htok,.hall.edit .hsay,.hall.edit #hBot,.hall.edit #hHint{display:none!important}
+.hedit{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;flex-direction:column;gap:6px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,rgba(255,253,246,.96),rgba(246,236,216,.98));border-top:1.5px solid #D9B46A;box-shadow:0 -10px 24px -14px rgba(20,32,56,.55);border-radius:18px 18px 0 0}
+.hesel{display:flex;align-items:center;gap:8px;min-height:36px}
+.hesel p{flex:1;margin:0;font:700 13.5px/1.35 var(--display);color:#233D62;word-break:keep-all}
+.hetools{display:flex;gap:6px}.hetools .btn{--bh:34px;font-size:12.5px;padding-left:12px!important;padding-right:12px!important}
+.hetl{margin:0;font:700 12.5px var(--display);color:#8A6A2E}.hetl small{font:400 11px var(--body);color:#9A8F7A;margin-left:4px}
+.hetray{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:thin;min-height:64px}
+.hetray:empty::before{content:"보관함이 비어 있어요. 룬 상점에서 새 가구와 소품을 만나 보세요.";font-size:12px;color:#9A8F7A;align-self:center}
+.hetray button{flex:none;width:62px;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid #E3D3B3;background:#FFFCF5;border-radius:12px;padding:5px 3px;cursor:pointer;font-size:10.5px;color:#5B5140;line-height:1.2}
+.hetray button .aic{width:38px;height:38px}.hetray button span{max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hetray button em{font-style:normal;font-size:10px;color:#8A6A2E}
+.heact{display:flex;gap:6px}.heact .btn{flex:1;--bh:38px;font-size:13px}.heact .btn.go{flex:1.4}
+.hall.edit .hroom{cursor:grab}
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -1054,8 +1072,14 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   <section class="hall" id="hall" hidden aria-label="카페 메로페 홀">
     <div class="hroom" id="hView"><div class="rbox" id="hRoom"></div></div>
     <p class="hhint" id="hHint">두 손가락으로 확대하고, 끌어서 둘러보세요</p>
+    <div class="hedit" id="hEdit" hidden>
+      <div class="hesel"><p id="heName">가구를 눌러 고르고, 끌어서 옮겨 보세요</p><span class="hetools"><button class="btn" id="heFlip" disabled>좌우 반전</button><button class="btn" id="heStore" disabled>보관함에 넣기</button></span></div>
+      <p class="hetl">보관함 <small>눌러서 카페에 꺼내요</small></p>
+      <div class="hetray" id="heTray"></div>
+      <div class="heact"><button class="btn" id="heUndo" disabled>되돌리기</button><button class="btn" id="heRedo" disabled>다시 하기</button><button class="btn go" id="heDone">꾸미기 끝내기</button></div>
+    </div>
     <div class="hbot" id="hBot">
-      <div class="hrow"><button class="hinv" id="hInv"><img src="a/u/st_merlin.webp" alt=""><span>손님 초대</span><b id="hInvN"></b></button>
+      <div class="hrow"><span class="hrl"><button class="hinv" id="hInv"><img src="a/u/st_merlin.webp" alt=""><span>손님 초대</span><b id="hInvN"></b></button><button class="hinv" id="hDeco"><img src="a/u/ic_star.webp" alt=""><span>꾸미기</span></button></span>
         <div class="hzoom"><button id="hZout" aria-label="축소">−</button><button id="hZin" aria-label="확대">+</button></div></div>
       <p class="hst" id="hSt"></p>
       <button class="tgo3 hgo" id="hGo"><span>손님 받기</span></button>
@@ -1210,9 +1234,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261105001651"></script>
-<script src="quiz.js?v=20261105001651"></script>
-<script src="recipes.js?v=20261105001651"></script>
+<script src="data.js?v=20261105101800"></script>
+<script src="quiz.js?v=20261105101800"></script>
+<script src="recipes.js?v=20261105101800"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1571,19 +1595,22 @@ const RCACHE={};
 const rsrc=h=>[...h.matchAll(/src="([^"]+)"/g)].map(m=>m[1]);
 function preRoom(html){return Promise.all(rsrc(html||roomHTML(roomState())).map(u=>{if(!RCACHE[u]){const im=new Image();im.src=u;RCACHE[u]=(im.decode?im.decode():new Promise((r,j)=>{im.onload=r;im.onerror=j})).catch(()=>{}).then(()=>{RCACHE[u].ok=1})}return RCACHE[u]}))}
 function goHall(){const ea=endReady();if(ea){$('hall').hidden=true;playEnding(ea,goHall);return}
-  const st=roomState(),h=$('hall'),rh=roomHTML(st),rb=$('hRoom');h.dataset.sc=st.scenery;rb.innerHTML=rh+hallTokens();
+  const st=roomState(),h=$('hall'),rh=roomHTML(st,2048),rb=$('hRoom');h.dataset.sc=st.scenery;rb.innerHTML=rh+hallTokens();
   const hv=$('hView');if(!rsrc(rh).every(u=>RCACHE[u]&&RCACHE[u].ok)){hv.style.transition='none';hv.style.opacity=0;Promise.race([preRoom(rh),new Promise(r=>setTimeout(r,2500))]).then(()=>{hv.style.transition='opacity .35s';hv.style.opacity=1})}else{hv.style.transition='none';hv.style.opacity=1}
   $('hRoom').querySelectorAll('.htok').forEach(b=>b.addEventListener('click',()=>{if(HV.moved>8)return;hallSay(b)}));
   const end=S.today.length>=S.perDay,hid=!end&&hiddenReady();
   const n=S.today.length;$('hSt').textContent=end?'오늘 만날 손님을 모두 배웅했어요':hid?'창밖에 낯선 그림자가 어른거려요':n?`손님 ${n}명을 배웅했어요. 다음 손님을 맞을까요?`:'문을 열었어요. 첫 손님을 맞아 볼까요?';
   $('hGo').querySelector('span').textContent=end?'영업 마감하기':hid?'문 앞에 누가 서 있어요…':S.today.length?'다음 손님 받기':'손님 받기';
-  h.hidden=false;stats();requestAnimationFrame(()=>{if(!HV.init){HV.init=true;hvReset()}else hvApply()})}
+  h.hidden=false;stats();requestAnimationFrame(()=>{if(!HV.init){HV.init=true;hvReset()}else hvApply();if(E4.on){e4draw();e4ui()}})}
 /* 홀 손님: 오늘 온 손님 + 초대한 손님이 자리에 앉아요 */
 /* 손님 자리: 붙박이 벤치 + 놓인 가구의 의자 */
-const FSEAT={two_seat_table:[[615,674],[751,696]],three_seat_table:[[693,604],[591,678],[771,690]],bar_stool:[[406,606],[476,578]],writing_desk:[[488,792]],navy_ottoman:[[450,832]]};
+const FSEAT={two_seat_table:[[615,674],[751,696]],three_seat_table:[[693,604],[591,678],[771,690]],bar_stool:[[406,606]],writing_desk:[[488,792]],navy_ottoman:[[450,832]]};
 const SEATS_BASE=[[625,438],[690,468],[752,498],[808,524]],INVMAX=6;
 const SEATS={get length(){return seatList().length}};
-function seatList(){const st=roomState();const f=Object.values(st.furn).flatMap(k=>FSEAT[k]||[]);return [...f,...SEATS_BASE,[540,760],[470,700]]}
+function seatList(){const st=roomState(),f=[];
+  st.items.forEach(it=>{const S0=FSEAT[it.t],T=T4(it.t);if(!S0||!T||!T.scr||it.par)return;const r=rect4(st,it);if(!r)return;
+    S0.forEach(([sx,sy])=>{let fx=(sx-T.scr[0])/T.box[0];const fy=(sy-T.scr[1])/T.box[1];if(it.flip)fx=1-fx;const dx=(fx-.5)*r.w;f.push([r.x+r.w/2+dx,r.y+fy*r.h+r.shear*dx])})});
+  return [...f,...SEATS_BASE]}
 function hallGuests(){const td=[...new Set((S.today||[]).map(t=>t.no))].filter(n=>n&&byNo(n)),pk=(S.hallPick||[]).filter(n=>S.met.includes(n)&&!td.includes(n));
   return [...td.map(n=>[n,1]),...pk.map(n=>[n,0])].slice(0,SEATS.length)}
 function hallTokens(){const g=hallGuests();$('hInvN').textContent=(S.hallPick||[]).length?`${(S.hallPick||[]).length}/${INVMAX}`:'';
@@ -1625,6 +1652,55 @@ function hvZoom(f,px,py,ease){const v=$('hView').getBoundingClientRect(),ox=(px?
   v.addEventListener('dblclick',e=>{hvZoom(HV.z<2?1.6:1/HV.z,e.clientX,e.clientY,1)});
   $('hZin').addEventListener('click',()=>hvZoom(1.3,null,null,1));$('hZout').addEventListener('click',()=>hvZoom(1/1.3,null,null,1));
   new ResizeObserver(()=>{if(!$('hall').hidden)hvApply()}).observe(v)})();
+/* ---------- 꾸미기: 홀에서 가구·소품을 직접 끌어서 옮겨요 ---------- */
+const E4={on:false,sel:null,hist:[],fut:[],drag:null};
+const e4cv=()=>$('hRoom').querySelector('canvas.rcv');
+const e4snap=st=>JSON.stringify({items:st.items,rug:st.rugOff});
+function e4pt(e){const r=e4cv().getBoundingClientRect();return {x:(e.clientX-r.left)/r.width*1024,y:(e.clientY-r.top)/r.height*1024}}
+function e4draw(ui){const cv=e4cv();if(cv&&cv._st)drawRoom4(cv,cv._st,{sel:E4.sel,...(ui||{})})}
+function e4save(st){S.r4={v:4,items:st.items.map(i=>({...i})),rug:[...st.rugOff]};save()}
+function e4commit(st,before){E4.hist.push(before);if(E4.hist.length>40)E4.hist.shift();E4.fut=[];e4save(st);e4ui()}
+function e4rug(st){const im=$('hRoom').querySelector('img.rug4');if(im)im.outerHTML=rugHTML(st)}
+function e4name(t){const x=RI(cat4(t)+':'+t);return t==='merlin'?'멀린':x?x.nm:t}
+function e4ui(){const cv=e4cv(),st=cv&&cv._st;if(!st)return;const it=st.items.find(i=>i.id===E4.sel);
+  $('heName').textContent=it?e4name(it.t)+(it.t==='merlin'?' · 끌어서 자리를 옮겨 보세요':T4(it.t).mount==='surface'?' · 상판·선반 위로 끌어 옮겨요':' · 끌어서 옮겨요'):'가구를 눌러 고르고, 끌어서 옮겨 보세요';
+  $('heFlip').disabled=!it||!!it.wall;$('heStore').disabled=!it||it.t==='merlin';$('heUndo').disabled=!E4.hist.length;$('heRedo').disabled=!E4.fut.length;
+  const types=[...RFURN.map(f=>f[0]),...RPROPS.map(p=>p[0]),...RLAMP.map(l=>l[0]),'merlin'].filter(t=>T4(t));
+  $('heTray').innerHTML=types.map(t=>{const own=t==='merlin'||roomOwned(cat4(t)+':'+t),n=(own?(COUNT4[t]||1):0)-st.items.filter(i=>i.t===t).length;if(n<1)return '';
+    const x=RI(cat4(t)+':'+t),ic=x&&x.ic&&R3IC[x.ic]!=null?R3ICN(x.ic):R4ICN(t);return `<button data-t="${t}">${ic}<span>${e4name(t)}</span>${n>1?`<em>×${n}</em>`:''}</button>`}).join('');
+  $('heTray').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const before=e4snap(st),o=spot4(st,b.dataset.t);if(!o){toast('놓을 빈자리가 없어요. 다른 가구를 옮기거나 보관해 주세요');return}
+    st.items.push(o);E4.sel=o.id;e4commit(st,before);e4draw();toast(`${jo(e4name(o.t),'을/를')} 꺼냈어요. 끌어서 자리를 잡아 주세요`)}))}
+function e4enter(){E4.on=true;E4.sel=null;E4.hist=[];E4.fut=[];$('hall').classList.add('edit');$('hEdit').hidden=false;goHall();requestAnimationFrame(()=>{e4draw();e4ui()})}
+function e4exit(){E4.on=false;E4.sel=null;$('hall').classList.remove('edit');$('hEdit').hidden=true;goHall()}
+$('hDeco').addEventListener('click',e4enter);window.__m4={rect4,gnd,ungnd,okFloor,spot4,foot4,blocked4,get S(){return S}};$('heDone').addEventListener('click',e4exit);
+$('heFlip').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it)return;const before=e4snap(st);it.flip=!it.flip;
+  if(!it.par&&!it.wall&&!okFloor(st,it)){it.flip=!it.flip;toast('돌리면 다른 가구와 겹쳐요. 조금 옮긴 뒤 다시 해 보세요');return}e4commit(st,before);e4draw()});
+$('heStore').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it||it.t==='merlin')return;const before=e4snap(st),kids=st.items.filter(i=>i.par===it.id).length;
+  st.items=st.items.filter(i=>i.id!==it.id&&i.par!==it.id);E4.sel=null;e4commit(st,before);e4draw();toast(kids?`가구와 그 위의 소품 ${kids}개를 함께 보관했어요`:`${jo(e4name(it.t),'을/를')} 보관함에 넣었어요`)});
+function e4load(js){const cv=e4cv(),st=cv._st,o=JSON.parse(js);st.items=o.items;st.rugOff=o.rug;e4save(st);e4rug(st);E4.sel=null;e4draw();e4ui()}
+$('heUndo').addEventListener('click',()=>{if(!E4.hist.length)return;const st=e4cv()._st;E4.fut.push(e4snap(st));e4load(E4.hist.pop());$('heRedo').disabled=false});
+$('heRedo').addEventListener('click',()=>{if(!E4.fut.length)return;const st=e4cv()._st;E4.hist.push(e4snap(st));e4load(E4.fut.pop())});
+(()=>{const v=$('hView');
+  v.addEventListener('pointerdown',e=>{if(!E4.on||E4.drag)return;const cv=e4cv();if(!cv||!cv._st)return;const st=cv._st,p=e4pt(e),it=hit4(cv,p);
+    if(!it){if(rugHit(st,p)&&!e.target.closest('.htok')){e.stopImmediatePropagation();v.setPointerCapture(e.pointerId);E4.drag={rug:1,pid:e.pointerId,p0:p,o0:[...st.rugOff],before:e4snap(st),moved:false};return}
+      if(E4.sel){E4.sel=null;e4draw();e4ui()}return}
+    e.stopImmediatePropagation();v.setPointerCapture(e.pointerId);E4.sel=it.id;
+    const T=T4(it.t),a=it.par||it.wall?rect4(st,it).p:gnd(it.x,it.y);
+    E4.drag={id:it.id,pid:e.pointerId,p0:p,off:[a.x-p.x,a.y-p.y],orig:{...it},before:e4snap(st),moved:false,ok:true,mount:T.mount};e4draw();e4ui()},true);
+  v.addEventListener('pointermove',e=>{const D=E4.drag;if(!D||e.pointerId!==D.pid)return;const st=e4cv()._st,p=e4pt(e);
+    if(!D.moved&&Math.hypot(p.x-D.p0.x,p.y-D.p0.y)<4)return;D.moved=true;
+    if(D.rug){const off=[D.o0[0]+p.x-D.p0.x,D.o0[1]+p.y-D.p0.y];if(rugOk(off)){st.rugOff=off;e4rug(st)}return}
+    const it=st.items.find(i=>i.id===D.id);if(!it)return;const q={x:p.x+D.off[0],y:p.y+D.off[1]};
+    if(D.mount==='surface'){const s4=surfaceAt(st,q);if(s4){Object.assign(it,s4);delete it.x;delete it.y;D.ok=okSurf(st,it)}else D.ok=false;e4draw({hint:'surface',bad:!D.ok});return}
+    if(D.mount==='wall'){const w=invQ(R4F.wall,q);if(w){it.u=w.u;it.v=w.v;D.ok=okWall(st,it)}else D.ok=false;e4draw({hint:'wall',bad:!D.ok});return}
+    const w=ungnd(q.x,q.y);it.x=Math.round(w.x*4)/4;it.y=Math.round(w.y*4)/4;D.ok=okFloor(st,it);e4draw({foot:it,bad:!D.ok})});
+  const up=e=>{const D=E4.drag;if(!D||e.pointerId!==D.pid)return;E4.drag=null;const st=e4cv()._st;
+    if(D.rug){if(D.moved)e4commit(st,D.before);return}
+    const it=st.items.find(i=>i.id===D.id);
+    if(D.moved&&it){if(!D.ok){Object.keys(it).forEach(k=>delete it[k]);Object.assign(it,D.orig);toast(D.mount==='surface'?'금빛으로 보이는 상판·선반 위에, 다른 소품과 조금 떨어지게 놓아 주세요':D.mount==='wall'?'왼쪽 벽의 금빛 칸 안에 걸어 주세요':'붙박이 가구나 다른 가구와 겹치지 않게, 바닥 안쪽에 놓아 주세요')}
+      else{if(T4(it.t).mount==='floor'||T4(it.t).mount==='ceiling')st.items.filter(c=>c.par===it.id).forEach(c=>{});e4commit(st,D.before)}}
+    e4draw();e4ui()};
+  v.addEventListener('pointerup',up,true);v.addEventListener('pointercancel',up,true)})();
 $('hGo').addEventListener('click',()=>{if(busy)return;const end=S.today.length>=S.perDay;$('hall').hidden=true;if(end)closing();else startCustomer()});
 
 /* ---------- 장보기 · 과학 퀴즈 ---------- */
@@ -2305,7 +2381,7 @@ function decorHTML(placed,pv){const P={...(placed||{})};if(pv)P[pv.slot]=pv.id;
 function renderDecor(){$('decor').innerHTML=decorHTML(S.placed);if(MODES[mode]&&MODES[mode].bg.startsWith('room_'))setBg(MODES[mode].bg,false,MODES[mode].fg,MODES[mode].mt)}
 /* ---------- 나의 메로페: 층 그림 방 (1024×1024 같은 좌표, 10단 순서) ---------- */
 /* ---------- 나의 메로페: 넓은 방 v3 (같은 1024 캔버스 레이어) ---------- */
-const R3={"layers": {"sc_sunset": [432, 77, 980, 562], "sc_day": [432, 77, 980, 562], "sc_night": [432, 77, 980, 562], "sc_rain": [432, 77, 980, 562], "sc_autumn": [432, 77, 980, 562], "sc_snow": [432, 77, 980, 562], "fl_oak": [12, 397, 1005, 998], "fl_walnut": [12, 397, 1005, 998], "fl_white_oak": [12, 397, 1005, 998], "fl_opal": [12, 397, 1005, 998], "fl_rain": [12, 397, 1005, 998], "fl_autumn": [12, 397, 1005, 998], "fl_moon": [12, 397, 1005, 998], "fl_snow": [12, 397, 1005, 998], "wp_ivory": [110, 215, 1001, 601], "wp_cool_pearl": [110, 215, 1001, 601], "wp_champagne": [110, 215, 1001, 601], "wp_opal": [110, 215, 1001, 601], "wp_rain": [110, 215, 1001, 601], "wp_autumn": [110, 215, 1001, 601], "wp_moon": [110, 215, 1001, 601], "wp_snow": [110, 215, 1001, 601], "am_sunset": null, "am_day": null, "am_night": [7, 47, 1021, 1017], "am_rain": [7, 47, 1021, 1017], "am_autumn": [7, 47, 1021, 1017], "am_snow": [7, 47, 1021, 1017], "lf_orbit": [286, 156, 865, 671], "lf_pearl": [286, 156, 865, 671], "lf_starry": [286, 156, 865, 671], "lf_reading": [286, 156, 898, 728], "lf_amber": [286, 156, 865, 671], "lg_orbit": [12, 47, 1021, 861], "lg_pearl": [12, 47, 1021, 859], "lg_starry": [12, 47, 1021, 849], "lg_reading": [12, 47, 1021, 881], "lg_amber": [12, 47, 1021, 864], "rg_navy": [383, 548, 884, 912], "rg_ivory": [383, 548, 884, 912], "rg_rose": [383, 548, 884, 912], "fixed": [7, 47, 1021, 1017]}, "atlas": [1024, 735], "sprites": {"fu_bar_stool": [381, 589, 50, 88, 616, 506], "fu_coat_stand": [285, 279, 150, 501, 152, 0], "fu_crockery_cupboard": [285, 395, 150, 385, 304, 0], "fu_low_bookcase": [285, 578, 150, 202, 862, 0], "fu_navy_ottoman": [316, 702, 88, 78, 730, 506], "fu_pastry_trolley": [285, 542, 150, 238, 456, 0], "fu_side_table": [804, 594, 60, 88, 668, 506], "fu_tall_bookcase": [285, 276, 150, 504, 0, 0], "fu_three_drawer_chest": [285, 619, 150, 161, 152, 506], "fu_three_seat_table": [556, 554, 252, 219, 608, 0], "fu_two_seat_table": [568, 624, 228, 149, 304, 506], "fu_writing_desk": [285, 594, 150, 186, 0, 506], "pr_blue_porcelain": [367, 269, 34, 41, 0, 694], "pr_books_and_pen": [330, 608, 52, 49, 860, 506], "pr_brass_telescope": [828, 641, 80, 90, 534, 506], "pr_christmas_candle": [685, 639, 22, 35, 228, 694], "pr_coffee_server": [366, 452, 47, 36, 141, 694], "pr_constellation_frame": [168, 354, 28, 34, 290, 694], "pr_dessert_cloche": [653, 644, 42, 38, 97, 694], "pr_honcheonui": [358, 587, 38, 59, 820, 506], "pr_letter_box": [654, 646, 36, 35, 252, 694], "pr_mail_parcels": [323, 638, 40, 33, 320, 694], "pr_moon_hourglass": [419, 408, 24, 40, 36, 694], "pr_pocket_watch": [425, 422, 26, 25, 427, 694], "pr_sealed_letters": [654, 650, 38, 31, 362, 694], "pr_seed_pot": [822, 565, 23, 29, 402, 694], "pr_small_balance": [237, 448, 42, 42, 914, 506], "pr_star_chart": [649, 637, 52, 42, 958, 506], "pr_starlight_prism": [326, 628, 33, 40, 62, 694], "pr_wax_seal_tools": [365, 607, 36, 36, 190, 694]}};
+const R3={"layers":{"sc_sunset":[432,77,980,562],"sc_day":[432,77,980,562],"sc_night":[432,77,980,562],"sc_rain":[432,77,980,562],"sc_autumn":[432,77,980,562],"sc_snow":[432,77,980,562],"fl_oak":[12,397,1005,998],"fl_walnut":[12,397,1005,998],"fl_white_oak":[12,397,1005,998],"fl_opal":[12,397,1005,998],"fl_rain":[12,397,1005,998],"fl_autumn":[12,397,1005,998],"fl_moon":[12,397,1005,998],"fl_snow":[12,397,1005,998],"wp_ivory":[110,215,1001,601],"wp_cool_pearl":[110,215,1001,601],"wp_champagne":[110,215,1001,601],"wp_opal":[110,215,1001,601],"wp_rain":[110,215,1001,601],"wp_autumn":[110,215,1001,601],"wp_moon":[110,215,1001,601],"wp_snow":[110,215,1001,601],"am_sunset":null,"am_day":null,"am_night":[7,47,1021,1017],"am_rain":[7,47,1021,1017],"am_autumn":[7,47,1021,1017],"am_snow":[7,47,1021,1017],"lf_orbit":[286,156,865,671],"lf_pearl":[286,156,865,671],"lf_starry":[286,156,865,671],"lf_reading":[286,156,898,728],"lf_amber":[286,156,865,671],"lg_orbit":[12,47,1021,861],"lg_pearl":[12,47,1021,859],"lg_starry":[12,47,1021,849],"lg_reading":[12,47,1021,881],"lg_amber":[12,47,1021,864],"rg_navy":[383,548,884,912],"rg_ivory":[383,548,884,912],"rg_rose":[383,548,884,912],"fixed":[7,47,1021,1017]}};
 const R3IC={"blue_porcelain": 0, "books_and_pen": 1, "brass_telescope": 2, "christmas_candle": 3, "coffee_server": 4, "constellation_frame": 5, "dessert_cloche": 6, "floor_autumn": 7, "floor_moon": 8, "floor_oak": 9, "floor_opal": 10, "floor_rain": 11, "floor_snow": 12, "floor_walnut": 13, "floor_white_oak": 14, "furniture_bar_stool": 15, "furniture_coat_stand": 16, "furniture_crockery_cupboard": 17, "furniture_low_bookcase": 18, "furniture_navy_ottoman": 19, "furniture_pastry_trolley": 20, "furniture_side_table": 21, "furniture_tall_bookcase": 22, "furniture_three_drawer_chest": 23, "furniture_three_seat_table": 24, "furniture_two_seat_table": 25, "furniture_writing_desk": 26, "honcheonui": 27, "letter_box": 28, "lighting_amber": 29, "lighting_orbit": 30, "lighting_pearl": 31, "lighting_reading": 32, "lighting_starry": 33, "mail_parcels": 34, "moon_hourglass": 35, "pocket_watch": 36, "rug_ivory": 37, "rug_navy": 38, "rug_rose": 39, "scenery_autumn": 40, "scenery_day": 41, "scenery_night": 42, "scenery_rain": 43, "scenery_snow": 44, "scenery_sunset": 45, "sealed_letters": 46, "seed_pot": 47, "small_balance": 48, "star_chart": 49, "starlight_prism": 50, "wallpaper_autumn": 51, "wallpaper_champagne": 52, "wallpaper_cool_pearl": 53, "wallpaper_ivory": 54, "wallpaper_moon": 55, "wallpaper_opal": 56, "wallpaper_rain": 57, "wallpaper_snow": 58, "wax_seal_tools": 59};
 const ROOM_OPT={
  floor:{nm:'바닥',def:'oak',it:[["oak", "기본 오크", 0, "가장 처음의 따뜻한 오크 마루예요."], ["walnut", "월넛 마감", 2000, "짙고 차분한 월넛 마루예요."], ["white_oak", "밝은 오크", 2000, "햇살처럼 밝은 오크 마루예요."], ["opal", "오팔 진주 타일", 3000, "진주빛 오팔 타일이에요."], ["rain", "빗소리 월넛 헤링본", 3000, "빗소리가 어울리는 짙은 월넛 헤링본이에요."], ["autumn", "꿀빛 오크 헤링본", 3000, "꿀빛 오크 헤링본이에요."], ["moon", "별빛 남색 석재", 3000, "별빛이 박힌 남색 석재예요."], ["snow", "첫눈 화이트 오크", 3000, "첫눈처럼 하얀 오크 마루예요."]]},
@@ -2315,59 +2391,146 @@ const ROOM_OPT={
  scenery:{nm:'풍경',def:'sunset',it:[["sunset", "노을 호수", 0, "노을빛으로 물든 호수가 창과 천창에 보여요."], ["day", "맑은 아침", 0, "햇살 아래 반짝이는 호수 마을이에요."], ["night", "보름달 밤", 1800, "보름달이 뜬 밤 호수예요."], ["rain", "비 오는 저녁", 2500, "빗방울이 창을 두드리는 저녁이에요."], ["autumn", "가을 노을", 2500, "단풍과 노을이 함께 보여요."], ["snow", "첫눈의 마을", 2500, "첫눈이 내려앉은 마을이에요."]]}};
 /* 가구: [id, 이름, 값, 설명, 자리, 기준점] — 자리마다 하나 */
 const RFURN=[["two_seat_table", "오팔 2인 테이블", 0, "오팔 상판의 2인 테이블과 별무늬 의자 두 개예요.", "main_table", [682, 773]], ["three_seat_table", "오팔 3인 테이블", 2500, "세 사람이 둘러앉는 오팔 테이블이에요. 손님 자리가 하나 늘어요.", "main_table", [682, 773]], ["side_table", "창가 보조 탁자", 0, "창가 소파 옆 작은 보조 탁자예요.", "side_table", [834, 682]], ["bar_stool", "별빛 바 스툴", 0, "카운터 앞 별빛 바 스툴이에요.", "bar_stool", [406, 677]], ["low_bookcase", "낮은 별빛 전시 책장", 0, "앞쪽 바닥에 놓는 낮은 전시 책장이에요. 위에 소품을 올릴 수 있어요.", "foreground", [360, 780]], ["three_drawer_chest", "별빛 3단 서랍장", 2000, "별무늬 손잡이의 3단 서랍장이에요.", "foreground", [360, 780]], ["writing_desk", "기록가의 책상과 의자", 2500, "기록가가 쓰던 책상과 의자예요.", "foreground", [360, 780]], ["pastry_trolley", "작은 페이스트리 카트", 2000, "디저트를 싣고 다니는 작은 카트예요.", "foreground", [360, 780]], ["navy_ottoman", "별자리 오토만", 1200, "남색 별자리 오토만이에요.", "foreground", [360, 780]], ["tall_bookcase", "천문 서가", 3000, "천장까지 닿는 천문 서가예요.", "foreground", [360, 780]], ["crockery_cupboard", "진주빛 컵 수납장", 2500, "진주빛 컵을 넣어 두는 유리 수납장이에요.", "foreground", [360, 780]], ["coat_stand", "황동 외투 걸이", 1500, "손님 외투를 거는 황동 걸이예요.", "foreground", [360, 780]]];
-const FSLOT={foreground:'앞쪽 바닥',main_table:'가운데 테이블',side_table:'창가 옆',bar_stool:'카운터 앞'};
 const FDEF={main_table:'two_seat_table',side_table:'side_table',bar_stool:'bar_stool',foreground:'low_bookcase'};
 /* 어울리는 손님: 만나서 이름을 안 손님만 보여 줘요 (모르는 손님은 ???) */
 function propWho(who){if(!who)return '';const ns=who.split('·').map(t=>{const c=C.find(x=>x.name.includes(t));return c&&S.met.includes(c.no)&&(!c.sci||sciDone(c.no))?t:null});
   const known=ns.filter(Boolean),unk=ns.length-known.length;if(!known.length)return ' 어울리는 손님: ???';return ' 어울리는 손님: '+known.join('·')+(unk?' 외 ???':'')}
 /* 소품: [id, 이름, 값, 설명, 어울리는 손님, 놓는 자리, 필요한 가구, 기준점] */
 const RPROPS=[["letter_box", "편지 보관함", 0, "별 도장 편지를 모아 두는 상자예요.", "베아트리스", "main_center", "two_seat_table", [672, 681]], ["starlight_prism", "별빛 프리즘", 800, "햇빛을 작은 무지개로 나눠요.", "보어·리비트", "display_left", "low_bookcase", [342, 668]], ["moon_hourglass", "달빛 모래시계", 600, "모래가 천천히 떨어지며 시간을 재요.", "장영실", "moon_hourglass", "", [431, 448]], ["constellation_frame", "별자리 액자", 1000, "별자리를 금선으로 이은 액자예요.", "스텔라·케플러", "constellation_frame", "", [182, 388]], ["brass_telescope", "놋쇠 망원경", 1500, "창가에서 하늘을 보는 놋쇠 망원경이에요.", "케플러", "brass_telescope", "", [868, 731]], ["honcheonui", "혼천의", 1600, "하늘의 움직임을 본뜬 조선의 천문 기구예요.", "장영실", "display_right", "low_bookcase", [377, 646]], ["small_balance", "작은 저울", 900, "카운터 위에서 무게를 재는 작은 저울이에요.", "라부아지에·마리안", "small_balance", "", [258, 490]], ["seed_pot", "씨앗 화분", 700, "싹이 돋기를 기다리는 작은 화분이에요.", "우장춘", "seed_pot", "side_table", [834, 594]], ["christmas_candle", "크리스마스 촛불", 700, "손님 테이블을 밝히는 작은 촛불이에요.", "패러데이", "main_candle", "two_seat_table", [696, 674]], ["blue_porcelain", "호수빛 유리병과 도자기", 900, "호수빛 유리병과 도자기를 선반에 올려요.", "", "blue_porcelain", "", [384, 310]], ["books_and_pen", "책과 만년필 기록 세트", 900, "책과 만년필을 늘어놓은 기록 세트예요.", "", "display_left", "low_bookcase", [356, 657]], ["coffee_server", "황동 드리퍼와 커피 서버", 1200, "황동 드리퍼와 커피 서버예요.", "", "coffee_server", "", [390, 488]], ["pocket_watch", "가을빛 회중시계", 1000, "가을빛 회중시계예요.", "", "pocket_watch", "", [438, 447]], ["star_chart", "펼친 별 지도", 1100, "테이블 위에 펼친 별 지도예요.", "케플러", "main_center", "two_seat_table", [675, 679]], ["sealed_letters", "별 봉인 편지 묶음", 800, "별 봉인을 찍은 편지 묶음이에요.", "", "main_center", "two_seat_table", [673, 681]], ["mail_parcels", "남색 리본 소포", 900, "남색 리본을 묶은 소포예요.", "", "display_left", "low_bookcase", [343, 671]], ["wax_seal_tools", "황동 봉인 도구", 1000, "봉인을 찍는 황동 도구예요.", "", "display_right", "low_bookcase", [383, 643]], ["dessert_cloche", "작은 디저트 돔", 900, "디저트를 덮어 두는 작은 유리 돔이에요.", "", "main_center", "two_seat_table", [674, 682]]];
-const FNAME=id=>(RFURN.find(f=>f[0]===id)||[])[1];
+const MOUNTTX={surface:' 가구 상판이나 선반 위에 올려요.',wall:' 왼쪽 벽에 걸어요.',floor:' 바닥에 세워요.',ceiling:' 천장에 매달아요.'};
+/* 새 조명 4종: [id, 이름, 값, 설명] */
+const RLAMP=[["reading_floor","별빛 독서 스탠드",2200,"바닥에 세우는 황동 독서등이에요."],["banker_desk","황동 뱅커 램프",1600,"테이블이나 선반 위에 올리는 작은 램프예요."],
+  ["amber_pendant","호박빛 펜던트",1800,"천장에 매다는 호박빛 유리등이에요."],["crescent_wall","초승달 벽등",2000,"왼쪽 벽에 거는 초승달 벽등이에요."]];
 const RITEMS=[...Object.entries(ROOM_OPT).flatMap(([cat,o])=>o.it.map(([k,nm,price,desc])=>({id:`${cat}:${k}`,cat,key:k,nm,price,desc,ic:`${cat}_${k}`,room:1}))),
-  ...RFURN.map(([k,nm,price,desc,slot,anc])=>({id:'furn:'+k,cat:'furn',key:k,nm,price,slot,anc,desc:desc+` (${FSLOT[slot]}에 하나)`,ic:'furniture_'+k,room:1})),
-  ...RPROPS.map(([k,nm,price,desc,who,ps,req,anc])=>({id:'prop:'+k,cat:'prop',key:k,nm,price,ps,req,anc,get desc(){return desc+(req?` ${FNAME(req)} 위에 놓여요.`:'')+propWho(who)},ic:k,room:1}))];
+  ...RFURN.map(([k,nm,price,desc,slot,anc])=>({id:'furn:'+k,cat:'furn',key:k,nm,price,desc:desc+(k==='bar_stool'?' 두 개를 놓을 수 있어요.':''),ic:'furniture_'+k,room:1})),
+  ...RPROPS.map(([k,nm,price,desc,who])=>({id:'prop:'+k,cat:'prop',key:k,nm,price,get desc(){return desc+MOUNTTX[T4(k).mount]+propWho(who)},ic:k,room:1})),
+  ...RLAMP.map(([k,nm,price,desc])=>({id:'prop:'+k,cat:'prop',key:k,nm,price,desc,i4:k,room:1}))];
 const RI=id=>RITEMS.find(x=>x.id===id);
 function roomState(){const r={...Object.fromEntries(Object.entries(ROOM_OPT).map(([c,o])=>[c,o.def])),...(S.room||{})};
   Object.keys(ROOM_OPT).forEach(c=>{if(!ROOM_OPT[c].it.some(x=>x[0]===r[c]))r[c]=ROOM_OPT[c].def});
-  r.props={...(S.rprops||{letter_box:1})};r.furn={...FDEF,...(S.rfurn||{})};return r}
+  if(!S.r4||S.r4.v!==4){S.r4=r4Migrate();const m=spot4({items:S.r4.items,rugOff:[0,0]},'merlin');if(m)S.r4.items.push(m)}
+  r.items=S.r4.items.map(i=>({...i}));r.rugOff=[...(S.r4.rug||[0,0])];return r}
 function roomOwned(id){const it=RI(id);return it&&(it.price===0||S.owned.includes(id))}
 const RDEC={};
 /* 그림 조각: 큰 레이어는 파일, 가구·소품은 한 장(아틀라스)에서 잘라 써요 */
 function R3L(name,cls='',sty=''){const b=R3.layers[name];if(!b)return '';let [x0,y0,x1,y1]=b;
   if(name.startsWith('rg_')){const t=RUGT,f=v=>v;x0=t.cx+t.dx-(t.cx-x0)*t.sc;x1=t.cx+t.dx+(x1-t.cx)*t.sc;y0=t.cy+t.dy-(t.cy-y0)*t.sc;y1=t.cy+t.dy+(y1-t.cy)*t.sc}
   return `<img src="a/r3/${name}.webp" alt="" class="lay ${cls}" style="left:${x0/10.24}%;top:${y0/10.24}%;width:${(x1-x0)/10.24}%;height:${(y1-y0)/10.24}%;${sty}">`}
-function R3S(name,cls='',pl){const q=R3.sprites[name];if(!q)return '';let [x,y,w,h,ax,ay]=q;const [AW,AH]=R3.atlas,bw=w,bh=h;
-  if(pl&&pl.length===3){const [bx,by,sc]=pl;w=bw*sc;h=bh*sc;x=bx-w/2;y=by-h}else if(pl){x+=pl[0]||0;y+=pl[1]||0}
-  return `<i class="spr ${cls}" data-src="a/r3/atlas.webp" style="left:${x/10.24}%;top:${y/10.24}%;width:${w/10.24}%;height:${h/10.24}%;background-size:${AW/bw*100}% ${AH/bh*100}%;background-position:${AW>bw?ax/(AW-bw)*100:0}% ${AH>bh?ay/(AH-bh)*100:0}%"></i>`}
-/* 배치 다듬기: 앞쪽 가구는 바닥 앞으로 내려 작은 코너를 만들고, 테이블은 러그 한가운데에 */
-const FOFF={foreground:[90,110],main_table:[3,6]};
 const RUGT={sc:.78,cx:633,cy:730,dx:47,dy:-18};
-/* 소품 자리 [바닥 가운데 x, 바닥 y, 크기] — 걸치지 않게, 조금 작게 */
-const PPL={blue_porcelain:[384,253,.7],pocket_watch:[384,324,.8],constellation_frame:[388,360,.8],
-  moon_hourglass:[252,383,.68],small_balance:[292,370,.6],coffee_server:[334,356,.62],
-  seed_pot:[833,610,.9],brass_telescope:[305,786,.95],
-  _display_left:[338,633,.72],_display_right:[392,609,.72],_main_center:[687,681,.85],_main_candle:[657,688,.8]};
-function propPlace(st,k){const p=RPROPS.find(x=>x[0]===k),ps=p&&p[5];let q=PPL[k]||PPL['_'+ps];if(!q)return null;q=[...q];
-  if(ps==='display_left'||ps==='display_right'){const o=FOFF.foreground;q[0]+=o[0];q[1]+=o[1]}
-  if(ps==='main_center'||ps==='main_candle'){const o=FOFF.main_table;q[0]+=o[0];q[1]+=o[1]+(st.furn.main_table==='three_seat_table'?-39:0)}
-  return q}
 const R3ICN=k=>{const i=R3IC[k];if(i==null)return '';const rows=Math.ceil(Object.keys(R3IC).length/8);return `<i class="aic" style="background-size:800% ${rows*100}%;background-position:${(i%8)/7*100}% ${Math.floor(i/8)/(rows-1)*100}%"></i>`};
-function propShown(st,k){const p=RPROPS.find(x=>x[0]===k);return p&&st.props[k]&&(!p[6]||propBase(st,p[6]))}
-/* 소품 놓기: 같은 자리의 소품은 치우고, 받침 가구가 없으면 함께 놓아요 */
-function propPut(st,it){Object.keys(st.props).forEach(k=>{const q=RPROPS.find(x=>x[0]===k);if(q&&q[5]===it.ps&&k!==it.key)delete st.props[k]});st.props[it.key]=1;
-  if(it.req&&!propBase(st,it.req)){const f=RFURN.find(x=>x[0]===it.req);st.furn[f[4]]=f[0]}}
-/* 바 스툴과 앞쪽 큰 가구는 같은 자리에 겹쳐요 (오토만만 함께 둘 수 있어요) */
-function furnPut(st,slot,key){st.furn[slot]=key;
-  Object.keys(st.props).forEach(k=>{if(!propShown(st,k))delete st.props[k]})}
-const propBase=(st,req)=>Object.values(st.furn).includes(req)||(req==='two_seat_table'&&st.furn.main_table==='three_seat_table');
-function roomHTML(st){const gl={day:.3,sunset:.6,night:1,rain:.75,autumn:.6,snow:.55}[st.scenery]??.6;
-  return R3L('sc_'+st.scenery)+R3L('fl_'+st.floor)+R3L('wp_'+st.wallpaper)+R3L('rg_'+st.rug)+R3L('fixed')
-   +Object.entries(st.furn).filter(([,k])=>k).sort((a,b)=>(RFURN.find(f=>f[0]===a[1])||[])[5][1]-(RFURN.find(f=>f[0]===b[1])||[])[5][1]).map(([sl,k])=>{const o=FOFF[sl],c=st.pvF===k?'pv':'';return R3S('fu_'+k,c,o)+(k==='bar_stool'?R3S('fu_'+k,c,[70,-28]):'')}).join('')
-   +RPROPS.filter(([k])=>propShown(st,k)).map(([k])=>R3S('pr_'+k,st.pv===k?'pv':'',propPlace(st,k))).join('')
+/* ===================== 나의 메로페 v4: 자유 배치 =====================
+   가구는 바닥 위 어디든 끌어서 옮기고, 소품은 가구 상판·바 뒤 선반·카운터 위에 올려요.
+   바닥 좌표: 12×12 칸. 화면(1024 캔버스)과는 바닥 네 모서리로 이어져요(이중선형 투영). */
+const R4={"atlas":[2048,2291],"items":{"three_drawer_chest":{"k":"f","box":[150,161],"an":0.83,"mount":"floor","fw":0.97,"fd":2.58,"o":[9.232,10.995],"scr":[375,729],"axis":"v","surf":[["top",[[0.02,0.26],[0.76,0.02],[0.98,0.17],[0.24,0.42]]]],"at":[1386,1262,375,402]},"writing_desk":{"k":"f","box":[150,186],"an":0.83,"mount":"floor","fw":1.58,"fd":2.44,"o":[9.158,10.917],"scr":[375,704],"axis":"v","surf":[["top",[[0.03,0.24],[0.75,0.02],[0.98,0.17],[0.26,0.39]]]],"at":[1009,1262,375,465]},"pastry_trolley":{"k":"f","box":[150,238],"an":0.85,"mount":"floor","fw":1.02,"fd":1.42,"o":[9.086,10.842],"scr":[375,652],"axis":"v","surf":[["top",[[0.12,0.25],[0.73,0.08],[0.92,0.18],[0.3,0.37]]],["lower",[[0.12,0.69],[0.74,0.52],[0.92,0.64],[0.3,0.81]]]],"at":[1131,0,375,595]},"navy_ottoman":{"k":"f","box":[88,78],"an":0.88,"mount":"floor","fw":1.7,"fd":1.7,"o":[9.544,11.325],"scr":[406,812],"at":[1206,1812,220,195]},"tall_bookcase":{"k":"f","box":[150,504],"an":0.94,"mount":"floor","fw":0.88,"fd":1.29,"o":[9.182,10.942],"scr":[375,386],"axis":"v","surf":[["top",[[0.05,0.1],[0.74,0.03],[0.94,0.08],[0.25,0.15]]],["upper",[[0.18,0.34],[0.72,0.28],[0.87,0.32],[0.33,0.39]]],["middle",[[0.18,0.55],[0.72,0.49],[0.87,0.53],[0.33,0.6]]]],"at":[0,0,375,1260]},"low_bookcase":{"k":"f","box":[150,202],"an":0.85,"mount":"floor","fw":0.98,"fd":2.45,"o":[9.181,10.941],"scr":[375,688],"axis":"v","surf":[["top",[[0.03,0.22],[0.78,0.03],[0.97,0.12],[0.22,0.32]]]],"at":[632,1262,375,505]},"crockery_cupboard":{"k":"f","box":[150,385],"an":0.94,"mount":"floor","fw":0.95,"fd":1.43,"o":[9.307,11.073],"scr":[375,505],"axis":"v","surf":[["top",[[0.04,0.08],[0.74,0.02],[0.95,0.07],[0.25,0.14]]]],"at":[754,0,375,962]},"coat_stand":{"k":"f","box":[150,501],"an":0.96,"mount":"floor","fw":0.8,"fd":0.8,"o":[9.36,11.129],"scr":[375,389],"at":[377,0,375,1252]},"two_seat_table":{"k":"f","box":[228,149],"an":0.91,"mount":"floor","fw":3.7,"fd":3.2,"o":[9.828,5.77],"scr":[571,630],"surf":[["top",[[0.36,0.31],[0.51,0.25],[0.67,0.34],[0.51,0.43]]]],"at":[0,1812,570,372]},"three_seat_table":{"k":"f","box":[252,219],"an":0.92,"mount":"floor","fw":4,"fd":3.7,"o":[9.749,5.69],"scr":[559,560],"surf":[["top",[[0.25,0.46],[0.5,0.34],[0.75,0.46],[0.5,0.59]]]],"at":[0,1262,630,548]},"side_table":{"k":"f","box":[60,88],"an":0.96,"mount":"floor","fw":1.2,"fd":1.2,"o":[9.752,1.983],"scr":[804,594],"surf":[["top",[[0.1,0.2],[0.5,0.065],[0.9,0.2],[0.5,0.34]]]],"at":[864,1812,150,220]},"bar_stool":{"k":"f","box":[50,88],"an":0.96,"mount":"floor","fw":0.9,"fd":0.9,"o":[5.284,8.037],"scr":[381,589],"at":[1016,1812,125,220]},"starlight_prism":{"k":"p","box":[33,40],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[4.594,8.868],"scr":[326,628],"at":[219,2186,82,100]},"moon_hourglass":{"k":"p","box":[24,40],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[0.349,2.783],"scr":[419,408],"at":[303,2186,60,100]},"constellation_frame":{"k":"p","box":[28,34],"an":0.96,"mount":"wall","fw":0.5,"fd":0.5,"o":[-2.953,5.432],"scr":[168,354],"at":[833,2186,70,85]},"letter_box":{"k":"p","box":[36,35],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[7.976,4.249],"scr":[654,646],"at":[684,2186,90,88]},"brass_telescope":{"k":"p","box":[80,90],"an":0.96,"mount":"floor","fw":1.2,"fd":1.2,"o":[11.158,2.514],"scr":[828,641],"at":[662,1812,200,225]},"honcheonui":{"k":"p","box":[38,59],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[4.423,7.88],"scr":[358,587],"at":[1512,1812,95,148]},"small_balance":{"k":"p","box":[42,42],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[0.063,6.482],"scr":[237,448],"at":[1823,1812,105,105]},"seed_pot":{"k":"p","box":[23,29],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[7.87,0.192],"scr":[822,565],"at":[1163,2186,58,72]},"christmas_candle":{"k":"p","box":[22,35],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[8.085,3.767],"scr":[685,639],"light":[0.5,0.12,28.6],"at":[776,2186,55,88]},"blue_porcelain":{"k":"p","box":[34,41],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[-3.874,0.137],"scr":[367,269],"at":[132,2186,85,102]},"books_and_pen":{"k":"p","box":[52,49],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[4.478,8.433],"scr":[330,608],"at":[1691,1812,130,122]},"coffee_server":{"k":"p","box":[47,36],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[1.019,4.349],"scr":[366,452],"at":[472,2186,118,90]},"pocket_watch":{"k":"p","box":[26,25],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[0.395,2.665],"scr":[425,422],"at":[1223,2186,65,62]},"star_chart":{"k":"p","box":[52,42],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[7.96,4.16],"scr":[649,637],"at":[0,2186,130,105]},"sealed_letters":{"k":"p","box":[38,31],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[7.99,4.238],"scr":[654,650],"at":[1066,2186,95,78]},"mail_parcels":{"k":"p","box":[40,33],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[4.664,8.926],"scr":[323,638],"at":[905,2186,100,82]},"wax_seal_tools":{"k":"p","box":[36,36],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[4.431,7.745],"scr":[365,607],"at":[592,2186,90,90]},"dessert_cloche":{"k":"p","box":[42,38],"an":0.96,"mount":"surface","fw":0.5,"fd":0.5,"o":[8.015,4.238],"scr":[653,644],"at":[365,2186,105,95]},"amber_pendant":{"k":"l","box":[24.5,81.1],"an":0.95,"mount":"ceiling","fw":0.85,"fd":0.85,"light":[0.5,0.76,57.2],"at":[1143,1812,61,203]},"banker_desk":{"k":"l","box":[22.9,32.7],"an":0.95,"mount":"surface","fw":0.85,"fd":0.85,"light":[0.5,0.25,32.7],"at":[1007,2186,57,82]},"crescent_wall":{"k":"l","box":[31.8,58.6],"an":0.95,"mount":"wall","fw":0.85,"fd":0.85,"light":[0.5,0.45,53.1],"at":[1609,1812,80,146]},"reading_floor":{"k":"l","box":[35.1,102.7],"an":0.95,"mount":"floor","fw":0.85,"fd":0.85,"light":[0.5,0.17,61.2],"at":[572,1812,88,257]},"merlin":{"k":"c","box":[33,66.5],"an":0.97,"mount":"floor","fw":0.8,"fd":0.8,"at":[1428,1812,82,166]}}};
+const R4F={"surfaces":[["bar_hi","바 뒤 선반 위",[[238,341],[342,306],[342,315],[238,350]],0.8],["bar_lo","바 뒤 선반 아래",[[238,378],[342,343],[342,352],[238,387]],0.8],["arch2","아치 선반 2",[[368,286],[404,277],[404,284],[368,293]],0.75],["arch3","아치 선반 3",[[368,322],[404,313],[404,320],[368,329]],0.75],["arch4","아치 선반 4",[[368,358],[404,349],[404,356],[368,365]],0.75],["counter","카운터 위",[[185,508],[465,440],[482,458],[167,530]],0.9]],"wall":[[110,330],[226,293],[226,430],[110,466]]};
+const R4MASK=(h=>{const b=[];for(const c of h){const n=parseInt(c,16);for(let k=3;k>=0;k--)b.push((n>>k)&1)}return b})('0fffffff8fff07ffffff87ff03ffffff83fe01ffffff800000ffff800000807f80000000c00000000000f00000000000f80000000000fc0000000000fe0000000000ff0000000000ff8000000000ffc000000000ffc000000000ffe000000000fff000000000fff000000000fff800000000fff800000000fffc00000000fffc00000000fffc00000000fffc00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe00000000fffe000000003ffc000000001ffc000000000ff80000000007f00000000003c000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000');
+const RW=12,FLOOR4=[[539,400],[1000,688],[528,982],[14,560]],CEIL4=300;
+const COUNT4={bar_stool:2};
+function gnd(x,y){const u=x/RW,v=y/RW,[b,r,f,l]=FLOOR4;return {x:(1-u)*(1-v)*b[0]+u*(1-v)*r[0]+u*v*f[0]+(1-u)*v*l[0],y:(1-u)*(1-v)*b[1]+u*(1-v)*r[1]+u*v*f[1]+(1-u)*v*l[1]}}
+function ungnd(px,py){let x=6,y=6;for(let i=0;i<10;i++){const p=gnd(x,y),a=gnd(x+.01,y),b=gnd(x,y+.01),ax=(a.x-p.x)/.01,ay=(a.y-p.y)/.01,bx=(b.x-p.x)/.01,by=(b.y-p.y)/.01,dx=px-p.x,dy=py-p.y,d=ax*by-ay*bx;if(Math.abs(d)<1e-9)break;x+=(dx*by-dy*bx)/d;y+=(dy*ax-dx*ay)/d}return {x,y}}
+const persp4=(x,y)=>.84+(x+y)/24*.25;
+function axSlope(x,y,ax){const p=gnd(x,y),q=ax==='u'?gnd(x+.1,y):gnd(x,y+.1);return (q.y-p.y)/(q.x-p.x)}
+function mapQ(q,u,v){const [a,b,c,d]=q.map(p=>Array.isArray(p)?{x:p[0],y:p[1]}:p);return {x:(1-u)*(1-v)*a.x+u*(1-v)*b.x+u*v*c.x+(1-u)*v*d.x,y:(1-u)*(1-v)*a.y+u*(1-v)*b.y+u*v*c.y+(1-u)*v*d.y}}
+function invQ(q,p){let u=.5,v=.5;for(let i=0;i<8;i++){const a=mapQ(q,u,v),b=mapQ(q,u+.001,v),c=mapQ(q,u,v+.001),ax=(b.x-a.x)*1000,ay=(b.y-a.y)*1000,bx=(c.x-a.x)*1000,by=(c.y-a.y)*1000,d=ax*by-ay*bx;if(Math.abs(d)<1e-7)return null;const dx=p.x-a.x,dy=p.y-a.y;u+=(dx*by-dy*bx)/d;v+=(dy*ax-dx*ay)/d}return {u,v}}
+const T4=t=>R4.items[t];
+const cat4=t=>{const T=T4(t);return !T?null:T.k==='f'?'furn':T.k==='c'?'cat':'prop'};
+const own4=t=>t==='merlin'||roomOwned(cat4(t)+':'+t);
+const FIXS=Object.fromEntries(R4F.surfaces.map(([k,nm,q,sc])=>[k,{k,nm,q,sc}]));
+/* 기존 배치(정해진 자리)를 새 배치로 한 번 옮겨 와요 */
+function r4Migrate(){const items=[],furn={...FDEF,...(S.rfurn||{})},props={...(S.rprops||{letter_box:1})};
+  Object.values(furn).filter(Boolean).forEach(k=>{const T=T4(k);if(T&&T.o)items.push({id:k,t:k,x:T.o[0],y:T.o[1],flip:false})});
+  if(Object.values(furn).includes('bar_stool')){const o=T4('bar_stool').o,p=gnd(o[0],o[1]),q=ungnd(p.x+70,p.y-28);items.push({id:'bar_stool#2',t:'bar_stool',x:q.x,y:q.y,flip:false})}
+  const st={items,rug:[0,0]};
+  Object.keys(props).forEach(k=>{if(T4(k)){const it=spot4(st,k);if(it)st.items.push(it)}});
+  return {v:4,...st}}
+const OLDPPL={blue_porcelain:[384,286],pocket_watch:[384,324],constellation_frame:[168,420],moon_hourglass:[252,383],small_balance:[292,370],coffee_server:[334,356],
+  seed_pot:[833,610],brass_telescope:[305,786],starlight_prism:[428,743],honcheonui:[482,719],books_and_pen:[428,743],mail_parcels:[428,743],wax_seal_tools:[482,719],
+  letter_box:[690,687],star_chart:[690,687],sealed_letters:[690,687],dessert_cloche:[690,687],christmas_candle:[660,694]};
+/* 처음 꺼낼 때 놓일 자리: 예전 자리 → 빈 선반 → 방 가운데 */
+function spot4(st,t,id){const T=T4(t);id=id||uid4(st,t);
+  if(T.mount==='wall'){for(const u of [.5,.3,.7,.2,.8])for(const v of [.45,.3,.6]){const it={id,t,wall:1,u,v};if(okWall(st,it))return it}return null}
+  if(T.mount==='surface'){const pts=[];if(OLDPPL[t])pts.push(OLDPPL[t]);
+    for(const s of Object.values(FIXS))for(const u of [.5,.25,.75,.12,.88])pts.push(mapQ(s.q,u,.75));
+    st.items.filter(i=>!i.par&&T4(i.t).surf).forEach(par=>{for(const [key] of T4(par.t).surf)for(const u of [.5,.3,.7]){const c=surfCorners(st,par,key);if(c.length)pts.push(mapQ(c,u,.5))}});
+    for(const p of pts){const s=surfaceAt(st,Array.isArray(p)?{x:p[0],y:p[1]}:p);if(!s)continue;const it={id,t,par:s.par,sf:s.sf,u:s.u,v:s.v};if(okSurf(st,it))return it}return null}
+  const tries=[],ring=c=>{tries.push(c);for(let r=.5;r<2;r+=.5)for(let a=0;a<12;a++)tries.push([c[0]+r*Math.cos(a/12*6.283),c[1]+r*Math.sin(a/12*6.283)])};
+  if(OLDPPL[t]){const w=ungnd(...OLDPPL[t]);ring([w.x,w.y])}if(T.o)tries.push(T.o);
+  for(let r=0;r<6;r+=.5)for(let a=0;a<16;a++)tries.push([6+r*Math.cos(a/16*6.283),7+r*Math.sin(a/16*6.283)]);
+  for(const [x,y] of tries){const it={id,t,x:Math.round(x*4)/4,y:Math.round(y*4)/4,flip:false};if(okFloor(st,it))return it}return null}
+function uid4(st,t){let n=1;while(st.items.some(i=>i.id===(n>1?t+'#'+n:t)))n++;return n>1?t+'#'+n:t}
+/* 바닥 자리: 칸 안쪽 · 붙박이(카운터·벤치·수납장) 피하기 · 다른 가구와 겹치지 않기 */
+function foot4(it){const T=T4(it.t);let fw=T.fw,fd=T.fd;if(it.flip&&T.axis)[fw,fd]=[fd,fw];return [it.x-fw/2,it.y-fd/2,it.x+fw/2,it.y+fd/2]}
+function blocked4(x,y){const i=Math.floor(x/RW*48),j=Math.floor(y/RW*48);if(i<0||j<0||i>47||j>47)return true;return !!R4MASK[j*48+i]}
+function okFloor(st,it){const T=T4(it.t);if(T.mount!=='floor'&&T.mount!=='ceiling')return false;const [x0,y0,x1,y1]=foot4(it);
+  if(x0<-.2||y0<-.2||x1>RW+.25||y1>RW+.25)return false;
+  if(T.mount==='floor'){for(let x=x0+.1;x<=x1-.05;x+=.25)for(let y=y0+.1;y<=y1-.05;y+=.25)if(blocked4(x,y))return false;
+    for(const o of st.items){if(o.id===it.id||o.par||o.wall||T4(o.t).mount!=='floor')continue;const [a0,b0,a1,b1]=foot4(o);if(x0<a1-.05&&x1>a0+.05&&y0<b1-.05&&y1>b0+.05)return false}}
+  return true}
+function surfCorners(st,par,key){const T=T4(par.t),d=(T.surf||[]).find(s=>s[0]===key),r=rect4(st,par);if(!d||!r)return [];
+  return d[1].map(([u,v])=>{const dx=(u-.5)*r.w*(par.flip?-1:1);return {x:r.x+r.w/2+dx,y:r.y+v*r.h+r.shear*dx}})}
+function surfaceAt(st,p){
+  const pars=st.items.filter(i=>!i.par&&!i.wall&&T4(i.t).surf).sort((a,b)=>gnd(b.x,b.y).y-gnd(a.x,a.y).y);
+  for(const par of pars)for(const [key] of T4(par.t).surf){const q=invQ(surfCorners(st,par,key),p);if(q&&q.u>=-.1&&q.u<=1.1&&q.v>=-.2&&q.v<=1.2)return {par:par.id,sf:key,u:clamp(q.u,.1,.9),v:clamp(q.v,.12,.88)}}
+  for(const s of Object.values(FIXS)){const q=invQ(s.q,p);if(q&&q.u>=-.06&&q.u<=1.06&&q.v>=-.6&&q.v<=1.6)return {par:'room',sf:s.k,u:clamp(q.u,.06,.94),v:clamp(q.v,.2,.9)}}
+  return null}
+function okSurf(st,it){const r=rect4(st,it);if(!r)return false;for(const o of st.items){if(o.id===it.id||o.par!==it.par||o.sf!==it.sf)continue;const q=rect4(st,o);if(q&&Math.hypot(r.p.x-q.p.x,(r.p.y-q.p.y)*1.7)<Math.min(22,(r.w+q.w)*.4))return false}return true}
+function okWall(st,it){if(it.u<.06||it.u>.94||it.v<.08||it.v>.92)return false;const r=rect4(st,it);for(const o of st.items){if(o.id===it.id||!o.wall)continue;const q=rect4(st,o);if(q&&Math.abs(r.p.x-q.p.x)<(r.w+q.w)*.5&&Math.abs(r.p.y-q.p.y)<(r.h+q.h)*.5)return false}return true}
+/* 그림 자리: 바닥 기준점 + 깊이에 따른 크기 + 바닥 방향에 맞춘 기울임 */
+function rect4(st,it){const T=T4(it.t);if(!T)return null;let [w,h]=T.box,p,k=1,shear=0;
+  if(it.par){if(it.par==='room'){const s=FIXS[it.sf];if(!s)return null;p=mapQ(s.q,it.u,it.v);k=s.sc}
+    else{const par=st.items.find(i=>i.id===it.par);if(!par)return null;const c=surfCorners(st,par,it.sf);if(c.length!==4)return null;p=mapQ(c,it.u,it.v);const PT=T4(par.t);k=persp4(par.x,par.y)/persp4(...(PT.o||[6,6]))*.92}}
+  else if(it.wall){p=mapQ(R4F.wall,it.u,it.v)}
+  else{p=gnd(it.x,it.y);k=persp4(it.x,it.y)/persp4(...(T.o||[6,6]));if(T.mount==='ceiling')p={x:p.x,y:p.y-CEIL4*k};
+    if(T.axis){const o=T.o||[6,6],ax=it.flip?(T.axis==='u'?'v':'u'):T.axis;shear=axSlope(it.x,it.y,ax)-(it.flip?-1:1)*axSlope(o[0],o[1],T.axis)}}
+  w*=k;h*=k;return {x:p.x-w/2,y:p.y-h*T.an,w,h,shear,p,it}}
+function depth4(st,it){if(it.wall)return -2000;if(it.par==='room'){const s=FIXS[it.sf];return mapQ(s.q,.5,.5).y-(s.k==='counter'?0:1000)}
+  if(it.par){const par=st.items.find(i=>i.id===it.par);return par?gnd(par.x,par.y).y+.01+it.v*.001:0}return gnd(it.x,it.y).y+(T4(it.t).mount==='ceiling'?.5:0)}
+/* 그리기 */
+const R4IMG=new Image();let R4A=null;R4IMG.src='a/r4/atlas.webp';
+R4IMG.onload=()=>{try{const c=document.createElement('canvas');c.width=R4IMG.width;c.height=R4IMG.height;const g=c.getContext('2d',{willReadFrequently:true});g.drawImage(R4IMG,0,0);
+  const d=g.getImageData(0,0,c.width,c.height).data,a=new Uint8Array(c.width*c.height);for(let i=0;i<a.length;i++)a[i]=d[i*4+3];R4A=a}catch(e){R4A=null}paintRooms()};
+const R4Q={};let R4K=0;
+function paintRooms(){document.querySelectorAll('canvas.rcv[data-k]').forEach(cv=>{const st=R4Q[cv.dataset.k];if(st)drawRoom4(cv,st)})}
+function drawRoom4(cv,st,ui){if(!R4IMG.complete||!R4IMG.naturalWidth)return;const g=cv.getContext('2d'),s=cv.width/1024;g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cv.width,cv.height);g.setTransform(s,0,0,s,0,0);
+  const night={night:1,rain:.75,autumn:.55,snow:.6,sunset:.6,day:.3}[st.scenery]??.6;
+  if(ui&&ui.hint==='surface'){g.save();g.setLineDash([5,4]);g.lineWidth=1.4;g.strokeStyle='rgba(242,210,150,.95)';g.fillStyle='rgba(242,205,132,.18)';
+    const qs=[...Object.values(FIXS).map(s=>s.q),...st.items.filter(i=>!i.par&&!i.wall&&T4(i.t).surf).flatMap(par=>T4(par.t).surf.map(([k])=>surfCorners(st,par,k)))];
+    qs.forEach(q=>{if(q.length!==4)return;g.beginPath();q.forEach((p,i)=>{const P=Array.isArray(p)?{x:p[0],y:p[1]}:p;i?g.lineTo(P.x,P.y):g.moveTo(P.x,P.y)});g.closePath();g.fill();g.stroke()});g.restore()}
+  if(ui&&ui.hint==='wall'){g.save();g.setLineDash([7,5]);g.lineWidth=1.6;g.strokeStyle='rgba(242,210,150,.95)';g.fillStyle='rgba(242,205,132,.12)';g.beginPath();R4F.wall.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.fill();g.stroke();g.restore()}
+  if(ui&&ui.foot){const [x0,y0,x1,y1]=foot4(ui.foot);g.save();g.beginPath();[[x0,y0],[x1,y0],[x1,y1],[x0,y1]].forEach(([x,y],i)=>{const p=gnd(x,y);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)});g.closePath();
+    g.fillStyle=ui.bad?'rgba(196,103,98,.28)':'rgba(222,202,146,.2)';g.strokeStyle=ui.bad?'#d97972':'#f4dca4';g.lineWidth=1.6;g.setLineDash([6,4]);g.fill();g.stroke();g.restore()}
+  const list=st.items.map(it=>[depth4(st,it),it]).sort((a,b)=>a[0]-b[0]);const rects=[];
+  for(const [,it] of list){const T=T4(it.t),r=rect4(st,it);if(!r)continue;const [ax,ay,aw,ah]=T.at;
+    g.save();g.translate(r.x+r.w/2,r.y);g.transform(1,r.shear,0,1,0,0);if(it.flip)g.scale(-1,1);
+    const on=ui&&ui.sel===it.id,pv=st.pv===it.id;if(on||pv)g.filter='drop-shadow(0 0 2px #fff3cf) drop-shadow(0 0 5px rgba(240,200,120,.95))';if(ui&&ui.bad&&on)g.globalAlpha=.6;
+    g.drawImage(R4IMG,ax,ay,aw,ah,-r.w/2,0,r.w,r.h);g.restore();rects.push(r)}
+  /* 빛 번짐 */
+  g.save();g.globalCompositeOperation='screen';
+  for(const r of rects){const L=T4(r.it.t).light;if(!L)continue;const dx=(L[0]-.5)*r.w*(r.it.flip?-1:1),px=r.x+r.w/2+dx,py=r.y+L[1]*r.h+r.shear*dx,rad=L[2]*(r.w/T4(r.it.t).box[0]);
+    const gr=g.createRadialGradient(px,py,0,px,py,rad);gr.addColorStop(0,`rgba(255,197,104,${.34*night+.1})`);gr.addColorStop(.35,`rgba(255,211,140,${.14*night+.04})`);gr.addColorStop(1,'rgba(255,211,140,0)');g.fillStyle=gr;g.fillRect(px-rad,py-rad,rad*2,rad*2)}
+  g.restore();cv._rects=rects;cv._st=st}
+function hit4(cv,p){const rs=cv._rects||[];for(let i=rs.length-1;i>=0;i--){const r=rs[i],lx=p.x-(r.x+r.w/2),ly=p.y-r.y-r.shear*lx;if(Math.abs(lx)>r.w/2||ly<0||ly>r.h)continue;
+  if(!R4A)return r.it;const [ax,ay,aw,ah]=T4(r.it.t).at;let u=lx/r.w+.5;if(r.it.flip)u=1-u;const sx=Math.floor(ax+u*(aw-1)),sy=Math.floor(ay+ly/r.h*(ah-1));if(R4A[sy*R4IMG.width+sx]>110)return r.it}return null}
+/* 러그: 바닥을 따라 미끄러지듯 옮겨요 */
+const RUGC={x:633,y:730};
+function rugHTML(st){const b=R3.layers['rg_'+st.rug];if(!b)return '';const t=RUGT,[dx,dy]=st.rugOff||[0,0];
+  const x0=t.cx+t.dx-(t.cx-b[0])*t.sc+dx,x1=t.cx+t.dx+(b[2]-t.cx)*t.sc+dx,y0=t.cy+t.dy-(t.cy-b[1])*t.sc+dy,y1=t.cy+t.dy+(b[3]-t.cy)*t.sc+dy;
+  return `<img src="a/r3/rg_${st.rug}.webp" alt="" class="lay rug4" style="left:${x0/10.24}%;top:${y0/10.24}%;width:${(x1-x0)/10.24}%;height:${(y1-y0)/10.24}%">`}
+function rugHit(st,p){const [dx,dy]=st.rugOff||[0,0],c={x:RUGC.x+RUGT.dx+dx,y:RUGC.y+RUGT.dy+dy},w0=ungnd(c.x,c.y),w=ungnd(p.x,p.y);return Math.abs(w.x-w0.x)<1.75&&Math.abs(w.y-w0.y)<1.75}
+function rugOk(off){const c={x:RUGC.x+RUGT.dx+off[0],y:RUGC.y+RUGT.dy+off[1]},w=ungnd(c.x,c.y);return w.x>1.4&&w.x<RW-1.4&&w.y>1.4&&w.y<RW-1.4}
+
+function roomHTML(st,res){const gl={day:.3,sunset:.6,night:1,rain:.75,autumn:.6,snow:.55}[st.scenery]??.6,k=++R4K;R4Q[k]=st;delete R4Q[k-30];requestAnimationFrame(paintRooms);
+  return R3L('sc_'+st.scenery)+R3L('fl_'+st.floor)+R3L('wp_'+st.wallpaper)+rugHTML(st)+R3L('fixed')
+   +`<canvas class="rcv" data-k="${k}" width="${res||1536}" height="${res||1536}" data-src="a/r4/atlas.webp"></canvas>`
    +R3L('lf_'+st.lighting)+R3L('am_'+st.scenery)+R3L('lg_'+st.lighting,'',`opacity:${gl}`)}
+const R4ICN=t=>{const T=T4(t);if(!T)return '';const [ax,ay,aw,ah]=T.at,[AW,AH]=R4.atlas,ar=aw/ah,w=ar>=1?100:100*ar,h=ar>=1?100/ar:100;
+  return `<i class="aic a4"><b style="width:${w}%;height:${h}%;left:${(100-w)/2}%;top:${(100-h)/2}%;background-size:${AW/aw*100}% ${AH/ah*100}%;background-position:${ax/(AW-aw)*100}% ${ay/(AH-ah)*100}%"></b></i>`};
+const placed4=t=>(S.r4&&S.r4.items||[]).filter(i=>i.t===t).length;
+const avail4=t=>(own4(t)?(COUNT4[t]||1):0)-placed4(t);
+function remove4(t){const ids=new Set(S.r4.items.filter(i=>i.t===t).map(i=>i.id));S.r4.items=S.r4.items.filter(i=>!ids.has(i.id)&&!ids.has(i.par))}
 let shT='prop',shSel=null;
 function shItems(){if(shT==='gift')return GIFTS;if(shT==='box')return [...RITEMS.filter(x=>x.price>0&&S.owned.includes(x.id)),...DECOR.filter(x=>S.owned.includes(x.id)),...GIFTS.filter(x=>S.owned.includes(x.id))];return RITEMS.filter(x=>x.cat===shT)}
-function isOn(it){const st=roomState();return it.cat==='prop'?!!st.props[it.key]:it.cat==='furn'?st.furn[it.slot]===it.key:st[it.cat]===it.key}
+function isOn(it){if(it.cat==='prop'||it.cat==='furn'){roomState();return placed4(it.key)>0}return roomState()[it.cat]===it.key}
 function renderShop(){
   $('shCoins').textContent=S.coins.toLocaleString('ko-KR');
   document.querySelectorAll('.shtabs button,.shboxb').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===shT));
@@ -2375,9 +2538,9 @@ function renderShop(){
   const it=shSel&&(RI(shSel)||SHOPI(shSel)),isG=it&&!!it.who,isR=it&&it.room,own=it&&(isR?roomOwned(it.id):S.owned.includes(it.id)),met=!isG||S.met.includes(it.who),gname=isG?byNo(it.who).name:'';
   /* 미리보기 */
   if(!it){$('shPrev').innerHTML=`<div class="shempty">아직 보관함이 비어 있어요.<br>소품이나 선물을 사면 여기에 모여요.</div>`}
-  else if(isR){const st=roomState();if(it.cat==='prop'){propPut(st,it);st.pv=it.key}else if(it.cat==='furn'){furnPut(st,it.slot,it.key);st.pvF=it.key}else st[it.cat]=it.key;
-    const pq=it.cat==='prop'&&propPlace(st,it.key),fo=it.cat==='furn'&&FOFF[it.slot]||[0,0],z=pq?[pq[0],pq[1]-10]:it.cat==='furn'?[it.anc[0]+fo[0],it.anc[1]+fo[1]-90]:null;
-    $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox${z?' zoom':''}" style="${z?`--zx:${z[0]/10.24}%;--zy:${(z[1]-30)/10.24}%`:''}">${roomHTML(st)}</div>
+  else if(isR){const st=roomState();let z=null;
+    if(it.cat==='prop'||it.cat==='furn'){let o=st.items.find(i=>i.t===it.key);if(!o){o=spot4(st,it.key);if(o)st.items.push(o)}if(o){st.pv=o.id;const r=rect4(st,o);if(r)z=[r.p.x,r.p.y-r.h*.45+30]}}else st[it.cat]=it.key;
+    $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox${z?' zoom':''}" style="${z?`--zx:${z[0]/10.24}%;--zy:${(z[1]-30)/10.24}%`:''}">${roomHTML(st,1024)}</div>
       <span class="chip l">나의 메로페</span><span class="chip r">${isOn(it)?'지금 적용 중':'구매 전 미리보기'}</span></div>`}
   else if(!isG&&!RDEC[it.slot]){$('shPrev').innerHTML=`<div class="shroom2 shdec"><img src="${it.icon||`a/g/${it.id}.webp`}" alt=""><span class="chip l">예전 소품</span><span class="chip r">보관 중</span></div>`}
   else if(!isG){const st=roomState(),r=RDEC[it.slot];st.pvDec={slot:it.slot,id:it.id};
@@ -2386,7 +2549,7 @@ function renderShop(){
   else{$('shPrev').innerHTML=`<div class="shgift"><img class="gp ${met?'':'lock'}" src="${sprite(it.who,'h')}" alt=""><div class="gi"><img src="a/g/${it.id}.webp" alt=""></div>
       <span class="chip l">${met?gname+'님께 줄 선물':'아직 만나지 못한 손님'}</span><span class="chip r">${S.given.includes(it.id)?'건넸어요':own?'다음 방문 때 건네요':'선물 미리보기'}</span></div>`}
   /* 고른 물건 */
-  const icon=x=>x.ic&&R3IC[x.ic]!=null?R3ICN(x.ic):`<img src="${x.icon||`a/g/${x.id}.webp`}" alt="" loading="lazy">`;
+  const icon=x=>x.i4?R4ICN(x.i4):x.ic&&R3IC[x.ic]!=null?R3ICN(x.ic):`<img src="${x.icon||`a/g/${x.id}.webp`}" alt="" loading="lazy">`;
   const stOf=x=>x.room?(roomOwned(x.id)?(isOn(x)?(x.cat==='prop'||x.cat==='furn'?'놓여 있음':'적용 중'):'보유 중'):''):x.who?(S.given.includes(x.id)?'건넴':S.owned.includes(x.id)?'보유 중':''):(S.owned.includes(x.id)?(S.placed[x.slot]===x.id?'놓여 있음':'보유 중'):'');
   $('shSel').innerHTML=it?`${icon(it)}<div><b>${met?it.nm:'???'}</b><span>${met?it.desc:'손님을 만나면 열려요.'}</span></div><em>${stOf(it)||'미리보기 중'}</em>`:'';
   /* 목록 */
@@ -2395,24 +2558,24 @@ function renderShop(){
   let html='';
   if(shT==='gift'){[...new Set(GIFTS.map(g=>g.who))].sort((a,b)=>S.met.includes(b)-S.met.includes(a)).forEach(w=>{const c=byNo(w),m=S.met.includes(w);html+=`<div class="shgh"><img src="${sprite(w,'n')}" alt="" class="${m?'':'lock'}">${m?c.name:'???'}<small>${m?c.role:'아직 만나지 못한 손님'}</small></div>`+GIFTS.filter(g=>g.who===w).map(card).join('')})}
   else html=list.map(card).join('');
-  const tot=shT==='prop'?`<p class="shcount">모은 소품 ${RITEMS.filter(x=>x.cat==='prop'&&roomOwned(x.id)).length} / ${RPROPS.length}</p>`:shT==='furn'?`<p class="shcount">모은 가구 ${RITEMS.filter(x=>x.cat==='furn'&&roomOwned(x.id)).length} / ${RFURN.length}</p>`:shT==='gift'?`<p class="shcount">건넨 선물 ${GIFTS.filter(g=>S.given.includes(g.id)).length} / ${GIFTS.length}</p>`:ROOM_OPT[shT]?`<p class="shcount">${ROOM_OPT[shT].nm} ${ROOM_OPT[shT].it.filter(([k])=>roomOwned(shT+':'+k)).length} / ${ROOM_OPT[shT].it.length}</p>`:'';
+  const tot=shT==='prop'?`<p class="shcount">모은 소품 ${RITEMS.filter(x=>x.cat==='prop'&&roomOwned(x.id)).length} / ${RPROPS.length+RLAMP.length}</p>`:shT==='furn'?`<p class="shcount">모은 가구 ${RITEMS.filter(x=>x.cat==='furn'&&roomOwned(x.id)).length} / ${RFURN.length}</p>`:shT==='gift'?`<p class="shcount">건넨 선물 ${GIFTS.filter(g=>S.given.includes(g.id)).length} / ${GIFTS.length}</p>`:ROOM_OPT[shT]?`<p class="shcount">${ROOM_OPT[shT].nm} ${ROOM_OPT[shT].it.filter(([k])=>roomOwned(shT+':'+k)).length} / ${ROOM_OPT[shT].it.length}</p>`:'';
   $('shGrid').innerHTML=tot+html;
   $('shGrid').querySelectorAll('.shcard').forEach(b=>b.addEventListener('click',()=>{shSel=b.dataset.id;renderShop()}));
   /* 버튼 */
   const B=$('shBuy');B.onclick=null;B.disabled=false;B.className='shbuy';
   const done=()=>{save();stats();renderShop();renderDecor()};
-  const applyR=x=>{const st=roomState();if(x.cat==='prop'){propPut(st,x);S.rprops=st.props;S.rfurn=st.furn}else if(x.cat==='furn'){furnPut(st,x.slot,x.key);S.rfurn=st.furn;S.rprops=st.props}else S.room={...(S.room||{}),[x.cat]:x.key}};
+  const applyR=x=>{if(x.cat==='prop'||x.cat==='furn'){const st=roomState(),o=spot4(st,x.key);if(!o){toast('놓을 빈자리가 없어요. 홀의 꾸미기에서 자리를 비워 주세요');return false}S.r4.items.push(o);return true}S.room={...(S.room||{}),[x.cat]:x.key};return true};
   if(!it){B.textContent='소품 보러 가기';B.onclick=()=>{shT='prop';renderShop()}}
   else if(!own){if(!met){B.disabled=true;B.textContent='손님을 만나면 살 수 있어요'}
     else if(S.coins<it.price){B.disabled=true;B.textContent=`${(it.price-S.coins).toLocaleString('ko-KR')} 룬이 모자라요`}
     else{B.innerHTML=`${it.price.toLocaleString('ko-KR')} 룬으로 구매`;B.onclick=()=>{S.coins-=it.price;S.owned=[...S.owned,it.id];
-      if(isR){applyR(it);toast(it.cat==='prop'||it.cat==='furn'?`${jo(it.nm,'을/를')} 카페에 놓았어요`:`${jo(it.nm,'으로/로')} 바꿨어요`)}
+      if(isR){if(applyR(it))toast(it.cat==='prop'||it.cat==='furn'?`${jo(it.nm,'을/를')} 카페에 놓았어요 · 홀의 꾸미기에서 옮길 수 있어요`:`${jo(it.nm,'으로/로')} 바꿨어요`)}
       else if(!isG){S.placed={...S.placed,[it.slot]:it.id};toast(`${jo(it.nm,'을/를')} ${SLOTS[it.slot].nm}에 놓았어요`)}
       else toast(`${gname}님이 오면 ${jo(it.nm,'을/를')} 건넬 수 있어요`);done()}}}
-  else if(isR){if(it.cat==='furn'){if(isOn(it)){B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{const st=roomState();furnPut(st,it.slot,'');S.rfurn=st.furn;S.rprops=st.props;done()}}
-      else{const now=FNAME(roomState().furn[it.slot]);B.textContent=now?`${jo(now,'과/와')} 바꿔 놓기`:'카페에 놓기';B.onclick=()=>{applyR(it);done()}}}
-    else if(it.cat==='prop'){if(isOn(it)){B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{const p=roomState().props;delete p[it.key];S.rprops=p;done()}}
-      else{B.textContent='카페에 놓기';B.onclick=()=>{applyR(it);done()}}}
+  else if(isR&&(it.cat==='furn'||it.cat==='prop')){const n=placed4(it.key),cap=COUNT4[it.key]||1;
+    if(n<cap){B.textContent=n?'하나 더 놓기':'카페에 놓기';B.onclick=()=>{if(applyR(it)){toast(`${jo(it.nm,'을/를')} 카페에 놓았어요 · 홀의 꾸미기에서 옮길 수 있어요`);done()}}}
+    else{B.textContent='치우기';B.className='shbuy ghost';B.onclick=()=>{remove4(it.key);done()}}}
+  else if(isR){if(false){}
     else if(isOn(it)){B.disabled=true;B.textContent='지금 적용 중이에요'}
     else{B.textContent='이걸로 바꾸기';B.onclick=()=>{applyR(it);done()}}}
   else if(isG){B.disabled=true;B.textContent=S.given.includes(it.id)?`${gname}님께 건넸어요`:`${gname}님이 오면 건넬 수 있어요`}
