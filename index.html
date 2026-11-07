@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261105101800">
+<meta name="merope-ver" content="20261107214512">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -205,6 +205,8 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .btn:disabled{cursor:not-allowed}
 .btn:active:not(:disabled){transform:translateY(1px)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.qtaste{display:none}
+@media (max-width:760px){.sticky-act.hasq{flex-wrap:wrap}.sticky-act .qtaste{display:flex;flex:1 1 100%;align-items:center;gap:8px;margin:0 0 2px;padding:8px 12px;border:1px solid rgba(176,141,87,.45);border-radius:12px;background:#fffdf7;box-shadow:0 2px 8px rgba(60,40,20,.08);font-size:13.5px;line-height:1.35;text-align:left;color:inherit;cursor:pointer}.sticky-act .qtaste b{font-weight:700}.sticky-act .qtaste .qn{color:var(--muted);font-size:12.5px}.sticky-act .qtaste .qgo{margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap}.sticky-act .qtaste.ok{border-color:#2E7D5B;background:#f3faf5}}
 .sticky-act{position:sticky;bottom:-24px;margin:0 calc(-1 * var(--gxr)) -24px calc(-1 * var(--gx));padding:12px var(--gxr) calc(14px + env(safe-area-inset-bottom,0px)) var(--gx);background:linear-gradient(rgba(248,243,232,0),var(--cream) 30%);display:flex;gap:8px;justify-content:flex-end;z-index:2}
 /* 작업대 */
 .waiting{border:1.5px dashed var(--wood);border-radius:16px;padding:18px;text-align:center;color:var(--muted);background:rgba(255,253,248,.6)}
@@ -1963,6 +1965,12 @@ function openExtract(m){
   $('brew').addEventListener('click',()=>brew(m));$('serveX').addEventListener('click',()=>serveX(m));
   log=log.filter(r=>r.menu===cur.menu);renderLog(m);drawChart(m);refreshStock();
 }
+/* 좁은 화면: 맛보기 결과가 슬라이더 아래로 밀려 안 보이므로, 버튼 위에 요약 줄을 띄운다. 누르면 결과 패널로 이동 */
+function quickRes(head,nums,ok){const bar=document.querySelector('#sheet .sticky-act');if(!bar)return;
+  let q=bar.querySelector('.qtaste');if(!q){q=document.createElement('button');q.type='button';q.className='qtaste';
+    q.addEventListener('click',()=>{const t=$('xres'),sb=$('sheetBody');if(!t||!sb)return;const pn=t.closest('.panel');sb.scrollTo({top:sb.scrollTop+pn.getBoundingClientRect().top-sb.getBoundingClientRect().top-8,behavior:'smooth'})});bar.prepend(q);bar.classList.add('hasq')}
+  q.classList.toggle('ok',!!ok);q.innerHTML=`<span><b>${head}</b><br><span class="qn">${nums}</span></span><span class="qgo">그래프 보기 ↓</span>`;
+  q.classList.remove('pop');void q.offsetWidth;q.classList.add('pop')}
 function brew(m){
   const raws=D.EXTRACT_RAW[cur.menu];if(!has(raws,NEED)){noStock(raws,NEED);return}useStock(raws,1);clearWarn();
   const p={};m.sliders.forEach(s=>p[s.id]=+$('s-'+s.id).value);
@@ -1982,6 +1990,8 @@ function brew(m){
     <div><b>${e.t}</b> · ${sw}</div><div style="color:var(--muted);font-size:13px">${e.d}</div>
     ${r.extra?`<div class="meter" style="margin-top:4px"><span>${r.extra.label} (${r.extra.val})</span><b style="font-family:var(--body);color:${r.extra.ok?'#2E7D5B':'var(--rose)'}">${r.extra.state}</b></div><div style="color:var(--muted);font-size:13px">${r.extra.desc}</div>`:''}</div></div>`;
   $('serveX').disabled=false;drawChart(m);
+  {const ia=r.ex>=m.ex[cur.taste][0]&&r.ex<=m.ex[cur.taste][1],ib=r.tds>=m.tds[cur.strength][0]&&r.tds<=m.tds[cur.strength][1];
+  quickRes(ia&&ib?'손님 취향에 딱 맞아요':ia||ib?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요',`${e.t} · ${sw} · 추출 ${r.ex.toFixed(1)}% · 진하기 ${r.tds.toFixed(2)}%`,ia&&ib)}
   log.unshift({menu:cur.menu,who:cur.name,p,r,changed,s:null});log=log.slice(0,40);renderLog(m);
 }
 function observe(m,a,b){
@@ -2152,7 +2162,8 @@ function labBrew(m){const K=LABK[m.kind],sl=K.sl(m),raws=m.raw;if(!has(raws,NEED
   $('xres').innerHTML=`<div class="result pop"><img class="tcup" src="${drinkImg(m)}" alt="${m.name}" style="${labCup(m,r)}"><div class="taste">
     <div class="meter"><span>${xl}</span><b>${+r.x.toFixed(1)}${xu?' '+xu:''}</b></div><div class="meter"><span>${yl}</span><b>${+r.y.toFixed(2)}${yu?' '+yu:''}</b></div>
     <div><b>${a&&b?'손님 취향에 딱 맞아요':a||b?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요'}</b></div><div style="color:var(--muted);font-size:13px">${cap}</div></div></div>`;
-  $('serveX').disabled=false;drawLab(m);}
+  $('serveX').disabled=false;drawLab(m);
+  quickRes(a&&b?'손님 취향에 딱 맞아요':a||b?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요',`${xl} ${+r.x.toFixed(1)}${xu?' '+xu:''} · ${yl} ${+r.y.toFixed(2)}${yu?' '+yu:''}`,a&&b);}
 function labCup(m,r){if(m.kind==='indicator')return `filter:hue-rotate(${Math.round((r.x-6.2)*-32)}deg) saturate(${(0.6+r.y/80).toFixed(2)})`;
   if(m.kind==='scatter')return `filter:brightness(${(1.25-r.x/250).toFixed(2)}) contrast(${(0.8+r.x/300).toFixed(2)})`;
   if(m.kind==='thick'||m.kind==='filter')return `filter:saturate(${(0.5+r.y/60).toFixed(2)}) opacity(${(0.65+r.x/300).toFixed(2)})`;
