@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261108235758">
+<meta name="merope-ver" content="20261109000439">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -52,6 +52,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .wfill{position:absolute;left:0;right:0;top:0;background:center/cover no-repeat;filter:blur(22px) brightness(.85) saturate(1.1);transform:scale(1.1);opacity:.9}
 .world .cat,.world .served{transition:opacity .5s ease}
 .world.nocounter .cat,.world.nocounter .served,.world.nocounter .fgl{opacity:0!important;pointer-events:none}
+/* 멀린 박사 자리: 카운터 대신 앞 탁자 위에 음료만 놓아요 */
+.ctr.off[data-m=merlin]{opacity:1}.ctr[data-m=merlin] .cclip,.ctr[data-m=merlin] .pmat{opacity:0}
+.world.nocounter[data-m=merlin] .served,.ctr[data-m=merlin] .served{opacity:1!important}
+.ctr[data-m=merlin] .served{left:57%;bottom:calc(100% + 26px);width:calc(var(--mw,30%)*0.4)}
 .world.noactor .actor{opacity:0}
 /* HUD */
 .hud{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:max(10px,env(safe-area-inset-top,0px)) var(--gxr) 0 var(--gx);pointer-events:none}
@@ -1239,9 +1243,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261108235758"></script>
-<script src="quiz.js?v=20261108235758"></script>
-<script src="recipes.js?v=20261108235758"></script>
+<script src="data.js?v=20261109000439"></script>
+<script src="quiz.js?v=20261109000439"></script>
+<script src="recipes.js?v=20261109000439"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1693,7 +1697,7 @@ function e4ui(){const cv=e4cv(),st=cv&&cv._st;if(!st)return;const it=st.items.fi
     st.items.push(o);E4.sel=o.id;e4commit(st,before);e4draw();toast(`${jo(e4name(o.t),'을/를')} 꺼냈어요. 끌어서 자리를 잡아 주세요`)}))}
 function e4enter(){E4.on=true;E4.sel=null;E4.hist=[];E4.fut=[];$('hall').classList.add('edit');$('hEdit').hidden=false;goHall();requestAnimationFrame(()=>{e4draw();e4ui()})}
 function e4exit(){E4.on=false;E4.sel=null;$('hall').classList.remove('edit');$('hEdit').hidden=true;goHall()}
-$('hDeco').addEventListener('click',e4enter);window.__m4={rect4,gnd,ungnd,okFloor,spot4,foot4,blocked4,seatList,HSIT,get S(){return S}};$('heDone').addEventListener('click',e4exit);
+$('hDeco').addEventListener('click',e4enter);window.__m4={rect4,gnd,ungnd,okFloor,spot4,foot4,blocked4,seatList,HSIT,sceneMode,get S(){return S}};$('heDone').addEventListener('click',e4exit);
 $('heFlip').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it)return;const before=e4snap(st);it.flip=!it.flip;
   if(!it.par&&!it.wall&&!okFloor(st,it)){it.flip=!it.flip;toast('돌리면 다른 가구와 겹쳐요. 조금 옮긴 뒤 다시 해 보세요');return}e4commit(st,before);e4draw()});
 $('heStore').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it||it.t==='merlin')return;const before=e4snap(st),kids=st.items.filter(i=>i.par===it.id).length;
@@ -1756,7 +1760,7 @@ function renderQuiz(){if(S.quizDay!==S.day){S.quizDay=S.day;S.quizCount=0;save()
 }
 
 /* ---------- 휴고의 재료 배달 (보너스 퀴즈) ---------- */
-function delivery(){S.deliveryDay=S.day;save();actor.classList.remove('idle');actor.classList.add('away');$('served').hidden=true;
+function delivery(){S.deliveryDay=S.day;save();sceneMode(slotMode());actor.classList.remove('idle');actor.classList.add('away');$('served').hidden=true;
   setTimeout(()=>{cur={...byNo(22),role:'택배 기사 · 재료 배달',ep:'again'};actor.src=sprite(22,'n');actor.classList.remove('away');actor.classList.add('idle');
     run([['사장님! 재료 배달 왔어요.','h'],['근데 오늘은 보너스 상자가 하나 더 있어요. 과학 퀴즈 하나 맞히면 공짜예요!','h']],0,()=>{
       const qi=pickQuiz(),q=window.CAFE_QUIZ[qi];S.quizSeen.push(qi);face('t',false);
