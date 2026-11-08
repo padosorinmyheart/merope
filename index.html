@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261108224212">
+<meta name="merope-ver" content="20261108231437">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1237,9 +1237,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261108224212"></script>
-<script src="quiz.js?v=20261108224212"></script>
-<script src="recipes.js?v=20261108224212"></script>
+<script src="data.js?v=20261108231437"></script>
+<script src="quiz.js?v=20261108231437"></script>
+<script src="recipes.js?v=20261108231437"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1614,7 +1614,7 @@ function seatList(){const st=roomState(),f=[];
   st.items.forEach(it=>{const S0=FSEAT[it.t],T=T4(it.t);if(!S0||!T||!T.scr||it.par)return;const r=rect4(st,it);if(!r)return;
     const d=depth4(st,it);S0.forEach(([sx,sy])=>{let fx=(sx-T.scr[0])/T.box[0];const fy=(sy-T.scr[1])/T.box[1];if(it.flip)fx=1-fx;const dx=(fx-.5)*r.w;
       f.push([r.x+r.w/2+dx,r.y+fy*r.h+r.shear*dx,fx<.38?'r':'l',d+.02,S0.length>1&&Math.abs(fx-.5)<.12])})});
-  return [...f,...SEATS_BASE.map(([x,y])=>[x,y,'l',y,false])]}
+  return [...f,...SEATS_BASE.map(([x,y])=>[x-14,y+22,'l',y,false])]}
 /* 앉은 그림: 기본은 왼쪽을 향하고, _r 파일이 있으면 오른쪽 그림을 따로 써요 */
 const SITR=new Set([32,33,37,38]),SITIMG={},HSIT=[];
 function sitImg(k){if(!SITIMG[k]){const im=new Image();im.onload=paintRooms;im.src=`a/st/${k}.webp`;SITIMG[k]=im}return SITIMG[k]}
@@ -1623,7 +1623,7 @@ function hallGuests(){const td=[...new Set((S.today||[]).map(t=>t.no))].filter(n
   return [...td.map(n=>[n,1]),...pk.map(n=>[n,0])].slice(0,SEATS.length)}
 function hallTokens(){const g=hallGuests();$('hInvN').textContent=(S.hallPick||[]).length?`${(S.hallPick||[]).length}/${INVMAX}`:'';
   const SL=seatList();HSIT.length=0;return g.map(([n,td],i)=>{const c=byNo(n),[x,y,face,dep,back]=SL[i];
-    if(hasSit(n)){const own=face==='r'&&SITR.has(n),k=own?n+'_r':String(n),mir=face==='r'&&!own,ax=face==='r'?.32:.68,ay=.57,w=ungnd(x,y),h=148*(.84+(w.x+w.y)/24*.25),im=sitImg(k),ar=(im.naturalWidth/im.naturalHeight)||.58,ww=h*ar;
+    if(hasSit(n)){const own=face==='r'&&SITR.has(n),k=own?n+'_r':String(n),mir=face==='r'&&!own,ax=face==='r'?.32:.68,ay=.62,w=ungnd(x,y),h=128*(.84+(w.x+w.y)/24*.25),im=sitImg(k),ar=(im.naturalWidth/im.naturalHeight)||.58,ww=h*ar;
       HSIT.push({k,x,y,h,ax,ay,mir,dep,back,td});
       return `<button class="htok st ${td?'today':''}" data-no="${n}" style="left:${(x-ax*ww)/10.24}%;top:${(y-ay*h)/10.24}%;width:${ww/10.24}%;height:${h*(back?.6:.98)/10.24}%" aria-label="${dn(c)}"><span class="hn">${dn(c)}</span></button>`}
     return `<button class="htok ${td?'today':''}" data-no="${n}" style="left:${x/10.24}%;top:${y/10.24}%;animation-delay:${i*80}ms" aria-label="${dn(c)}"><span class="hf" style="background-image:url(${sprite(n,td?'h':'n')})"></span><span class="hn">${dn(c)}</span></button>`}).join('')}
@@ -1684,7 +1684,7 @@ function e4ui(){const cv=e4cv(),st=cv&&cv._st;if(!st)return;const it=st.items.fi
     st.items.push(o);E4.sel=o.id;e4commit(st,before);e4draw();toast(`${jo(e4name(o.t),'을/를')} 꺼냈어요. 끌어서 자리를 잡아 주세요`)}))}
 function e4enter(){E4.on=true;E4.sel=null;E4.hist=[];E4.fut=[];$('hall').classList.add('edit');$('hEdit').hidden=false;goHall();requestAnimationFrame(()=>{e4draw();e4ui()})}
 function e4exit(){E4.on=false;E4.sel=null;$('hall').classList.remove('edit');$('hEdit').hidden=true;goHall()}
-$('hDeco').addEventListener('click',e4enter);window.__m4={rect4,gnd,ungnd,okFloor,spot4,foot4,blocked4,get S(){return S}};$('heDone').addEventListener('click',e4exit);
+$('hDeco').addEventListener('click',e4enter);window.__m4={rect4,gnd,ungnd,okFloor,spot4,foot4,blocked4,seatList,HSIT,get S(){return S}};$('heDone').addEventListener('click',e4exit);
 $('heFlip').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it)return;const before=e4snap(st);it.flip=!it.flip;
   if(!it.par&&!it.wall&&!okFloor(st,it)){it.flip=!it.flip;toast('돌리면 다른 가구와 겹쳐요. 조금 옮긴 뒤 다시 해 보세요');return}e4commit(st,before);e4draw()});
 $('heStore').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it||it.t==='merlin')return;const before=e4snap(st),kids=st.items.filter(i=>i.par===it.id).length;
