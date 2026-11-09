@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261109235155">
+<meta name="merope-ver" content="20261110000313">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1251,9 +1251,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261109235155"></script>
-<script src="quiz.js?v=20261109235155"></script>
-<script src="recipes.js?v=20261109235155"></script>
+<script src="data.js?v=20261110000313"></script>
+<script src="quiz.js?v=20261110000313"></script>
+<script src="recipes.js?v=20261110000313"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -2657,8 +2657,68 @@ const ROOM_OPT={
  floor:{nm:'바닥',def:'oak',it:[["oak", "기본 오크", 0, "가장 처음의 따뜻한 오크 마루예요."], ["walnut", "월넛 마감", 2000, "짙고 차분한 월넛 마루예요."], ["white_oak", "밝은 오크", 2000, "햇살처럼 밝은 오크 마루예요."], ["opal", "오팔 진주 타일", 3000, "진주빛 오팔 타일이에요."], ["rain", "빗소리 월넛 헤링본", 3000, "빗소리가 어울리는 짙은 월넛 헤링본이에요."], ["autumn", "꿀빛 오크 헤링본", 3000, "꿀빛 오크 헤링본이에요."], ["moon", "별빛 남색 석재", 3000, "별빛이 박힌 남색 석재예요."], ["snow", "첫눈 화이트 오크", 3000, "첫눈처럼 하얀 오크 마루예요."]]},
  wallpaper:{nm:'벽지',def:'ivory',it:[["ivory", "기본 아이보리", 0, "크림빛 카빙이 살아 있는 아이보리 벽이에요."], ["cool_pearl", "쿨 펄", 2000, "푸른 기가 도는 진주빛 벽이에요."], ["champagne", "샴페인", 2000, "은은한 금빛이 도는 샴페인 벽이에요."], ["opal", "오팔빛 달무늬", 3000, "하늘색 바탕에 달과 궤도 무늬예요."], ["rain", "남색 궤도 스트라이프", 3000, "남색 궤도 스트라이프예요."], ["autumn", "가을빛 기록 무늬", 3000, "크림빛 기록 무늬예요."], ["moon", "진주 별자리", 3000, "진주빛 별자리 무늬예요."], ["snow", "눈꽃과 별 편지", 3000, "눈꽃과 별, 편지 무늬예요."]]},
  rug:{nm:'러그',def:'navy',it:[["navy", "남색 별자리 러그", 0, "남색 바탕에 금빛 별자리를 수놓은 러그예요."], ["ivory", "아이보리 별자리 러그", 1500, "밝은 아이보리 바탕의 별자리 러그예요."], ["rose", "로즈 별자리 러그", 1500, "더스티 로즈빛 별자리 러그예요."]]},
- lighting:{nm:'조명',def:'orbit',it:[["orbit", "천체 궤도 조명", 0, "행성 궤도를 닮은 황동 조명 세트예요."], ["pearl", "오팔 진주 조명", 2500, "둥근 오팔 유리의 진주 조명 세트예요."], ["starry", "별빛 랜턴", 2500, "별빛이 새어 나오는 랜턴 조명 세트예요."], ["reading", "서재의 독서등", 3000, "책 읽기 좋은 스탠드와 탁상등이에요."], ["amber", "가을빛 유리등", 3000, "호박빛 유리 펜던트 등이에요."]]},
+ lighting:{nm:'조명',def:'orbit',it:[["orbit", "천체 궤도 조명", 0, "행성 궤도를 닮은 황동 조명 세트예요."], ["pearl", "오팔 진주 조명", 2500, "둥근 오팔 유리의 진주 조명 세트예요."], ["starry", "별빛 랜턴", 2500, "별빛이 새어 나오는 랜턴 조명 세트예요."], ["reading", "서재의 독서등", 3000, "짙은 청록 유리 갓이 읽는 자리에 따뜻한 빛을 더하는 천장등이에요."], ["amber", "가을빛 유리등", 3000, "호박빛 유리 펜던트 등이에요."]]},
  scenery:{nm:'풍경',def:'sunset',it:[["sunset", "노을 호수", 0, "노을빛으로 물든 호수가 창과 천창에 보여요."], ["day", "맑은 아침", 0, "햇살 아래 반짝이는 호수 마을이에요."], ["night", "보름달 밤", 1800, "보름달이 뜬 밤 호수예요."], ["rain", "비 오는 저녁", 2500, "빗방울이 창을 두드리는 저녁이에요."], ["autumn", "가을 노을", 2500, "단풍과 노을이 함께 보여요."], ["snow", "첫눈의 마을", 2500, "첫눈이 내려앉은 마을이에요."]]}};
+/* Merope decor fit · room and shop share the same 1024px coordinates. */
+const DECOR_FURN4 = {
+  three_drawer_chest: { size: .65, places: [[248,715],[568,892],[847,780]] },
+  writing_desk:      { size: .69, places: [[611,890],[749,839],[246,724]] },
+  pastry_trolley:    { size: .49, places: [[225,664],[287,711],[825,750]] },
+  navy_ottoman:      { size: .80, places: [[821,754],[581,831],[744,837]] },
+  tall_bookcase:     { size: .40, places: [[145,605],[180,649],[907,719]] },
+  low_bookcase:      { size: .86, places: [[450,861],[560,901],[268,721]] },
+  crockery_cupboard: { size: .50, places: [[156,617],[194,670],[887,738]] },
+  coat_stand:        { size: .34, places: [[144,610],[180,645],[922,714]] },
+};
+const DECOR_LAYER4 = {"fl_opal":[12,397,1005,998],"fl_moon":[12,397,1005,998],"fl_walnut":[12,397,1005,998],"fl_white_oak":[12,397,1005,998],"fl_rain":[12,397,1005,998],"fl_autumn":[12,397,1005,998],"fl_snow":[12,397,1005,998],"wp_cool_pearl":[24,121,988,589],"wp_champagne":[24,121,988,589],"wp_opal":[24,121,988,589],"wp_rain":[24,121,988,589],"wp_autumn":[24,121,988,589],"wp_moon":[24,121,988,589],"wp_snow":[24,121,988,589],"lf_reading":[278,156,873,335],"lg_reading":[230,152,919,467]};
+
+function decorSize4(t) {
+  return DECOR_FURN4[t]?.size ?? 1;
+}
+
+function decorLayer4(name, style = '') {
+  const b = DECOR_LAYER4[name];
+  if (!b) return '';
+  const [x0,y0,x1,y1] = b;
+  return `<img src="a/decor-fit/${name}.webp" alt="" class="lay" style="left:${x0/10.24}%;top:${y0/10.24}%;width:${(x1-x0)/10.24}%;height:${(y1-y0)/10.24}%;${style}">`;
+}
+
+function decorThumb4(it) {
+  const prefix = { floor: 'fl_', wallpaper: 'wp_', lighting: 'lf_' }[it.cat];
+  if (!prefix || !DECOR_LAYER4[prefix + it.key]) return '';
+  return `<img src="a/decor-fit/ic_${it.cat}_${it.key}.webp" alt="" loading="lazy">`;
+}
+
+function decorSpot4(st, t, id) {
+  const places = DECOR_FURN4[t].places;
+  // Keep the stairs' landing and the aisle from the blue door clear when placing an item automatically.
+  const clear = ([x,y]) => !(x < 139 && y < 597) && !(x > 464 && x < 578 && y < 677);
+  const candidate = (x,y) => ({ id, t, x:Math.round(x*4)/4, y:Math.round(y*4)/4, flip:false });
+  const valid = it => {
+    const p = gnd(it.x,it.y);
+    return clear([p.x,p.y]) && okFloor(st,it);
+  };
+  for (const point of places) {
+    const q = ungnd(...point);
+    const it = candidate(q.x,q.y);
+    if (valid(it)) return it;
+  }
+  let best = null;
+  let distance = Infinity;
+  for (let x = .25; x < RW; x += .25) {
+    for (let y = .25; y < RW; y += .25) {
+      const p = gnd(x,y);
+      const d = Math.min(...places.map(([u,v]) => (p.x-u)**2 + (p.y-v)**2));
+      if (d >= distance) continue;
+      const it = candidate(x,y);
+      if (valid(it)) {
+        best = it;
+        distance = d;
+      }
+    }
+  }
+  return best;
+}
 /* 가구: [id, 이름, 값, 설명, 자리, 기준점] — 자리마다 하나 */
 const RFURN=[["two_seat_table", "오팔 2인 테이블", 0, "오팔 상판의 2인 테이블과 별무늬 의자 두 개예요.", "main_table", [682, 773]], ["three_seat_table", "오팔 3인 테이블", 2500, "세 사람이 둘러앉는 오팔 테이블이에요. 손님 자리가 하나 늘어요.", "main_table", [682, 773]], ["side_table", "창가 보조 탁자", 0, "창가 소파 옆 작은 보조 탁자예요.", "side_table", [834, 682]], ["bar_stool", "별빛 바 스툴", 0, "카운터 앞 별빛 바 스툴이에요.", "bar_stool", [406, 677]], ["low_bookcase", "낮은 별빛 전시 책장", 0, "앞쪽 바닥에 놓는 낮은 전시 책장이에요. 위에 소품을 올릴 수 있어요.", "foreground", [360, 780]], ["three_drawer_chest", "별빛 3단 서랍장", 2000, "별무늬 손잡이의 3단 서랍장이에요.", "foreground", [360, 780]], ["writing_desk", "기록가의 책상과 의자", 2500, "기록가가 쓰던 책상과 의자예요.", "foreground", [360, 780]], ["pastry_trolley", "작은 페이스트리 카트", 2000, "디저트를 싣고 다니는 작은 카트예요.", "foreground", [360, 780]], ["navy_ottoman", "별자리 오토만", 1200, "남색 별자리 오토만이에요.", "foreground", [360, 780]], ["tall_bookcase", "천문 서가", 3000, "천장까지 닿는 천문 서가예요.", "foreground", [360, 780]], ["crockery_cupboard", "진주빛 컵 수납장", 2500, "진주빛 컵을 넣어 두는 유리 수납장이에요.", "foreground", [360, 780]], ["coat_stand", "황동 외투 걸이", 1500, "손님 외투를 거는 황동 걸이예요.", "foreground", [360, 780]]];
 const FDEF={main_table:'two_seat_table',side_table:'side_table',bar_stool:'bar_stool',foreground:'low_bookcase'};
@@ -2723,13 +2783,14 @@ function spot4(st,t,id){const T=T4(t);id=id||uid4(st,t);
     for(const s of Object.values(FIXS))for(const u of [.5,.25,.75,.12,.88])pts.push(mapQ(s.q,u,.75));
     st.items.filter(i=>!i.par&&T4(i.t).surf).forEach(par=>{for(const [key] of T4(par.t).surf)for(const u of [.5,.3,.7]){const c=surfCorners(st,par,key);if(c.length)pts.push(mapQ(c,u,.5))}});
     for(const p of pts){const s=surfaceAt(st,Array.isArray(p)?{x:p[0],y:p[1]}:p);if(!s)continue;const it={id,t,par:s.par,sf:s.sf,u:s.u,v:s.v};if(okSurf(st,it))return it}return null}
+  if(DECOR_FURN4[t])return decorSpot4(st,t,id);
   const tries=[],ring=c=>{tries.push(c);for(let r=.5;r<2;r+=.5)for(let a=0;a<12;a++)tries.push([c[0]+r*Math.cos(a/12*6.283),c[1]+r*Math.sin(a/12*6.283)])};
   if(OLDPPL[t]){const w=ungnd(...OLDPPL[t]);ring([w.x,w.y])}if(T.o)tries.push(T.o);
   for(let r=0;r<6;r+=.5)for(let a=0;a<16;a++)tries.push([6+r*Math.cos(a/16*6.283),7+r*Math.sin(a/16*6.283)]);
   for(const [x,y] of tries){const it={id,t,x:Math.round(x*4)/4,y:Math.round(y*4)/4,flip:false};if(okFloor(st,it))return it}return null}
 function uid4(st,t){let n=1;while(st.items.some(i=>i.id===(n>1?t+'#'+n:t)))n++;return n>1?t+'#'+n:t}
 /* 바닥 자리: 칸 안쪽 · 붙박이(카운터·벤치·수납장) 피하기 · 다른 가구와 겹치지 않기 */
-function foot4(it){const T=T4(it.t);let fw=T.fw,fd=T.fd;if(it.flip&&T.axis)[fw,fd]=[fd,fw];return [it.x-fw/2,it.y-fd/2,it.x+fw/2,it.y+fd/2]}
+function foot4(it){const T=T4(it.t);const size=decorSize4(it.t);let fw=T.fw*size,fd=T.fd*size;if(it.flip&&T.axis)[fw,fd]=[fd,fw];return [it.x-fw/2,it.y-fd/2,it.x+fw/2,it.y+fd/2]}
 function blocked4(x,y){const i=Math.floor(x/RW*48),j=Math.floor(y/RW*48);if(i<0||j<0||i>47||j>47)return true;return !!R4MASK[j*48+i]}
 function okFloor(st,it){const T=T4(it.t);if(T.mount!=='floor'&&T.mount!=='ceiling')return false;const [x0,y0,x1,y1]=foot4(it);
   if(x0<-.2||y0<-.2||x1>RW+.25||y1>RW+.25)return false;
@@ -2748,11 +2809,11 @@ function okWall(st,it){if(it.u<.06||it.u>.94||it.v<.08||it.v>.92)return false;co
 /* 그림 자리: 바닥 기준점 + 깊이에 따른 크기 + 바닥 방향에 맞춘 기울임 */
 function rect4(st,it){const T=T4(it.t);if(!T)return null;let [w,h]=T.box,p,k=1,shear=0;
   if(it.par){if(it.par==='room'){const s=FIXS[it.sf];if(!s)return null;p=mapQ(s.q,it.u,it.v);k=s.sc}
-    else{const par=st.items.find(i=>i.id===it.par);if(!par)return null;const c=surfCorners(st,par,it.sf);if(c.length!==4)return null;p=mapQ(c,it.u,it.v);const PT=T4(par.t);k=persp4(par.x,par.y)/persp4(...(PT.o||[6,6]))*.92}}
+    else{const par=st.items.find(i=>i.id===it.par);if(!par)return null;const c=surfCorners(st,par,it.sf);if(c.length!==4)return null;p=mapQ(c,it.u,it.v);const PT=T4(par.t);k=persp4(par.x,par.y)/persp4(...(PT.o||[6,6]))*.92*decorSize4(par.t)}}
   else if(it.wall){p=mapQ(R4F.wall,it.u,it.v)}
   else{p=gnd(it.x,it.y);k=persp4(it.x,it.y)/persp4(...(T.o||[6,6]));if(T.mount==='ceiling')p={x:p.x,y:p.y-CEIL4*k};
     if(T.axis){const o=T.o||[6,6],ax=it.flip?(T.axis==='u'?'v':'u'):T.axis;shear=axSlope(it.x,it.y,ax)-(it.flip?-1:1)*axSlope(o[0],o[1],T.axis)}}
-  w*=k;h*=k;return {x:p.x-w/2,y:p.y-h*T.an,w,h,shear,p,it}}
+  const size=decorSize4(it.t);w*=k*size;h*=k*size;return {x:p.x-w/2,y:p.y-h*T.an,w,h,shear,p,it}}
 function depth4(st,it){if(it.wall)return -2000;if(it.par==='room'){const s=FIXS[it.sf];return mapQ(s.q,.5,.5).y-(s.k==='counter'?0:1000)}
   if(it.par){const par=st.items.find(i=>i.id===it.par);return par?gnd(par.x,par.y).y+.01+it.v*.001:0}return gnd(it.x,it.y).y+(T4(it.t).mount==='ceiling'?.5:0)}
 /* 그리기 */
@@ -2845,9 +2906,12 @@ function rugHit(st,p){const [dx,dy]=st.rugOff||[0,0],c={x:RUGC.x+RUGT.dx+dx,y:RU
 function rugOk(off){const c={x:RUGC.x+RUGT.dx+off[0],y:RUGC.y+RUGT.dy+off[1]},w=ungnd(c.x,c.y);return w.x>1.4&&w.x<RW-1.4&&w.y>1.4&&w.y<RW-1.4}
 
 function roomHTML(st,res){const gl={day:.3,sunset:.6,night:1,rain:.75,autumn:.6,snow:.55}[st.scenery]??.6,k=++R4K;R4Q[k]=st;delete R4Q[k-30];requestAnimationFrame(paintRooms);
-  return R3L('sc_'+st.scenery)+R3L('fl_'+st.floor)+R3L('wp_'+st.wallpaper)+rugHTML(st)+R3L('fixed')
+  const floor=decorLayer4('fl_'+st.floor)||R3L('fl_'+st.floor);
+  const fixture=decorLayer4('lf_'+st.lighting)||R3L('lf_'+st.lighting);
+  const glow=decorLayer4('lg_'+st.lighting,`opacity:${gl}`)||R3L('lg_'+st.lighting,'',`opacity:${gl}`);
+  return R3L('sc_'+st.scenery)+floor+R3L('wp_ivory')+rugHTML(st)+R3L('fixed')+decorLayer4('wp_'+st.wallpaper)
    +`<canvas class="rcv" data-k="${k}" width="${res||1536}" height="${res||1536}" data-src="a/r4/atlas.webp"></canvas>`
-   +R3L('lf_'+st.lighting)+R3L('am_'+st.scenery)+R3L('lg_'+st.lighting,'',`opacity:${gl}`)}
+   +fixture+R3L('am_'+st.scenery)+glow}
 const R4ICN=t=>{const T=T4(t);if(!T)return '';const [ax,ay,aw,ah]=T.at,[AW,AH]=R4.atlas,ar=aw/ah,w=ar>=1?100:100*ar,h=ar>=1?100/ar:100;
   return `<i class="aic a4"><b style="width:${w}%;height:${h}%;left:${(100-w)/2}%;top:${(100-h)/2}%;background-size:${AW/aw*100}% ${AH/ah*100}%;background-position:${ax/(AW-aw)*100}% ${ay/(AH-ah)*100}%"></b></i>`};
 const placed4=t=>(S.r4&&S.r4.items||[]).filter(i=>i.t===t).length;
@@ -2863,10 +2927,10 @@ function renderShop(){
   const it=shSel&&(RI(shSel)||SHOPI(shSel)),isG=it&&!!it.who,isR=it&&it.room,own=it&&(isR?roomOwned(it.id):S.owned.includes(it.id)),met=!isG||S.met.includes(it.who),gname=isG?byNo(it.who).name:'';
   /* 미리보기 */
   if(!it){$('shPrev').innerHTML=`<div class="shempty">아직 보관함이 비어 있어요.<br>소품이나 선물을 사면 여기에 모여요.</div>`}
-  else if(isR){const st=roomState();let z=null;
-    if(it.cat==='prop'||it.cat==='furn'){let o=st.items.find(i=>i.t===it.key);if(!o){o=spot4(st,it.key);if(o)st.items.push(o)}if(o){st.pv=o.id;const r=rect4(st,o);if(r)z=[r.p.x,r.p.y-r.h*.45+30]}}else st[it.cat]=it.key;
+  else if(isR){const st=roomState();let z=null,roomNote='';
+    if(it.cat==='prop'||it.cat==='furn'){let o=st.items.find(i=>i.t===it.key);if(!o){o=spot4(st,it.key);if(o)st.items.push(o)}if(o){st.pv=o.id;const r=rect4(st,o);if(r&&it.cat!=='furn')z=[r.p.x,r.p.y-r.h*.45+30]}else if(it.cat==='furn')roomNote=own?'빈자리 필요':'구매하면 보관함에 담겨요'}else st[it.cat]=it.key;
     $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox${z?' zoom':''}" style="${z?`--zx:${z[0]/10.24}%;--zy:${(z[1]-30)/10.24}%`:''}">${roomHTML(st,1024)}</div>
-      <span class="chip l">나의 메로페</span><span class="chip r">${isOn(it)?'지금 적용 중':'구매 전 미리보기'}</span></div>`}
+      <span class="chip l">나의 메로페</span><span class="chip r">${isOn(it)?'지금 적용 중':(roomNote||'구매 전 미리보기')}</span></div>`}
   else if(!isG&&!RDEC[it.slot]){$('shPrev').innerHTML=`<div class="shroom2 shdec"><img src="${it.icon||`a/g/${it.id}.webp`}" alt=""><span class="chip l">예전 소품</span><span class="chip r">보관 중</span></div>`}
   else if(!isG){const st=roomState(),r=RDEC[it.slot];st.pvDec={slot:it.slot,id:it.id};
     $('shPrev').innerHTML=`<div class="shroom2"><div class="rbox zoom" style="--zx:${r[0]/10.24}%;--zy:${(r[1]+(r[2]==='b'?-20:r[2]==='t'?30:0))/10.24}%">${roomHTML(st)}</div>
@@ -2874,7 +2938,7 @@ function renderShop(){
   else{$('shPrev').innerHTML=`<div class="shgift"><img class="gp ${met?'':'lock'}" src="${sprite(it.who,'h')}" alt=""><div class="gi"><img src="a/g/${it.id}.webp" alt=""></div>
       <span class="chip l">${met?gname+'님께 줄 선물':'아직 만나지 못한 손님'}</span><span class="chip r">${S.given.includes(it.id)?'건넸어요':own?'다음 방문 때 건네요':'선물 미리보기'}</span></div>`}
   /* 고른 물건 */
-  const icon=x=>x.i4?R4ICN(x.i4):x.ic&&R3IC[x.ic]!=null?R3ICN(x.ic):`<img src="${x.icon||`a/g/${x.id}.webp`}" alt="" loading="lazy">`;
+  const icon=x=>decorThumb4(x)||(x.i4?R4ICN(x.i4):x.ic&&R3IC[x.ic]!=null?R3ICN(x.ic):`<img src="${x.icon||`a/g/${x.id}.webp`}" alt="" loading="lazy">`);
   const stOf=x=>x.room?(roomOwned(x.id)?(isOn(x)?(x.cat==='prop'||x.cat==='furn'?'놓여 있음':'적용 중'):'보유 중'):''):x.who?(S.given.includes(x.id)?'건넴':S.owned.includes(x.id)?'보유 중':''):(S.owned.includes(x.id)?(S.placed[x.slot]===x.id?'놓여 있음':'보유 중'):'');
   $('shSel').innerHTML=it?`${icon(it)}<div><b>${met?it.nm:'???'}</b><span>${met?it.desc:'손님을 만나면 열려요.'}</span></div><em>${stOf(it)||'미리보기 중'}</em>`:'';
   /* 목록 */
