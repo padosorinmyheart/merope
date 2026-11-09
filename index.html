@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261109233430">
+<meta name="merope-ver" content="20261109233836">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -906,7 +906,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.3)}
 .sdark{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;width:min(92vw,380px);display:flex;gap:10px;align-items:center;padding:10px 12px;background:#FFFDF8;color:#1F2F4A;border:1.5px solid #C9A365;border-radius:14px;box-shadow:0 6px 18px rgba(20,30,50,.3);font:500 13.5px/1.45 var(--body)}
 .sdark p{margin:0;flex:1}.sdark b{font-weight:700}.sdark button{flex:none;border:0;background:#233D62;color:#FFFDF8;border-radius:999px;padding:6px 12px;font:700 13px var(--body);cursor:pointer}
 .lviz{margin:4px 0 10px}.lviz svg{width:100%;height:auto;display:block;background:#1E2B48;border-radius:12px}
-.ladder .lv{stroke:#d9b46a;stroke-width:3}.ladder .lv.g{stroke:#8a7a5a}.ladder .lt{fill:#e9dcc0;font:600 11px var(--body);text-anchor:end}
+.ladder .lv{stroke:#d9b46a;stroke-width:3}.ladder .lv.g{stroke:#8a7a5a}.ladder .lv.io{stroke:#9aa3b5;stroke-dasharray:6 4;stroke-width:2}.ladder .lt{fill:#e9dcc0;font:600 11px var(--body);text-anchor:end}
 .ladder .up{stroke:#9aa3b5;stroke-width:4;stroke-dasharray:5 4}.ladder .up.on{stroke:#f1d9a0;stroke-dasharray:none}.ladder .down{stroke:#f1d9a0;stroke-width:2;stroke-dasharray:3 3}
 .ladder .el{fill:#fff3cf;stroke:#d9b46a;stroke-width:2}.ladder .lm{fill:#e9dcc0;font:500 12px var(--body)}
 .htok:hover .hn,.htok:focus-visible .hn,.htok.say .hn{display:block}
@@ -1251,9 +1251,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261109233430"></script>
-<script src="quiz.js?v=20261109233430"></script>
-<script src="recipes.js?v=20261109233430"></script>
+<script src="data.js?v=20261109233836"></script>
+<script src="quiz.js?v=20261109233836"></script>
+<script src="recipes.js?v=20261109233836"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1432,19 +1432,32 @@ Object.assign(LABK,{
   T:{t1:['두 맛이 다 나게, 따뜻하게',[85,100],[60,72]],t2:['어머니가 데워 주시던 것처럼',[80,100],[66,78]]},
   tip:{xlo:d=>'한쪽 맛만 나요. 두 재료를 비슷하게 섞어 보세요.',ylo:d=>'미지근해요. 조금 더 데워 보세요.',yhi:d=>'너무 뜨거워요. 조금 식혀 보세요.'},
   sci:'서로 다른 두 종을 교배하면 어느 쪽과도 다른 새 종이 생길 수 있어요. 우장춘은 배추 무리와 양배추 무리가 만나 유채가 생긴다는 걸 밝혀 "종의 합성"을 보여 줬어요.'},
- sp09:{st:'색·빛 · 계단 불빛',sl:d=>[['E','비추는 빛의 에너지',1,10,0.5,5.5,'',['약한 빛','센 빛']],['t','비추는 시간',1,6,0.5,3,'초',['짧게','길게']]],
-  viz:p=>{const n=[3,6,9].find(v=>Math.abs(p.E-v)<.26),H=150,y=e=>H-14-e*12.4,on=!!n;
-    const rungs=[0,3,6,9].map(e=>`<line x1="60" x2="200" y1="${y(e)}" y2="${y(e)}" class="lv${e?'':' g'}"/><text x="54" y="${y(e)+4}" class="lt">${e?e+'칸':'바닥'}</text>`).join('');
-    const top=y(p.E),col=on?['','#5aa9ff','#7fd1ff','#c7a6ff'][n/3]:'#9aa3b5';
-    return `<svg viewBox="0 0 340 ${H}" class="ladder" role="img" aria-label="에너지 계단 그림">${rungs}
-      <line x1="110" x2="110" y1="${y(0)}" y2="${top}" class="up${on?' on':''}"/><circle cx="${on?150:110}" cy="${on?y(n):y(0)}" r="7" class="el"/>
-      ${on?`<line x1="150" x2="150" y1="${y(n)+8}" y2="${y(0)-6}" class="down"/><circle cx="290" cy="38" r="${8+p.t*3.4}" fill="${col}" opacity=".45"/><circle cx="290" cy="38" r="8" fill="${col}"/><text x="290" y="${38+12+p.t*3.4+4}" class="lm" text-anchor="middle">빛</text>`:''}
-      <text x="212" y="${H-48}" class="lm">${on?`전자가 ${n}칸 계단에`:'이 에너지로는'}</text><text x="212" y="${H-30}" class="lm">${on?'올라갔다 내려오며':'닿는 계단이 없어요'}</text><text x="212" y="${H-12}" class="lm">${on?'빛을 내요':'(빛이 안 나요)'}</text></svg>`},
-  model:p=>{const n=Math.round(p.E/3)*3||3,x=100*Math.exp(-Math.pow(p.E-n,2)/0.08);return {x,y:x*p.t/10}},
-  X:['빛나는 정도','%',0,100,20],Y:['빛 세기','',0,60,10],
-  T:{t1:['푸르게 또렷이',[90,100],[28,46]],t2:['은은하게',[90,100],[9,25]]},
-  tip:{xlo:d=>'계단 높이와 딱 맞는 에너지일 때만 빛나요. 위 그림에서 화살표가 계단에 닿는 값을 찾아보세요(3, 6, 9).',ylo:d=>'빛이 약해요. 조금 더 오래 비춰 보세요.',yhi:d=>'빛이 너무 세요. 비추는 시간을 줄여 보세요.'},
-  sci:'원자 속 전자는 사다리의 칸처럼 정해진 에너지 계단에만 설 수 있어요. 비춘 빛의 에너지가 계단 높이와 딱 맞아야 전자가 올라가고, 다시 내려올 때 그 높이만큼의 색으로 빛나요(보어의 원자 모형). 토닉워터는 실제로 자외선을 받으면 파랗게 빛나요. 빛나는 정도는 에너지가 계단에 맞았는지, 빛 세기는 얼마나 오래 비췄는지예요.'},
+ sp09:{st:'색·빛 · 계단 불빛',sl:d=>[['E','빛 알갱이 하나의 에너지',9.5,14,0.05,11.5,'eV',['빨강·적외선 쪽','보라·자외선 쪽']],['t','빛의 양 (알갱이 수)',1,6,0.5,3,'',['조금','많이']]],
+  /* 수소 원자의 실제 에너지 계단(바닥에서 잰 값, eV)과 n→2로 내려올 때 나오는 보이는 빛(발머 계열, nm) */
+  lv:[[2,10.20,0],[3,12.09,656],[4,12.75,486],[5,13.06,434],[6,13.22,410]],ion:13.6,
+  hit:function(E){return this.lv.find(l=>Math.abs(E-l[1])<=.031)},
+  model:function(p){const K=LABK.sp09;if(p.E>=K.ion)return {x:0,y:0,ion:1};const h=K.hit(p.E);if(!h)return {x:0,y:0};return {x:h[2],y:h[2]?p.t*10:0,n:h[0]}},
+  fx:r=>r.ion?'전자가 튀어 나감':r.x?Math.round(r.x)+' nm':r.n===2?'자외선(안 보임)':'흡수 안 됨',
+  viz:p=>{const K=LABK.sp09,H=190,top=14,bot=H-16,y=e=>e<1?bot:bot-26-(e-10)/(K.ion-10)*(bot-26-top),h=p.E<K.ion&&K.hit(p.E),ion=p.E>=K.ion;
+    const col=w=>w===656?'#ff5a4e':w===486?'#38d6e8':w===434?'#7a6bff':w===410?'#9b5cff':'#9aa3b5';
+    let g=`<line x1="70" x2="200" y1="${y(K.ion)}" y2="${y(K.ion)}" class="lv io"/><text x="64" y="${y(K.ion)+4}" class="lt">원자 밖</text>`;
+    g+=`<line x1="70" x2="200" y1="${bot}" y2="${bot}" class="lv g"/><text x="64" y="${bot+4}" class="lt">n=1 바닥</text><text x="40" y="${bot-14}" class="lt" style="text-anchor:middle">≈</text>`;
+    K.lv.forEach(([n,e])=>{g+=`<line x1="70" x2="200" y1="${y(e)}" y2="${y(e)}" class="lv"/>`+(n<=4?`<text x="64" y="${y(e)+4}" class="lt">n=${n} · ${e.toFixed(2)}</text>`:'')});
+    g+=`<text x="64" y="${y(13.14)+4}" class="lt">n=5, 6 …</text>`;
+    const ay=ion?top:y(p.E);g+=`<line x1="100" x2="100" y1="${bot}" y2="${ay}" class="up${h||ion?' on':''}"/>`;
+    let msg;
+    if(ion){g+=`<circle cx="230" cy="${top+4}" r="7" class="el"/><line x1="108" x2="222" y1="${top+4}" y2="${top+4}" class="down"/>`;msg=['전자가 원자 밖으로','튀어 나가요','(이온화)']}
+    else if(h){const [n,e,w]=h;g+=`<circle cx="140" cy="${y(e)}" r="7" class="el"/>`;
+      if(w){g+=`<line x1="140" x2="140" y1="${y(e)+8}" y2="${y(10.2)-2}" stroke="${col(w)}" stroke-width="3"/><line x1="160" x2="160" y1="${y(10.2)+2}" y2="${bot-4}" class="down"/><text x="166" y="${(y(10.2)+bot)/2}" class="lt" style="text-anchor:start;font-size:10px">자외선</text>`;
+        g+=`<circle cx="292" cy="40" r="${8+p.t*3.4}" fill="${col(w)}" opacity=".45"/><circle cx="292" cy="40" r="8" fill="${col(w)}"/><text x="292" y="${56+p.t*3.4}" class="lm" text-anchor="middle">${w} nm</text>`;
+        msg=[`n=${n}까지 올라갔다가`,`n=2로 내려오며`,`${w===656?'빨간':w===486?'청록':'보라'} 빛을 내요`]}
+      else{g+=`<line x1="140" x2="140" y1="${y(e)+8}" y2="${bot-4}" class="down"/>`;msg=['n=2까지 올라갔지만','자외선만 나와서','눈에 안 보여요']}}
+    else msg=['딱 맞는 계단이 없어서','빛이 흡수되지 않고','그냥 지나가요'];
+    return `<svg viewBox="0 0 340 ${H}" class="ladder" role="img" aria-label="수소 원자의 에너지 계단 그림">${g}<text x="216" y="${H-56}" class="lm">${msg[0]}</text><text x="216" y="${H-38}" class="lm">${msg[1]}</text><text x="216" y="${H-20}" class="lm">${msg[2]}</text></svg>`},
+  X:['보이는 빛의 파장','nm',380,700,80],Y:['빛 세기','',0,60,10],
+  T:{t1:['푸르게 또렷이',[470,500],[28,46]],t2:['붉고 은은하게',[640,670],[9,25]]},
+  tip:{xlo:d=>'계단 높이와 딱 맞는 에너지일 때만 흡수돼요. 그림에서 화살표가 계단에 닿는 값을 찾아보세요. 계단마다 나오는 빛의 색이 달라요.',ylo:d=>'빛이 희미해요. 빛의 양을 늘려 보세요. 에너지가 맞을 때만 소용있어요.',yhi:d=>'빛이 너무 세요. 빛의 양을 줄여 보세요.'},
+  sci:'원자 속 전자는 정해진 에너지 계단에만 설 수 있어요(보어의 원자 모형). 빛 알갱이는 에너지를 통째로 주거나 아예 안 주기 때문에, 계단 간격과 딱 맞는 에너지만 흡수돼요. 조금 크거나 작으면 그냥 지나가요. 단, 원자 밖(13.6 eV)보다 센 빛은 전자를 떼어 내요. 수소의 계단은 위로 갈수록 좁아지고, n=2로 내려올 때 보이는 빛(빨강 656, 청록 486, 보라 434 nm)이 나와요. 바닥(n=1)으로 내려올 때는 자외선이라 눈에 안 보여요. 빛의 양을 늘리면 더 밝아지지만, 에너지가 안 맞으면 아무리 많이 비춰도 흡수되지 않아요.'},
  sp10:{st:'탄산 · 기체 무게',sl:d=>[['T','탄산수 온도',2,25,1,15,'°C',['아주 차갑게','미지근하게']],['t','병을 열어 둔 시간',0,20,1,8,'분',['바로','오래']]],
   model:p=>({x:2.2*(1-Math.exp(-p.t/8))*(1+(p.T-2)*0.03),y:100*Math.exp(-p.t/8)*Math.exp(-0.035*(p.T-2))}),
   X:['빠져나간 기체 무게','g',0,4,0.5],Y:['남은 탄산','%',0,100,20],
@@ -2401,10 +2414,10 @@ function labBrew(m){const K=LABK[m.kind],sl=K.sl(m),raws=m.raw;if(!has(raws,NEED
   const cap=!prev?'첫 시음':chg.length===0?'조건을 바꾸지 않았어요':chg.length===1?`바꾼 변인: ${chg[0][1]} ${lfmt(chg[0])(prev.p[chg[0][0]])} → ${lfmt(chg[0])(p[chg[0][0]])}`:`변인을 ${chg.length}개 바꿨어요. 무엇 때문에 달라졌는지 가리기 어려워요`;
   $('tries').textContent=`시음 ${tastes}회`;
   $('xres').innerHTML=`<div class="result pop"><img class="tcup" src="${drinkImg(m)}" alt="${m.name}" style="${labCup(m,r)}"><div class="taste">
-    <div class="meter"><span>${xl}</span><b>${+r.x.toFixed(1)}${xu?' '+xu:''}</b></div><div class="meter"><span>${yl}</span><b>${+r.y.toFixed(2)}${yu?' '+yu:''}</b></div>
+    <div class="meter"><span>${xl}</span><b>${K.fx?K.fx(r):+r.x.toFixed(1)+(xu?' '+xu:'')}</b></div><div class="meter"><span>${yl}</span><b>${+r.y.toFixed(2)}${yu?' '+yu:''}</b></div>
     <div><b>${a&&b?'손님 취향에 딱 맞아요':a||b?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요'}</b></div><div style="color:var(--muted);font-size:13px">${cap}</div></div></div>`;
   $('serveX').disabled=false;drawLab(m);
-  quickRes(a&&b?'손님 취향에 딱 맞아요':a||b?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요',`${xl} ${+r.x.toFixed(1)}${xu?' '+xu:''} · ${yl} ${+r.y.toFixed(2)}${yu?' '+yu:''}`,a&&b);}
+  quickRes(a&&b?'손님 취향에 딱 맞아요':a||b?'조금만 더 맞추면 돼요':'손님 취향과 거리가 있어요',`${xl} ${K.fx?K.fx(r):+r.x.toFixed(1)+(xu?' '+xu:'')} · ${yl} ${+r.y.toFixed(2)}${yu?' '+yu:''}`,a&&b);}
 function labCup(m,r){if(m.kind==='indicator')return `filter:hue-rotate(${Math.round((r.x-6.2)*-32)}deg) saturate(${(0.6+r.y/80).toFixed(2)})`;
   if(m.kind==='scatter')return `filter:brightness(${(1.25-r.x/250).toFixed(2)}) contrast(${(0.8+r.x/300).toFixed(2)})`;
   if(m.kind==='thick'||m.kind==='filter')return `filter:saturate(${(0.5+r.y/60).toFixed(2)}) opacity(${(0.65+r.x/300).toFixed(2)})`;
