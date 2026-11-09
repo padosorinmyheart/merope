@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261109234315">
+<meta name="merope-ver" content="20261109234620">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1251,9 +1251,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261109234315"></script>
-<script src="quiz.js?v=20261109234315"></script>
-<script src="recipes.js?v=20261109234315"></script>
+<script src="data.js?v=20261109234620"></script>
+<script src="quiz.js?v=20261109234620"></script>
+<script src="recipes.js?v=20261109234620"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1880,8 +1880,10 @@ function openInvite(){const el=document.createElement('div');el.className='invv'
   const draw=()=>{el.innerHTML=`<div class="ip"><h3>손님 초대</h3><p class="is">만난 손님 중 ${INVMAX}명까지 홀에 앉힐 수 있어요 · 오늘 온 손님은 먼저 자리에 앉아요</p>
     <div class="ig">${list.map(c=>{const on=pick.includes(c.no),t=td.has(c.no);return `<button class="ic ${t?'td':''}" data-no="${c.no}" aria-pressed="${on||t}" ${t||(!on&&pick.length>=INVMAX)?'disabled':''}><span class="hf" style="background-image:url(${sprite(c.no,'n')})"></span>${dn(c)}${t?'<small>오늘 손님</small>':''}</button>`}).join('')||'<p class="is">아직 만난 손님이 없어요</p>'}</div>
     <div class="ia"><button class="btn" id="iClr">모두 내보내기</button><button class="btn go" id="iOk">${pick.length}명 초대하기</button></div></div>`;
-    el.querySelectorAll('.ic').forEach(b=>b.addEventListener('click',()=>{const n=+b.dataset.no;pick=pick.includes(n)?pick.filter(x=>x!==n):[...pick,n].slice(0,INVMAX);draw()}));
-    el.querySelector('#iClr').addEventListener('click',()=>{pick=[];draw()});
+    /* 고를 때마다 다시 그리지 않고 단추 상태만 바꿔서, 내려 둔 스크롤 위치가 그대로 남아요 */
+    const sync=()=>{el.querySelectorAll('.ic').forEach(b=>{const n=+b.dataset.no,on=pick.includes(n),t=td.has(n);b.setAttribute('aria-pressed',String(on||t));b.disabled=t||(!on&&pick.length>=INVMAX)});el.querySelector('#iOk').textContent=`${pick.length}명 초대하기`};
+    el.querySelectorAll('.ic').forEach(b=>b.addEventListener('click',()=>{const n=+b.dataset.no;pick=pick.includes(n)?pick.filter(x=>x!==n):[...pick,n].slice(0,INVMAX);sync()}));
+    el.querySelector('#iClr').addEventListener('click',()=>{pick=[];sync()});
     el.querySelector('#iOk').addEventListener('click',()=>{S.hallPick=pick;save();el.remove();goHall()})};
   draw();el.addEventListener('click',e=>{if(e.target===el)el.remove()});$('shell').appendChild(el)}
 $('hInv').addEventListener('click',openInvite);
