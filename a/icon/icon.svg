@@ -21,8 +21,10 @@
   <!-- 초승달 -->
   <circle cx="200" cy="196" r="128" fill="url(#gold)" mask="url(#cres)"/>
   <!-- 김이 별로 -->
-  <path d="M300 300c-18-22 14-34-2-60" fill="none" stroke="#F6E3B0" stroke-width="10" stroke-linecap="round" opacity=".9"/>
-  <path d="M298 228l7 17 17 7-17 7-7 17-7-17-17-7 17-7z" fill="#FBE6AE"/>
+  <g fill="none" stroke="#F6E3B0" stroke-linecap="round" opacity=".85">
+    <path d="M276 298c-16-18 12-30 0-52c-8-14 6-24 10-30" stroke-width="10"/>
+    <path d="M320 300c-12-16 10-26 0-44" stroke-width="8" opacity=".7"/>
+  </g>
   <!-- 잔과 받침 -->
   <ellipse cx="300" cy="420" rx="128" ry="26" fill="url(#gold)"/>
   <path d="M206 318h188c0 62-38 96-94 96s-94-34-94-96z" fill="url(#cup)"/>
