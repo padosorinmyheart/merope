@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261109000439">
+<meta name="merope-ver" content="20261109224208">
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1243,9 +1243,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261109000439"></script>
-<script src="quiz.js?v=20261109000439"></script>
-<script src="recipes.js?v=20261109000439"></script>
+<script src="data.js?v=20261109224208"></script>
+<script src="quiz.js?v=20261109224208"></script>
+<script src="recipes.js?v=20261109224208"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1620,26 +1620,144 @@ function goHall(){const ea=endReady();if(ea){$('hall').hidden=true;playEnding(ea
 /* 홀 손님: 오늘 온 손님 + 초대한 손님이 자리에 앉아요 */
 /* 손님 자리: 붙박이 벤치 + 놓인 가구의 의자 */
 /* 자리: [x,y,모드,등받이 높이] b=탁자 뒤라 다리를 가려요, u=등받이 위만 보여요(지금은 안 씀: 3인 탁자 앞 두 의자는 등을 보여서 빼 뒀어요) */
-const FSEAT={two_seat_table:[[631,686],[735,719]],three_seat_table:[[693,604,'b']],bar_stool:[[406,606]],writing_desk:[[488,792]],navy_ottoman:[[450,832]]};
-const SEATS_BASE=[[625,438],[690,468],[752,498],[808,524]],INVMAX=6;
+const FSEAT={two_seat_table:[[622,687],[743,719]],three_seat_table:[[693,604,'b']],bar_stool:[[406,606]],writing_desk:[[488,792]],navy_ottoman:[[450,832]]};
+const INVMAX=6;
 const SEATS={get length(){return seatList().length}};
-function seatList(){const st=roomState(),f=[];
-  st.items.forEach(it=>{const S0=FSEAT[it.t],T=T4(it.t);if(!S0||!T||!T.scr||it.par)return;const r=rect4(st,it);if(!r)return;
-    const d=depth4(st,it);S0.forEach(([sx,sy,md,cy])=>{let fx=(sx-T.scr[0])/T.box[0];const fy=(sy-T.scr[1])/T.box[1];if(it.flip)fx=1-fx;const dx=(fx-.5)*r.w;
-      const px=r.x+r.w/2+dx,py=r.y+fy*r.h+r.shear*dx;f.push([px,py,fx<.4?'r':'l',d+.02,md==='b'?py+4:md==='u'?r.y+cy*r.h+r.shear*dx:0])})});
-  return [...f,...SEATS_BASE.map(([x,y])=>[x-14,y+22,'l',y,0])]}
+/* 메로페 홀 착석 위치. 좌표는 1024×1024 방 기준입니다. */
+const SEAT_POSE = {
+  '31': ['l', .73, .63], '32': ['l', .76, .64], '33': ['l', .73, .65],
+  '34': ['l', .77, .63], '35': ['l', .75, .63], '36': ['l', .77, .62],
+  '37': ['l', .70, .64], '38': ['l', .77, .63], '39': ['l', .82, .63],
+  '40': ['l', .75, .63], '41': ['l', .77, .65], '42': ['r', .32, .63],
+  '32_r': ['r', .23, .64], '33_r': ['r', .23, .64],
+  '37_r': ['r', .32, .64], '38_r': ['r', .23, .64],
+};
+// 신발 밑창의 접점. 가로와 세로를 원본 이미지 너비와 높이로 나눈 값입니다.
+const SEAT_SOLES = {
+  '31': [[.245, .997], [.065, .933]], '32': [[.27, .996], [.07, .97]],
+  '33': [[.35, .996], [.075, .958]], '34': [[.35, .996], [.07, .948]],
+  '35': [[.32, .996], [.065, .938]], '36': [[.38, .996], [.075, .966]],
+  '37': [[.29, .996], [.07, .957]], '38': [[.38, .996], [.08, .957]],
+  '39': [[.28, .996], [.06, .947]], '40': [[.32, .996], [.06, .946]],
+  '41': [[.27, .996], [.07, .958]], '42': [[.655, .997], [.882, .939]],
+  '32_r': [[.78, .996], [.96, .978]], '33_r': [[.73, .996], [.945, .938]],
+  '37_r': [[.72, .996], [.945, .96]], '38_r': [[.65, .996], [.925, .938]],
+};
+const CHAIR_FLOOR_DROP = [54.5, 59];
+const SOFA_PINS = [[612, 442], [674, 472], [733, 501], [794, 532]];
+const SOFA_FLOOR = { x: 600, y: 499, slope: .52, clearance: 3 };
+// 570×372 가구 그림에서 손님 앞에 와야 하는 테이블과 팔걸이만 골라 다시 그립니다.
+const TABLE_FRONT = [
+  'M0 62 C10 91 36 104 65 114 C87 121 100 133 105 154 L106 214 L91 221 L0 223 Z M214 58 H382 V190 H332 V326 H228 V189 H214 Z',
+  'M429 307 L429 238 C429 208 456 199 481 192 C532 179 558 151 570 119 L570 330 L466 330 Z',
+];
+
+function seatList() {
+  const st = roomState();
+  const seats = [];
+  for (const it of st.items) {
+    const table = it.t === 'two_seat_table';
+    const pins = FSEAT[it.t];
+    const type = T4(it.t);
+    if (!pins || !type?.scr || it.par) continue;
+    const rect = rect4(st, it);
+    if (!rect) continue;
+    const depth = depth4(st, it);
+    pins.forEach(([sx, sy, mode, cut], index) => {
+      const u = (sx - type.scr[0]) / type.box[0];
+      const v = (sy - type.scr[1]) / type.box[1];
+      const fx = it.flip ? 1 - u : u;
+      const dx = (fx - .5) * rect.w;
+      const x = rect.x + rect.w / 2 + dx;
+      const y = rect.y + v * rect.h + rect.shear * dx;
+      const back = mode === 'b' ? y + 4 : mode === 'u' ? rect.y + cut * rect.h + rect.shear * dx : 0;
+      // 먼 의자 앞의 상판은 그 위에 놓인 소품보다 먼저 그립니다.
+      const dep = depth + (table && index === 0 ? .004 : .02);
+      const front = table ? { rect, at: type.at, index, flip: it.flip } : null;
+      const floor = table ? { drop: CHAIR_FLOOR_DROP[index] * rect.h / type.box[1], slope: 0 } : null;
+      seats.push([x, y, fx < .4 ? 'r' : 'l', dep, back, front, floor]);
+    });
+  }
+  return seats.concat(SOFA_PINS.map(([x, y]) => {
+    const edgeY = SOFA_FLOOR.y + SOFA_FLOOR.slope * (x - SOFA_FLOOR.x);
+    return [x, y, 'l', y, 0, null, { drop: edgeY + SOFA_FLOOR.clearance - y, slope: SOFA_FLOOR.slope }];
+  }));
+}
+
+function seatPose(n, face) {
+  const k = face === 'r' && SITR.has(n) ? `${n}_r` : String(n);
+  const [originalFace, x, ay] = SEAT_POSE[k] ?? (k.endsWith('_r') ? ['r', .32, .62] : ['l', .68, .62]);
+  const mir = originalFace !== face;
+  const soles = (SEAT_SOLES[k] ?? []).map(([u, v]) => [mir ? 1 - u : u, v]);
+  return { k, mir, ax: mir ? 1 - x : x, ay, soles };
+}
+
+function sitBox(o, im) {
+  const ratio = im.naturalWidth / im.naturalHeight || .58;
+  let height = o.h;
+  if (o.floor && o.soles.length) {
+    const { drop, slope } = o.floor;
+    const reaches = o.soles.map(([u, v]) => v - o.ay - slope * ratio * (u - o.ax));
+    // 소파 앞에서는 두 발이 모두 목재 턱을 지나도록 맞춥니다.
+    // 의자에서는 가까운 발을 앞다리 끝 높이에 두고 나머지 발의 원근 차이를 살립니다.
+    const reach = slope ? Math.min(...reaches) : Math.max(...reaches);
+    if (reach > .2) height = drop / reach;
+  }
+  const width = height * ratio;
+  const left = o.x - o.ax * width;
+  const top = o.y - o.ay * height;
+  const hitHeight = o.back ? Math.max(o.back - top, height * .25) : height * .98;
+  const contacts = o.floor ? o.soles.map(([u, v]) => [left + u * width, top + v * height]) : [];
+  return { width, height, left, top, hitHeight, contacts };
+}
+
+function refreshSeatButtons(k) {
+  const room = $('hRoom');
+  for (const o of HSIT) {
+    if (o.k !== k) continue;
+    const button = room?.querySelector(`.htok.st[data-no="${o.n}"]`);
+    if (!button) continue;
+    const box = sitBox(o, SITIMG[k]);
+    Object.assign(button.style, {
+      left: `${box.left / 10.24}%`, top: `${box.top / 10.24}%`,
+      width: `${box.width / 10.24}%`, height: `${box.hitHeight / 10.24}%`,
+    });
+  }
+}
 /* 앉은 그림: 기본은 왼쪽을 향하고, _r 파일이 있으면 오른쪽 그림을 따로 써요 */
 const SITR=new Set([32,33,37,38]),SITIMG={},HSIT=[];
-function sitImg(k){if(!SITIMG[k]){const im=new Image();im.onload=paintRooms;im.src=`a/st/${k}.webp`;SITIMG[k]=im}return SITIMG[k]}
+function sitImg(k) {
+  if (!SITIMG[k]) {
+    const im = new Image();
+    SITIMG[k] = im;
+    im.onload = () => { refreshSeatButtons(k); paintRooms(); };
+    im.src = `a/st/${k}.webp`;
+  }
+  return SITIMG[k];
+}
 function hasSit(n){return n>=31&&n<=42}
 function hallGuests(){const td=[...new Set((S.today||[]).map(t=>t.no))].filter(n=>n&&byNo(n)),pk=(S.hallPick||[]).filter(n=>S.met.includes(n)&&!td.includes(n));
   return [...td.map(n=>[n,1]),...pk.map(n=>[n,0])].slice(0,SEATS.length)}
-function hallTokens(){const g=hallGuests();$('hInvN').textContent=(S.hallPick||[]).length?`${(S.hallPick||[]).length}/${INVMAX}`:'';
-  const SL=seatList();HSIT.length=0;return g.map(([n,td],i)=>{const c=byNo(n),[x,y,face,dep,back]=SL[i];
-    if(hasSit(n)){const own=face==='r'&&SITR.has(n),k=own?n+'_r':String(n),mir=face==='r'&&!own,ax=face==='r'?.32:.68,ay=.62,w=ungnd(x,y),h=128*(.84+(w.x+w.y)/24*.25),im=sitImg(k),ar=(im.naturalWidth/im.naturalHeight)||.58,ww=h*ar;
-      HSIT.push({k,x,y,h,ax,ay,mir,dep,back,td});
-      return `<button class="htok st ${td?'today':''}" data-no="${n}" style="left:${(x-ax*ww)/10.24}%;top:${(y-ay*h)/10.24}%;width:${ww/10.24}%;height:${(back?Math.max(back-(y-ay*h),h*.25):h*.98)/10.24}%" aria-label="${dn(c)}"><span class="hn">${dn(c)}</span></button>`}
-    return `<button class="htok ${td?'today':''}" data-no="${n}" style="left:${x/10.24}%;top:${y/10.24}%;animation-delay:${i*80}ms" aria-label="${dn(c)}"><span class="hf" style="background-image:url(${sprite(n,td?'h':'n')})"></span><span class="hn">${dn(c)}</span></button>`}).join('')}
+function hallTokens() {
+  const g = hallGuests();
+  $('hInvN').textContent = (S.hallPick || []).length ? `${S.hallPick.length}/${INVMAX}` : '';
+  const seats = seatList();
+  HSIT.length = 0;
+  return g.map(([n, td], i) => {
+    const c = byNo(n);
+    const [x, y, face, dep, back, front, floor] = seats[i];
+    if (!hasSit(n)) {
+      return `<button class="htok ${td ? 'today' : ''}" data-no="${n}" style="left:${x / 10.24}%;top:${y / 10.24}%;animation-delay:${i * 80}ms" aria-label="${dn(c)}"><span class="hf" style="background-image:url(${sprite(n, td ? 'h' : 'n')})"></span><span class="hn">${dn(c)}</span></button>`;
+    }
+    const world = ungnd(x, y);
+    const h = front ? 128 * front.rect.w / 228 : 128 * (.84 + (world.x + world.y) / 24 * .25);
+    const o = { ...seatPose(n, face), n, x, y, h, dep, back, front, floor, td };
+    const im = sitImg(o.k);
+    const box = sitBox(o, im);
+    HSIT.push(o);
+    return `<button class="htok st ${td ? 'today' : ''}" data-no="${n}" style="left:${box.left / 10.24}%;top:${box.top / 10.24}%;width:${box.width / 10.24}%;height:${box.hitHeight / 10.24}%" aria-label="${dn(c)}"><span class="hn">${dn(c)}</span></button>`;
+  }).join('');
+}
 function hallSay(btn){document.querySelectorAll('.hsay').forEach(e=>e.remove());document.querySelectorAll('.htok.say').forEach(e=>e.classList.remove('say'));
   const c=byNo(+btn.dataset.no),t=(S.today||[]).some(x=>x.no===c.no),line=c.sci?(sciDone(c.no)?'달이 차는 밤이면, 이 자리가 그리워질 거예요.':'…이 카페, 어딘가 익숙한 향이 나요.'):t?(c.ep2&&c.ep2.bye||c.ep1.bye||'잘 마셨어요.'):(c.again||c.ep1.bye||'');
   const el=document.createElement('div');el.className='hsay';el.innerHTML=`<b>${dn(c)}</b>${line}`;const v=$('hView'),vr=v.getBoundingClientRect(),br=btn.getBoundingClientRect();
@@ -2544,10 +2662,60 @@ function drawRoom4(cv,st,ui){if(!R4IMG.complete||!R4IMG.naturalWidth)return;cons
   for(const r of rects){const L=T4(r.it.t).light;if(!L)continue;const dx=(L[0]-.5)*r.w*(r.it.flip?-1:1),px=r.x+r.w/2+dx,py=r.y+L[1]*r.h+r.shear*dx,rad=L[2]*(r.w/T4(r.it.t).box[0]);
     const gr=g.createRadialGradient(px,py,0,px,py,rad);gr.addColorStop(0,`rgba(255,197,104,${.34*night+.1})`);gr.addColorStop(.35,`rgba(255,211,140,${.14*night+.04})`);gr.addColorStop(1,'rgba(255,211,140,0)');g.fillStyle=gr;g.fillRect(px-rad,py-rad,rad*2,rad*2)}
   g.restore();cv._rects=rects;cv._st=st}
-function drawSit(g,o){const im=sitImg(o.k);if(!im.complete||!im.naturalWidth)return;const w=o.h*im.naturalWidth/im.naturalHeight,x0=o.x-o.ax*w,y0=o.y-o.ay*o.h;
-  g.save();if(o.back){g.beginPath();g.rect(x0-20,y0-20,w+40,o.back-y0+20);g.clip()}
-  if(o.td){g.shadowColor='rgba(255,212,120,1)';g.shadowBlur=26}else{g.shadowColor='rgba(20,24,40,.28)';g.shadowBlur=6;g.shadowOffsetY=2}
-  if(o.mir){g.translate(o.x,0);g.scale(-1,1);g.translate(-o.x,0)}g.drawImage(im,o.mir?o.x-(1-o.ax)*w:x0,y0,w,o.h);g.restore()}
+function drawSeatFront(g, front) {
+  const { rect: r, at: [ax, ay, aw, ah], index, flip } = front;
+  g.save();
+  g.translate(r.x + r.w / 2, r.y);
+  g.transform(1, r.shear, 0, 1, 0, 0);
+  if (flip) g.scale(-1, 1);
+  g.translate(-r.w / 2, 0);
+  g.scale(r.w / aw, r.h / ah);
+  g.clip(new Path2D(TABLE_FRONT[index]));
+  g.drawImage(R4IMG, ax, ay, aw, ah, 0, 0, aw, ah);
+  g.restore();
+}
+
+function drawFootShadows(g, { contacts, height }) {
+  for (const [x, y] of contacts) {
+    g.save();
+    g.translate(x, y + height * .004);
+    g.scale(height * .046, height * .014);
+    const shadow = g.createRadialGradient(0, 0, 0, 0, 0, 1);
+    shadow.addColorStop(0, 'rgba(34,23,31,.34)');
+    shadow.addColorStop(.55, 'rgba(34,23,31,.22)');
+    shadow.addColorStop(1, 'rgba(34,23,31,0)');
+    g.fillStyle = shadow;
+    g.fillRect(-1, -1, 2, 2);
+    g.restore();
+  }
+}
+
+function drawSit(g, o) {
+  const im = sitImg(o.k);
+  if (!im.complete || !im.naturalWidth) return;
+  const box = sitBox(o, im);
+  const { width, height, left, top } = box;
+  drawFootShadows(g, box);
+  g.save();
+  if (o.back) {
+    g.beginPath();
+    g.rect(left - 20, top - 20, width + 40, o.back - top + 20);
+    g.clip();
+  }
+  if (o.td) {
+    g.shadowColor = 'rgba(255,212,120,1)';
+    g.shadowBlur = 26;
+  } else {
+    g.shadowColor = 'rgba(20,24,40,.28)';
+    g.shadowBlur = 6;
+    g.shadowOffsetY = 2;
+  }
+  g.translate(left + (o.mir ? width : 0), top);
+  if (o.mir) g.scale(-1, 1);
+  g.drawImage(im, 0, 0, width, height);
+  g.restore();
+  if (o.front) drawSeatFront(g, o.front);
+}
 function hit4(cv,p){const rs=cv._rects||[];for(let i=rs.length-1;i>=0;i--){const r=rs[i],lx=p.x-(r.x+r.w/2),ly=p.y-r.y-r.shear*lx;if(Math.abs(lx)>r.w/2||ly<0||ly>r.h)continue;
   if(!R4A)return r.it;const [ax,ay,aw,ah]=T4(r.it.t).at;let u=lx/r.w+.5;if(r.it.flip)u=1-u;const sx=Math.floor(ax+u*(aw-1)),sy=Math.floor(ay+ly/r.h*(ah-1));if(R4A[sy*R4IMG.width+sx]>110)return r.it}return null}
 /* 러그: 바닥을 따라 미끄러지듯 옮겨요 */
