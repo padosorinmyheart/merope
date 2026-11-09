@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261109233836">
+<meta name="merope-ver" content="20261109234315">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1251,9 +1251,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261109233836"></script>
-<script src="quiz.js?v=20261109233836"></script>
-<script src="recipes.js?v=20261109233836"></script>
+<script src="data.js?v=20261109234315"></script>
+<script src="quiz.js?v=20261109234315"></script>
+<script src="recipes.js?v=20261109234315"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1395,7 +1395,7 @@ Object.assign(LABK,{
   X:['맑기','%',30,100,10],Y:['남은 양','%',40,100,10],
   T:{t1:['맑게, 그래도 넉넉하게',[85,100],[70,100]],t2:['아주 맑게, 조금만 남아도',[95,100],[45,75]]},
   tip:{xlo:d=>'아직 탁해요. 한 번 더 거르거나 더 고운 거름망을 써 보세요.',ylo:d=>'너무 많이 걸러서 양이 줄었어요. 거르는 횟수를 줄여 보세요.'},
-  sci:'여러 번 걸러야 아주 적은 양의 순수한 것만 남아요. 퀴리는 몇 톤이나 되는 광석 찌꺼기를 거르고 또 걸러 라듐 화합물 0.1 g을 얻었어요.'},
+  sci:'되풀이할수록 더 순수해지지만 남는 양은 줄어요. 퀴리는 1톤이 넘는 광석 찌꺼기를 녹였다가 결정으로 굳히기를 수천 번 되풀이해(분별 결정), 1902년에 라듐 화합물 약 0.1 g을 얻었어요. 작업대의 거르기는 이 "되풀이해서 순수하게"를 음료로 바꾼 거예요.'},
  sp03:{st:'녹이기 · 인덕션',sl:d=>[['pot','냄비',0,1,1,0,'',['유리','쇠'],['유리 냄비','쇠 냄비']],['pw','코일 세기',1,10,1,5,'단',['약하게','세게']],['t','데우는 시간',0,5,0.5,2,'분',['짧게','길게']]],
   model:p=>{const T=Math.min(100,20+(p.pot?14:0.8)*p.pw*p.t);return {x:100*(1-Math.exp(-Math.max(0,T-45)/15)),y:T}},
   X:['토피가 녹은 정도','%',0,100,20],Y:['온도','°C',20,100,10],
@@ -1431,7 +1431,7 @@ Object.assign(LABK,{
   X:['두 맛이 어우러진 정도','%',0,100,20],Y:['따뜻함','°C',40,80,10],
   T:{t1:['두 맛이 다 나게, 따뜻하게',[85,100],[60,72]],t2:['어머니가 데워 주시던 것처럼',[80,100],[66,78]]},
   tip:{xlo:d=>'한쪽 맛만 나요. 두 재료를 비슷하게 섞어 보세요.',ylo:d=>'미지근해요. 조금 더 데워 보세요.',yhi:d=>'너무 뜨거워요. 조금 식혀 보세요.'},
-  sci:'서로 다른 두 종을 교배하면 어느 쪽과도 다른 새 종이 생길 수 있어요. 우장춘은 배추 무리와 양배추 무리가 만나 유채가 생긴다는 걸 밝혀 "종의 합성"을 보여 줬어요.'},
+  sci:'서로 다른 두 종을 교배하면 어느 쪽과도 다른 새 종이 생길 수 있어요. 우장춘은 1935년 배추와 양배추가 만나 두 종의 염색체를 모두 가진 유채가 생긴다는 걸 밝혀 "종의 합성"을 보여 줬어요(우장춘의 삼각형). 작업대에서는 두 맛을 고루 섞는 것으로 바꿔 보여 줘요.'},
  sp09:{st:'색·빛 · 계단 불빛',sl:d=>[['E','빛 알갱이 하나의 에너지',9.5,14,0.05,11.5,'eV',['빨강·적외선 쪽','보라·자외선 쪽']],['t','빛의 양 (알갱이 수)',1,6,0.5,3,'',['조금','많이']]],
   /* 수소 원자의 실제 에너지 계단(바닥에서 잰 값, eV)과 n→2로 내려올 때 나오는 보이는 빛(발머 계열, nm) */
   lv:[[2,10.20,0],[3,12.09,656],[4,12.75,486],[5,13.06,434],[6,13.22,410]],ion:13.6,
@@ -1465,11 +1465,11 @@ Object.assign(LABK,{
   tip:{xlo:d=>'기체가 거의 안 빠졌어요. 조금 더 열어 두세요.',xhi:d=>'기체가 너무 많이 빠졌어요. 열어 두는 시간을 줄이거나 더 차갑게 해 보세요.',ylo:d=>'탄산이 거의 없어요. 더 차갑게, 짧게 열어 두세요.'},
   sci:'기체에도 무게가 있어요. 병을 열기 전과 후의 무게 차이가 빠져나간 이산화 탄소의 무게예요. 캐번디시는 여러 기체의 무게를 재다가 수소를 발견했어요.'},
  sp11:{st:'굳히기 · 둘로 나누기',sl:d=>[['m','굳힌 크림 덩이',10,60,5,20,'g',['작게','크게']],['n','나누는 횟수',0,3,1,0,'번',['그대로','여러 번']]],
-  model:p=>({x:40+p.n*12*p.m/30,y:p.n*p.m*0.5}),
+  model:p=>{const k=p.m/30;if(!p.n)return {x:40,y:0};return {x:40+12*k-(p.n-1)*6*k,y:p.m*0.5,over:p.n>1}},
   X:['데워진 온도','°C',30,90,10],Y:['사라진 무게','mg',0,80,20],
   T:{t1:['반으로 나눠 따뜻하게',[55,65],[5,25]],t2:['반으로 나눠, 지난번처럼',[55,65],[5,25]]},
-  tip:{xlo:d=>'아직 미지근해요. 크림을 반으로 나눠 보세요.',xhi:d=>'너무 뜨거워요. 덜 나누거나 덩이를 작게 해 보세요.',yhi:d=>'너무 많이 쪼갰어요. 반으로만 나눠 주세요.'},
-  sci:'무거운 원자핵이 둘로 쪼개지면 조각들의 질량을 합한 값이 처음보다 아주 조금 줄고, 그만큼이 에너지가 돼요(핵분열, E = mc²). 여기서는 크게 부풀려 보여 줬어요.'}});
+  tip:{xlo:d=>'아직 미지근해요. 무거운 덩이를 한 번만 반으로 나눠 보세요. 두 번 이상 나누면 오히려 식어요. 쪼개진 조각은 더 쪼개도 에너지가 나오지 않거든요.',xhi:d=>'너무 뜨거워요. 덩이를 조금 작게 해 보세요.',yhi:d=>'사라진 무게가 너무 커요. 덩이를 조금 작게 해 보세요.'},
+  sci:'우라늄처럼 무거운 원자핵이 둘로 쪼개지면 조각들의 질량을 합한 값이 처음보다 약 0.1% 줄고, 그만큼이 에너지가 돼요(핵분열, E = mc²). 마이트너와 조카 프리슈가 1938년 겨울 이 계산을 해냈어요. 쪼개진 조각(중간 무게 원자핵)은 이미 가장 단단해서, 더 쪼개면 에너지가 나오기는커녕 들어가요. 온도는 음료로 바꾼 표현이에요.'}});
 D.SPM={};D.SPECIAL.forEach(s=>{D.SPM['sp'+s.id]={no:0,name:s.name,station:'lab',kind:'sp'+s.id,special:1,img:`a/sp/${s.id}_1.webp`,
   raw:{'01':['whitegrape','elderflower','soda'],'02':['pear','whitechoc','milk'],'03':['beans','malt','toffee','milk'],'04':['jujube','brownrice','honey'],'05':['apricot','oolong','rosemary'],'06':['pistachio','cherry','cream'],'07':['lychee','jasmine','gelatin'],'08':['chestnut','perilla','milk'],'09':['beans','kumquat','tonic'],'10':['blackcurrant','earlgrey'],'11':['hojicha','coconut','milk']}[s.id]}});
 const MENUS={...D.EXTRACT,...D.LAYER,...D.LAB,...D.SPM};
