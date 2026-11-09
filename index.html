@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261109234620">
+<meta name="merope-ver" content="20261109235019">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1251,9 +1251,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261109234620"></script>
-<script src="quiz.js?v=20261109234620"></script>
-<script src="recipes.js?v=20261109234620"></script>
+<script src="data.js?v=20261109235019"></script>
+<script src="quiz.js?v=20261109235019"></script>
+<script src="recipes.js?v=20261109235019"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1305,12 +1305,13 @@ const LABK={
   T:{fizz:['톡 쏘게',[64,100],[70,100]],soft:['부드러운 탄산으로',[45,70],[85,100]]},
   tip:{xlo:d=>'기포가 많이 빠졌어요. 더 차갑게, 덜 젓고, 낮게 부어 보세요.',xhi:d=>'탄산이 너무 세요. 조금 더 저어 기포를 빼 보세요.',ylo:d=>`${d.add}이 바닥에 몰려 있어요. 조금 더 저어 보세요.`},
   sci:'기체는 차가운 물에 더 많이 녹아 있어요. 젓거나 높이서 부으면 녹아 있던 이산화 탄소가 빠져나가요.'},
- indicator:{st:'색·빛',sl:d=>[['drop','레몬즙',0,20,1,2,'방울',['안 넣음','많이']],['w','물 양',100,300,10,200,'mL',['적게','많이']]],
-  model:p=>({x:7.2-4.4*(1-Math.exp(-p.drop/6)),y:7500/p.w}),
+ indicator:{st:'색·빛',sl:d=>[['drop','레몬즙',0,40,1,2,'방울',['안 넣음','많이']],['w','물 양',100,300,10,200,'mL',['적게','많이']]],
+  /* pH는 레몬즙이 얼마나 진한지(방울 수 ÷ 전체 부피)로 정해요. 스무디의 우유·과육이 산을 조금 받아 줘서(완충) 실제 레몬즙만큼 급하게 내려가지는 않아요 */
+  model:p=>{const H=Math.pow(10,-7.2)+5e-4*p.drop/p.w;return {x:-Math.log10(H),y:7500/p.w}},
   X:['산성도 (pH)','',2,8,1],Y:['색 진하기','%',20,80,10],
   T:{blue:['파란빛 그대로',[6.2,7.5],[35,60]],purple:['보랏빛으로',[4.4,5.8],[35,60]],pink:['분홍빛으로',[2.8,4.1],[35,60]]},
-  tip:{xhi:d=>'산성이 약해 색이 덜 바뀌었어요. 레몬즙을 더 넣어 보세요.',xlo:d=>'산성이 너무 강해 분홍빛까지 갔어요. 레몬즙을 줄여 보세요.',ylo:d=>'색이 너무 옅어요. 물을 줄여 보세요.',yhi:d=>'색이 너무 진해요. 물을 더 넣어 보세요.'},
-  sci:'꽃잎과 열매 속 색소(안토사이아닌)는 산성이 강해질수록 파랑 → 보라 → 분홍으로 바뀌어요. 천연 지시약이에요.'},
+  tip:{xhi:d=>'산성이 약해 색이 덜 바뀌었어요. 레몬즙을 더 넣거나, 물을 줄여 더 진하게 해 보세요.',xlo:d=>'산성이 너무 강해 분홍빛까지 갔어요. 레몬즙을 줄이거나, 물을 더 넣어 묽혀 보세요.',ylo:d=>'색이 너무 옅어요. 물을 줄여 보세요. 물을 줄이면 산도 진해져서 pH가 내려가요.',yhi:d=>'색이 너무 진해요. 물을 더 넣어 보세요. 물을 늘리면 산도 묽어져서 pH가 올라가요.'},
+  sci:'꽃잎과 열매 속 색소(안토사이아닌)는 산성이 강해질수록 파랑 → 보라 → 분홍으로 바뀌어요. 천연 지시약이에요. pH는 산의 양이 아니라 농도로 정해져요. 같은 레몬즙이라도 물을 많이 넣으면 묽어져서 pH가 올라가요(산성이 약해져요).'},
  scatter:{st:'색·빛',sl:d=>[['milk','우유 양',0,120,5,15,'mL',['안 넣음','많이']],['t','홍차 우리는 시간',1,6,0.5,3,'분',['짧게','길게']]],
   model:p=>({x:100*Math.exp(-p.milk/45),y:0.4+0.25*p.t}),
   X:['빛이 지나가는 정도','%',0,100,20],Y:['홍차 진하기','%',0.5,2.2,0.3],
