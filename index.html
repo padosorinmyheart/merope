@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261109225101">
+<meta name="merope-ver" content="20261109225951">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="a/icon/icon.svg">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1247,9 +1247,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261109225101"></script>
-<script src="quiz.js?v=20261109225101"></script>
-<script src="recipes.js?v=20261109225101"></script>
+<script src="data.js?v=20261109225951"></script>
+<script src="quiz.js?v=20261109225951"></script>
+<script src="recipes.js?v=20261109225951"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1650,6 +1650,21 @@ const SEAT_SOLES = {
 const CHAIR_FLOOR_DROP = [54.5, 59];
 const SOFA_PINS = [[612, 442], [674, 472], [733, 501], [794, 532]];
 const SOFA_FLOOR = { x: 600, y: 499, slope: .52, clearance: 3 };
+const BAR_STOOL_FIT = {
+  // 스툴 그림의 황동 고리 중심과 반지름. 이미지 너비와 높이에 대한 비율입니다.
+  rail: [.492, .650, .406, .093],
+  // 좁은 고리에는 밑창에서 실제로 닿는 앞쪽 또는 뒤꿈치 쪽 점을 씁니다.
+  soles: {
+    '31': [[.314, .989], [.189, .896]], '32': [[.235, .996], [.194, .932]],
+    '33': [[.312, .995], [.199, .929]], '34': [[.310, .995], [.195, .921]],
+    '35': [[.286, .995], [.190, .907]], '36': [[.341, .996], [.202, .936]],
+    '37': [[.257, .996], [.197, .925]], '38': [[.347, .996], [.207, .929]],
+    '39': [[.246, .996], [.185, .914]], '40': [[.286, .996], [.185, .918]],
+    '41': [[.240, .996], [.196, .918]], '42': [[.689, .996], [.770, .909]],
+    '32_r': [[.736, .988], [.843, .945]], '33_r': [[.758, .996], [.820, .914]],
+    '37_r': [[.757, .996], [.817, .929]], '38_r': [[.685, .998], [.800, .918]],
+  },
+};
 // 570×372 가구 그림에서 손님 앞에 와야 하는 테이블과 팔걸이만 골라 다시 그립니다.
 const TABLE_FRONT = [
   'M0 62 C10 91 36 104 65 114 C87 121 100 133 105 154 L106 214 L91 221 L0 223 Z M214 58 H382 V190 H332 V326 H228 V189 H214 Z',
@@ -1661,6 +1676,7 @@ function seatList() {
   const seats = [];
   for (const it of st.items) {
     const table = it.t === 'two_seat_table';
+    const bar = it.t === 'bar_stool';
     const pins = FSEAT[it.t];
     const type = T4(it.t);
     if (!pins || !type?.scr || it.par) continue;
@@ -1679,7 +1695,9 @@ function seatList() {
       const dep = depth + (table && index === 0 ? .004 : .02);
       const front = table ? { rect, at: type.at, index, flip: it.flip } : null;
       const floor = table ? { drop: CHAIR_FLOOR_DROP[index] * rect.h / type.box[1], slope: 0 } : null;
-      seats.push([x, y, fx < .4 ? 'r' : 'l', dep, back, front, floor]);
+      const stool = bar ? { rect, flip: it.flip } : null;
+      const face = bar ? (it.flip ? 'r' : 'l') : (fx < .4 ? 'r' : 'l');
+      seats.push([x, y, face, dep, back, front, floor, stool]);
     });
   }
   return seats.concat(SOFA_PINS.map(([x, y]) => {
@@ -1696,9 +1714,70 @@ function seatPose(n, face) {
   return { k, mir, ax: mir ? 1 - x : x, ay, soles };
 }
 
+function fitBarStool(o, ratio) {
+  const { rect: r, flip } = o.stool;
+  const [railU, railV, rx, ry] = BAR_STOOL_FIT.rail;
+  const centerU = flip ? 1 - railU : railU;
+  const targetU = o.ax < .5 ? .26 : .74;
+  const targetV = .26;
+  const solePins = BAR_STOOL_FIT.soles[o.k];
+  const soles = solePins ? solePins.map(([u, v]) => [o.mir ? 1 - u : u, v]) : o.soles;
+  const offsets = soles.map(([u, v]) => {
+    const dx = (u - o.ax) * ratio * r.h;
+    return [dx / r.w, v - o.ay - r.shear * dx / r.h];
+  });
+  const place = (u, v, scale, supports) => ({
+    x: r.x + u * r.w,
+    y: r.y + v * r.h + r.shear * (u - .5) * r.w,
+    height: scale * r.h,
+    supports,
+  });
+  let best = null;
+  let bestScore = Infinity;
+  if (offsets.length === 2) {
+    const [[u0, v0], [u1, v1]] = offsets;
+    // 두 밑창을 잇는 선분을 고리의 앞쪽 현으로 놓고 좌판 안에 오는 크기를 고릅니다.
+    for (let step = 0; step <= 34; step++) {
+      const scale = .96 + .016 * step;
+      const dx = (u1 - u0) * scale / rx;
+      const dy = (v1 - v0) * scale / ry;
+      const length = Math.hypot(dx, dy);
+      if (length <= 0 || length >= 2) continue;
+      const normal = Math.sign(-dx || 1) * Math.sqrt(1 - length * length / 4) / length;
+      const u = centerU + rx * (dy * normal - dx / 2) - u0 * scale;
+      const v = railV + ry * (-dx * normal - dy / 2) - v0 * scale;
+      if (Math.hypot((u - .5) / .47, (v - .168) / .154) > 1.02 || v < .19) continue;
+      const score = (u - targetU) ** 2 + 2 * (v - targetV) ** 2 + .08 * (scale - 1.24) ** 2;
+      if (score >= bestScore) continue;
+      bestScore = score;
+      best = place(u, v, scale, soles);
+    }
+  }
+  if (best) return best;
+  // 두 점을 맞추면 좌판을 벗어나는 자세는 한쪽 신발을 고리에 얹습니다.
+  const direction = Math.sign(targetU - .5);
+  for (const [du, dv] of [[0, 0], [.045, .01], [.085, .01], [.12, .004]]) {
+    const u = targetU + direction * du;
+    const v = targetV + dv;
+    const x0 = (u - centerU) / rx;
+    const y0 = (v - railV) / ry;
+    for (const [index, [dx, dy]] of offsets.entries()) {
+      const nx = dx / rx;
+      const ny = dy / ry;
+      const a = nx * nx + ny * ny;
+      const b = x0 * nx + y0 * ny;
+      const c = x0 * x0 + y0 * y0 - 1;
+      const scale = (-b + Math.sqrt(b * b - a * c)) / a;
+      if (scale >= .85 && scale <= 1.56) return place(u, v, scale, [soles[index]]);
+    }
+  }
+  return place(targetU, targetV, 1.18, []);
+}
+
 function sitBox(o, im) {
   const ratio = im.naturalWidth / im.naturalHeight || .58;
-  let height = o.h;
+  const stool = o.stool ? fitBarStool(o, ratio) : null;
+  let height = stool?.height ?? o.h;
   if (o.floor && o.soles.length) {
     const { drop, slope } = o.floor;
     const reaches = o.soles.map(([u, v]) => v - o.ay - slope * ratio * (u - o.ax));
@@ -1708,10 +1787,11 @@ function sitBox(o, im) {
     if (reach > .2) height = drop / reach;
   }
   const width = height * ratio;
-  const left = o.x - o.ax * width;
-  const top = o.y - o.ay * height;
+  const left = (stool?.x ?? o.x) - o.ax * width;
+  const top = (stool?.y ?? o.y) - o.ay * height;
   const hitHeight = o.back ? Math.max(o.back - top, height * .25) : height * .98;
-  const contacts = o.floor ? o.soles.map(([u, v]) => [left + u * width, top + v * height]) : [];
+  const supports = stool?.supports ?? (o.floor ? o.soles : []);
+  const contacts = supports.map(([u, v]) => [left + u * width, top + v * height]);
   return { width, height, left, top, hitHeight, contacts };
 }
 
@@ -1749,13 +1829,13 @@ function hallTokens() {
   HSIT.length = 0;
   return g.map(([n, td], i) => {
     const c = byNo(n);
-    const [x, y, face, dep, back, front, floor] = seats[i];
+    const [x, y, face, dep, back, front, floor, stool] = seats[i];
     if (!hasSit(n)) {
       return `<button class="htok ${td ? 'today' : ''}" data-no="${n}" style="left:${x / 10.24}%;top:${y / 10.24}%;animation-delay:${i * 80}ms" aria-label="${dn(c)}"><span class="hf" style="background-image:url(${sprite(n, td ? 'h' : 'n')})"></span><span class="hn">${dn(c)}</span></button>`;
     }
     const world = ungnd(x, y);
     const h = front ? 128 * front.rect.w / 228 : 128 * (.84 + (world.x + world.y) / 24 * .25);
-    const o = { ...seatPose(n, face), n, x, y, h, dep, back, front, floor, td };
+    const o = { ...seatPose(n, face), n, x, y, h, dep, back, front, floor, stool, td };
     const im = sitImg(o.k);
     const box = sitBox(o, im);
     HSIT.push(o);
@@ -2679,11 +2759,11 @@ function drawSeatFront(g, front) {
   g.restore();
 }
 
-function drawFootShadows(g, { contacts, height }) {
+function drawFootShadows(g, { contacts, height }, onRail) {
   for (const [x, y] of contacts) {
     g.save();
     g.translate(x, y + height * .004);
-    g.scale(height * .046, height * .014);
+    g.scale(height * (onRail ? .023 : .046), height * (onRail ? .008 : .014));
     const shadow = g.createRadialGradient(0, 0, 0, 0, 0, 1);
     shadow.addColorStop(0, 'rgba(34,23,31,.34)');
     shadow.addColorStop(.55, 'rgba(34,23,31,.22)');
@@ -2699,7 +2779,7 @@ function drawSit(g, o) {
   if (!im.complete || !im.naturalWidth) return;
   const box = sitBox(o, im);
   const { width, height, left, top } = box;
-  drawFootShadows(g, box);
+  drawFootShadows(g, box, Boolean(o.stool));
   g.save();
   if (o.back) {
     g.beginPath();
