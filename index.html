@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261110004514">
+<meta name="merope-ver" content="20261110005346">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -534,6 +534,19 @@ span.sc{cursor:default}
 .line.nar{font-style:italic;color:#6B6150;font-size:16px}
 .line.memo{font-family:var(--display);color:var(--navy);background:repeating-linear-gradient(transparent 0 1.7em,rgba(199,171,117,.35) 1.7em calc(1.7em + 1px));padding:2px 8px}
 .gcard .hid.moon{background:#233D62}
+.partv{position:absolute;inset:0;z-index:13;background:radial-gradient(120% 80% at 50% 30%,#22355A 0%,#0E1628 70%);display:flex;align-items:center;justify-content:center;padding:22px}
+.partv .pcd{width:min(360px,100%);color:#F3E8CF;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px 22px 22px;border-radius:20px;background:linear-gradient(180deg,rgba(30,48,80,.9),rgba(22,36,61,.95));box-shadow:0 0 0 1.5px #C7AB75,0 0 0 6px #16243D,0 0 0 7px rgba(199,171,117,.55),0 24px 50px rgba(0,0,0,.45)}
+.partv small{font-size:12px;letter-spacing:.32em;color:#C7AB75}
+.partv b{font-family:var(--display);font-size:25px;color:#F6E2AE;letter-spacing:.06em}
+.partv .pera{font-size:13px;color:#B9C3D6;letter-spacing:.12em}
+.partv p{margin:6px 0 2px;font-size:14.5px;line-height:1.7;word-break:keep-all;color:#EDE3CB}
+.partv .pth{font-size:13.5px;line-height:1.6;word-break:keep-all;padding:10px 12px;border-radius:12px;background:rgba(199,171,117,.1);border:1px solid rgba(199,171,117,.35);width:100%}
+.partv .pth em{display:block;font-style:normal;font-size:11.5px;letter-spacing:.12em;color:#C7AB75;margin-bottom:3px}
+.partv .pwho{font-size:12.5px;color:#9FB0CC}
+.partv .btn{margin-top:8px;min-width:150px}
+.ptabs{gap:1.6%!important}
+.ptabs button{padding:0 .95em!important;font-size:max(13px,1.55cqh)!important}
+.ptabs button.plock{opacity:.55}
 .spreveal{position:absolute;inset:0;z-index:12;background:rgba(15,24,42,.55);display:flex;align-items:center;justify-content:center;padding:18px}
 .spc{width:min(360px,100%);background:linear-gradient(180deg,#1E3050,#16243D);color:#F3E8CF;border-radius:20px;padding:20px 20px 18px;text-align:center;box-shadow:0 0 0 1.5px #C7AB75,0 0 0 6px #16243D,0 0 0 7px rgba(199,171,117,.6),0 24px 50px rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;gap:6px}
 .spc .eb{font-size:11.5px;letter-spacing:.16em;color:#C7AB75}
@@ -1147,7 +1160,7 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   <section class="cover stagev bkv" id="v-guests" hidden>
     <div class="stg bstage gstage">
       <h2 class="btitle">손님 도감</h2>
-      <div class="gtabs" role="tablist" aria-label="장 선택"><button role="tab" data-ch="1" id="gt1"><small>1장</small>카페 메로페</button><span class="gsep" aria-hidden="true">☾</span><button role="tab" data-ch="2" id="gt2"><small>2장</small>보름달의 기록</button></div>
+      <div class="gtabs ptabs" role="tablist" aria-label="부 선택"><button role="tab" data-ch="1" id="gt1">1부</button><button role="tab" data-ch="2" id="gt2">2부</button><button role="tab" data-ch="3" id="gt3">3부</button><button role="tab" data-ch="4" id="gt4">4부</button><button role="tab" data-ch="5" id="gt5">5부</button></div>
       <div class="bsub" id="guestSum"></div>
       <div class="blist"><div class="guests" id="guests"></div></div>
     </div>
@@ -1199,7 +1212,7 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   <section class="cover stagev bkv" id="v-menu" hidden>
     <div class="stg bstage mbstage">
       <h2 class="btitle">메뉴 도감</h2>
-      <div class="gtabs mbtabs" role="tablist" aria-label="장 선택"><button role="tab" data-mch="1" id="mt1"><small>1장</small>카페 메로페</button><span class="gsep" aria-hidden="true">☾</span><button role="tab" data-mch="2" id="mt2"><small>2장</small>보름달의 기록</button></div>
+      <div class="gtabs mbtabs" role="tablist" aria-label="장 선택"><button role="tab" data-mch="1" id="mt1">카페 메뉴</button><span class="gsep" aria-hidden="true">☾</span><button role="tab" data-mch="2" id="mt2">보름달 음료</button></div>
       <div class="bsub" id="menuSum"></div>
       <div class="blist"><div class="menus" id="menus"></div><div class="menus" id="spmenus"></div></div>
       <div class="mdet" id="mdet" hidden></div>
@@ -1214,6 +1227,11 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
     <fieldset><legend>보조 기능</legend>
       <label><input type="checkbox" id="optD"> 층 쌓기 작업대에서 밀도 바로 보여 주기</label>
       <label for="perDay" style="gap:10px">하루에 받을 손님 <select id="perDay"></select></label>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label for="partOpen" style="font-weight:600">부 바로 열기</label>
+        <select id="partOpen"></select>
+        <span style="font-size:12.5px;color:var(--muted)">특정 시대만 수업할 때 쓰세요. 고른 부까지의 손님과 보름달 손님이 모두 찾아와요.</span>
+      </div>
       <div style="display:flex;flex-direction:column;gap:6px">
         <label for="pick" style="font-weight:600">다음 손님 지정</label>
         <select id="pick"></select>
@@ -1251,9 +1269,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261110004514"></script>
-<script src="quiz.js?v=20261110004514"></script>
-<script src="recipes.js?v=20261110004514"></script>
+<script src="data.js?v=20261110005346"></script>
+<script src="quiz.js?v=20261110005346"></script>
+<script src="recipes.js?v=20261110005346"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1506,11 +1524,31 @@ const drinkImg=m=>m.special&&m.img?m.img.replace('_1.webp',`_${spVisit()}.webp`)
 
 
 const REG=C.filter(c=>!c.hidden&&!c.sci).map(c=>c.no),SCI=C.filter(c=>c.sci&&!c.companion);
-const SEQ=(()=>{const q=[];SCI.forEach((c,i)=>{q.push([c.no,0]);if(i>0)q.push([SCI[i-1].no,1])});q.push([SCI[SCI.length-1].no,1]);return q})();
+/* 부: 시대 순서. 일상 손님은 부가 열릴 때 함께 오고, 과학자는 그 부의 보름달 밤에 연도 순서대로 와요 */
+const PARTS=[
+ {n:1,t:'메로페라는 이름',era:'지금',reg:[1,2,3,6,9,4,7,22],hid:[28],sci:[]},
+ {n:2,t:'하늘이 움직이다',era:'1434 – 1690',reg:[13,24,12,10,11],hid:[25,26],sci:[34,35],th:'하늘이 땅을 돈다 · 모든 것은 네 가지 원소로 되어 있다',
+  open:'(기록장 맨 뒷장에 못 보던 글씨가 떠올라 있다.) “메로페. 일곱 자매별 가운데 가장 희미해서, 사라진 별이라 불리는 별. 이 카페의 이름은 첫 주인이 붙였다.” 그날 밤, 첫 보름달이 떴다. 이제 보름달이 뜨는 밤이면 문이 다른 시대로 열린다.'},
+ {n:3,t:'물질의 혁명',era:'1766 – 1811',reg:[19,8,15,17,18],hid:[],sci:[40,31],th:'불에 타면 플로지스톤이 빠져나간다',
+  open:'(문밖의 공기 냄새가 달라졌다. 유리 플라스크와 저울의 시대, 공기의 무게를 처음 재기 시작한 사람들이 온다.)'},
+ {n:4,t:'에너지와 생명',era:'1812 – 1869',reg:[23,20,5,14],hid:[29],sci:[33,36],th:'열은 눈에 보이지 않는 물질이다 · 생명은 저절로 생긴다',
+  open:'(촛불 대신 전깃불이 꿈꾸어지던 시대. 보이지 않는 힘과 생명의 규칙을 찾는 사람들이 문을 두드린다.)'},
+ {n:5,t:'보이지 않는 세계',era:'1897 – 1974',reg:[16,21],hid:[27,30],sci:[32,37,41,39,38],th:'원자는 더 쪼개지지 않는다 · 우주는 늘 그대로다',
+  open:'(원자 속과 우주 끝, 눈으로는 볼 수 없는 곳을 들여다본 사람들의 시대. 창밖 보름달 옆에 작은 별무리가 유난히 또렷하다.)'}];
+const PART_OF={};PARTS.forEach(p=>[...p.reg,...p.hid,...p.sci].forEach(n=>PART_OF[n]=p.n));
+const partOf=no=>{const c=byNo(no);return PART_OF[c&&c.companion||no]||1};
+const SEQ=PARTS.flatMap(p=>{const L=p.sci,q=[];L.forEach((no,i)=>{q.push([no,0]);if(i>0)q.push([L[i-1],1])});if(L.length)q.push([L[L.length-1],1]);return q});
+const SCI_ALL=PARTS.flatMap(p=>p.sci);
 const sciDone=no=>{const c=byNo(no);return (S.sciDone||[]).includes(c&&c.companion||no)};
 const dn=c=>c.sci&&!sciDone(c.no)?'???':c.name;
-function sciNext(){if((S.visits[30]||0)<2||S.today.length!==S.perDay-1||S.today.some(t=>byNo(t.no).sci))return null;
-  const n=SEQ.find(([no,k])=>(S.visits[no]||0)===k);return n?byNo(n[0]):null}
+function partDone(p){return p.n===1?p.reg.every(n=>S.met.includes(n)||!S.enabled[byNo(n).menu]):p.sci.every(n=>sciDone(n))}
+function curPart(){let k=1;while(k<PARTS.length&&partDone(PARTS[k-1]))k++;return Math.max(k,Math.min(PARTS.length,S.partOpen||1))}
+const allSciDone=()=>SCI_ALL.every(n=>sciDone(n));
+function sciNext(){const P=curPart();if(P<2||S.today.length!==S.perDay-1||S.today.some(t=>byNo(t.no).sci))return null;
+  const n=SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k);if(n)return byNo(n[0]);
+  /* 모든 이야기가 끝난 뒤에는 보름달 밤에 반가운 얼굴이 가끔 다시 들러요 */
+  if(allSciDone()&&(S.visits[30]||0)>=2&&Math.random()<.5){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]);if(L.length)return byNo(L[Math.floor(Math.random()*L.length)])}
+  return null}
 const pad=n=>String(n).padStart(2,'0');
 const sprite=(no,e)=>`a/c/${pad(no)}_${{n:'neutral',t:'thinking',h:'happy',d:'disappointed'}[e]}.webp`;
 const S5=s=>s>0?2*s-1:0;
@@ -1548,20 +1586,21 @@ document.addEventListener('click',e=>{if(!$('menu').hidden&&!e.target.closest('#
 /* ---------- 손님 고르기 ---------- */
 let cur=null,busy=false,forced=null,tastes=0;
 function hiddenReady(){
-  const order=[[30,()=>REG.every(n=>S.met.includes(n))],[25,()=>S.oneVar>=3],[26,()=>S.regServed>=8],[27,()=>S.kai],[28,()=>S.catTurns.length>=3],[29,()=>S.combos.length>=3]];
-  for(const [no,f] of order){if(!S.appeared.includes(no)&&f()&&S.enabled[byNo(no).menu])return no}
+  const P=curPart(),order=[[30,()=>P>=PARTS.length&&allSciDone()],[25,()=>S.oneVar>=3],[26,()=>S.regServed>=8],[27,()=>S.kai],[28,()=>S.catTurns.length>=3],[29,()=>S.combos.length>=3]];
+  for(const [no,f] of order){if(!S.appeared.includes(no)&&partOf(no)<=P&&f()&&S.enabled[byNo(no).menu])return no}
   return null;
 }
 function pickNext(){
   if(forced){const f=forced;forced=null;return byNo(f)}
   const h=hiddenReady();if(h)return byNo(h);
   const sn=sciNext();if(sn)return sn;
-  const pool=C.filter(c=>!c.sci&&S.enabled[c.menu]&&(!c.hidden||S.appeared.includes(c.no))&&(!c.after||S.met.includes(c.after))&&c!==cur
+  const P=curPart();
+  const pool=C.filter(c=>!c.sci&&S.enabled[c.menu]&&(c.hidden?S.appeared.includes(c.no):partOf(c.no)<=P)&&(!c.after||S.met.includes(c.after))&&c!==cur
     &&!((S.visits[c.no]||0)===1&&c.ep2After&&!S.met.includes(c.ep2After)&&S.enabled[byNo(c.ep2After).menu]));
   if(!pool.length)return null;
   {const fresh=pool.filter(c=>!S.today.some(t=>t.no===c.no));if(fresh.length){pool.length=0;pool.push(...fresh)}}
-  const unmet=pool.filter(c=>!S.met.includes(c.no));
-  const src=unmet.length&&Math.random()<.8?unmet:pool;
+  const unmet=pool.filter(c=>!S.met.includes(c.no)),fresh=unmet.filter(c=>partOf(c.no)===P);
+  const src=fresh.length&&Math.random()<.85?fresh:unmet.length&&Math.random()<.8?unmet:pool;
   return src[Math.floor(Math.random()*src.length)];
 }
 
@@ -1641,6 +1680,7 @@ const RCACHE={};
 const rsrc=h=>[...h.matchAll(/src="([^"]+)"/g)].map(m=>m[1]);
 function preRoom(html){return Promise.all(rsrc(html||roomHTML(roomState())).map(u=>{if(!RCACHE[u]){const im=new Image();im.src=u;RCACHE[u]=(im.decode?im.decode():new Promise((r,j)=>{im.onload=r;im.onerror=j})).catch(()=>{}).then(()=>{RCACHE[u].ok=1})}return RCACHE[u]}))}
 function goHall(){const ea=endReady();if(ea){$('hall').hidden=true;playEnding(ea,goHall);return}
+  {const P=curPart();if(P>(S.partSeen||1)){S.partSeen=P;save();$('hall').hidden=true;partCard(PARTS[P-1],goHall);return}}
   const st=roomState(),h=$('hall'),rh=roomHTML(st,2048),rb=$('hRoom');h.dataset.sc=st.scenery;rb.innerHTML=rh+hallTokens();
   const hv=$('hView');if(!rsrc(rh).every(u=>RCACHE[u]&&RCACHE[u].ok)){hv.style.transition='none';hv.style.opacity=0;Promise.race([preRoom(rh),new Promise(r=>setTimeout(r,2500))]).then(()=>{hv.style.transition='opacity .35s';hv.style.opacity=1})}else{hv.style.transition='none';hv.style.opacity=1}
   $('hRoom').querySelectorAll('.htok').forEach(b=>b.addEventListener('click',()=>{if(HV.moved>8)return;hallSay(b)}));
@@ -1932,7 +1972,7 @@ function e4ui(){const cv=e4cv(),st=cv&&cv._st;if(!st)return;const it=st.items.fi
     st.items.push(o);E4.sel=o.id;e4commit(st,before);e4draw();toast(`${jo(e4name(o.t),'을/를')} 꺼냈어요. 끌어서 자리를 잡아 주세요`)}))}
 function e4enter(){E4.on=true;E4.sel=null;E4.hist=[];E4.fut=[];$('hall').classList.add('edit');$('hEdit').hidden=false;goHall();requestAnimationFrame(()=>{e4draw();e4ui()})}
 function e4exit(){E4.on=false;E4.sel=null;$('hall').classList.remove('edit');$('hEdit').hidden=true;goHall()}
-$('hDeco').addEventListener('click',e4enter);window.__m4={rect4,gnd,ungnd,okFloor,spot4,foot4,blocked4,seatList,HSIT,sceneMode,sitBox,SITIMG,openLab,sheet,get SPM(){return D.SPM},setCur(c){cur=c},get S(){return S}};$('heDone').addEventListener('click',e4exit);
+$('hDeco').addEventListener('click',e4enter);window.__m4={rect4,gnd,ungnd,okFloor,spot4,foot4,blocked4,seatList,HSIT,sceneMode,sitBox,SITIMG,openLab,sheet,get SPM(){return D.SPM},setCur(c){cur=c},get S(){return S},curPart,pickNext,hiddenReady,PARTS,partOf};$('heDone').addEventListener('click',e4exit);
 $('heFlip').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it)return;const before=e4snap(st);it.flip=!it.flip;
   if(!it.par&&!it.wall&&!okFloor(st,it)){it.flip=!it.flip;toast('돌리면 다른 가구와 겹쳐요. 조금 옮긴 뒤 다시 해 보세요');return}e4commit(st,before);e4draw()});
 $('heStore').addEventListener('click',()=>{const cv=e4cv(),st=cv._st,it=st.items.find(i=>i.id===E4.sel);if(!it||it.t==='merlin')return;const before=e4snap(st),kids=st.items.filter(i=>i.par===it.id).length;
@@ -2113,7 +2153,7 @@ function reaction(st,pay,hints){
   say(t,{then:()=>{
     if(hints.length){const h=document.createElement('div');h.className='note';h.innerHTML='<b>바리스타 노트</b><br>'+hints.join('<br>');$('choices').appendChild(h)}
     next('▶',()=>{face('h');say(cur.alt?cur.alt.bye:EP().bye,{then:()=>{
-      if(cur.no===30&&cur.ep==='ep2')$('choices').innerHTML='<div class="note"><b>1장 · 플레이아데스에서 온 바리스타 · 끝</b><br>로페의 편지가 서른 해 만에 아빠에게 닿았어요. 이제 보름달이 뜨는 밤이면, 카페의 문이 다른 시대로 이어져요.<br><b>2장 · 보름달의 기록</b>이 시작돼요.</div>';
+      if(cur.no===30&&cur.ep==='ep2')$('choices').innerHTML='<div class="note"><b>카페 메로페 · 플레이아데스에서 온 바리스타 · 끝</b><br>로페의 편지가 서른 해 만에 아빠에게 닿았어요. 이제 손님들은 시대를 가리지 않고 찾아와요. 보름달 밤이면 반가운 얼굴이 다시 들르기도 해요.</div>';
       if(cur.sci)sciFinish();
       giftStep(afterVisit)}})});
   }});
@@ -2470,7 +2510,7 @@ function practiceDone(st,h){const el=document.createElement('div');el.className=
 /* ---------- 도감 ---------- */
 let sel=null;
 const ALBUM=[
- {id:'ch1',title:'다시 차오르는 달',who:30,spr:30,cost:40,big:1,ok:()=> (S.visits[30]||0)>=2,need:'1장을 끝까지 보면 열 수 있어요'},
+ {id:'ch1',title:'다시 차오르는 달',who:30,spr:30,cost:40,big:1,ok:()=> (S.visits[30]||0)>=2,need:'엘리아스의 이야기를 끝까지 들으면 열 수 있어요'},
  ...[['end1','창가의 수상한 고양이',[10,11,12,19]],['end3','전하지 못한 말',[6,21,16]],['end4','교복 주머니 속 비밀',[1,2,3,14]],['end2','금요일의 택배',[22,23,7]]].map(([id,title,g])=>({id,title,who:g[0],spr:g[0],cost:30,big:1,end:1,
    names:g.map(n=>byNo(n).name).join(' · ')+(id==='end1'?' · 멀린':''),ok:()=>g.every(n=>(S.visits[n]||0)>=2),need:`${g.length}명의 이야기를 모두 들으면 열 수 있어요`})),
  ...[25,26,27,28,29,30].map(n=>({id:'h'+n,title:{25:'손톱만큼의 차이',26:'서른 해 늦은 배달',27:'82쪽',28:'오후 세 시의 연구',29:'달이 다 찼다',30:'아빠, 내가 없어도'}[n],who:n,spr:n,cost:25,ok:()=> (S.visits[n]||0)>=2,need:'두 번째 이야기까지 들으면 열 수 있어요'})),
@@ -2487,6 +2527,11 @@ function renderAlbum(){const have=S.album||[],n=have.length;
     S.spent=(S.spent||0)+a.cost;S.album=[...(S.album||[]),a.id];stats();save();renderAlbum();showIllust(a,true)}));
   $('albums').querySelectorAll('.acard.open').forEach(b=>b.addEventListener('click',()=>showIllust(ALBUM.find(x=>x.id===b.dataset.id))));
 }
+/* 부가 열리는 장면: 시대 이름과 이번 부에 흔들릴 생각 */
+function partCard(p,done){const el=document.createElement('div');el.className='partv';el.setAttribute('role','dialog');el.setAttribute('aria-label',`${p.n}부 · ${p.t}`);
+  const who=p.sci.map(n=>byNo(n)).filter(Boolean).length;
+  el.innerHTML=`<div class="pcd pop"><small>${p.n}부</small><b>${p.t}</b><span class="pera">${p.era}</span>${p.open?`<p>${p.open}</p>`:''}${p.th?`<div class="pth"><em>이번 시대에 흔들리는 생각</em>${p.th}</div>`:''}<div class="pwho">보름달 손님 ${who}명 · 새 손님 ${p.reg.length}명</div><button class="btn go">문 열기</button></div>`;
+  $('shell').appendChild(el);el.querySelector('.btn').addEventListener('click',()=>{el.remove();done&&done()})}
 /* 결말: 한 무리의 이야기를 모두 들으면 홀로 돌아올 때 천천히 펼쳐져요 */
 const ENDS={
  end1:[[50,'비가 그친 저녁, 창가 자리에 네 사람이 모였다.'],[36,'레온은 이번 주 예보를 전부 맞혔다며, 오늘만큼은 하늘 대신 딸을 본다.'],[46,'헤이즐이 무지개 그림을 펼쳤다. “고양이한테 줄 거예요. 마법사니까요.”'],[62,'핀이 프리즘을 창에 대자 햇빛이 일곱 빛깔로 갈라져 창틀 위로 쏟아졌다. “사건 번호 1번, 해결!”'],[22,'알렉스는 지붕 위에서 본 금테 안경을 떠올리며 웃었다. 오늘은 출동이 한 건도 없다.'],[86,'멀린은 무지개를 한참 바라보다가 안경을 슬쩍 고쳐 썼다. 관측 기록을 남기는 사람처럼.'],[55,'창가의 수상한 고양이는, 오늘도 아무 말이 없었다.']],
@@ -2518,16 +2563,18 @@ function showIllust(a,fresh){const el=document.createElement('div');el.className
   if(el.querySelector('#iReplay'))el.querySelector('#iReplay').addEventListener('click',e=>{e.stopPropagation();el.remove();playEnding(a,null)});
   if((S.album||[]).includes(a.id)){bg.hidden=false;setL()}
   bg.addEventListener('click',e=>{e.stopPropagation();S.titleBg=S.titleBg===a.id?null:a.id;save();titleBg();setL();toast(S.titleBg?'첫 화면 배경을 바꿨어요':'첫 화면을 기본 배경으로 되돌렸어요')});const close=()=>el.remove();el.querySelector('.xbtn').addEventListener('click',close);el.addEventListener('click',e=>{if(e.target===el)close()});}
-let gch=1;
-document.querySelectorAll('.gtabs button').forEach(b=>b.addEventListener('click',()=>{gch=+b.dataset.ch;renderGuests();const l=document.querySelector('.gstage .blist');if(l)l.scrollTop=0}));
+let gch=0;
+document.querySelectorAll('.ptabs button').forEach(b=>b.addEventListener('click',()=>{gch=+b.dataset.ch;renderGuests();const l=document.querySelector('.gstage .blist');if(l)l.scrollTop=0}));
 function renderGuests(){
-  const met=S.met.filter(n=>!byNo(n).sci).length,hid=S.appeared.length,SC=C.filter(c=>c.sci),open2=(S.visits[30]||0)>=2;
-  const sd=SC.filter(c=>sciDone(c.no)).length,ms=SC.filter(c=>S.met.includes(c.no)).length;
-  $('gt1').setAttribute('aria-selected',gch===1);$('gt2').setAttribute('aria-selected',gch===2);document.querySelector('.gstage').classList.toggle('ch2',gch===2);
-  $('guestSum').textContent=gch===1?`만난 손님 ${met}/30 · 히든 ${hid}/6`:open2?`만난 손님 ${ms}/${SC.length} · 이름이 새겨진 손님 ${sd}/${SC.length}`:'1장을 마치면 보름달 밤의 손님들이 찾아와요';
-  $('guests').innerHTML=C.filter(c=>gch===1?!c.sci:c.sci).map(c=>{const ok=S.met.includes(c.no);
-    return `<button class="gcard ${ok?'':'locked'}" data-no="${c.no}" ${ok?'':'aria-disabled="true"'}><div class="pic"><img loading="lazy" src="${sprite(c.no,'n')}" alt=""><span class="no">${pad(c.no)}</span>${c.hidden?'<span class="hid">히든</span>':c.sci?'<span class="hid moon">보름달</span>':''}${ok?`<span class="vis">방문 ${S.visits[c.no]||1}번</span>`:''}</div>
-    <div class="meta"><span class="nm">${ok?dn(c):'???'}</span><span class="rl">${ok?c.role:c.hidden||c.sci?c.hint:'아직 만나지 못했어요'}</span></div></button>`}).join('');
+  const P=curPart();if(!gch)gch=P;const p=PARTS[gch-1],open=gch<=P;
+  PARTS.forEach(x=>{const b=$('gt'+x.n);b.setAttribute('aria-selected',gch===x.n);b.classList.toggle('plock',x.n>P)});
+  document.querySelector('.gstage').classList.toggle('ch2',gch>1);
+  const L=[...p.reg,...p.hid,...p.sci,...C.filter(c=>c.companion&&p.sci.includes(c.companion)).map(c=>c.no)].map(byNo).filter(Boolean);
+  const ms=L.filter(c=>S.met.includes(c.no)).length,sc=p.sci.length,sd=p.sci.filter(n=>sciDone(n)).length;
+  $('guestSum').textContent=`${p.t} · `+(open?`만난 손님 ${ms}/${L.length}`+(sc?` · 이름 새김 ${sd}/${sc}`:''):`${gch-1}부를 마치면 열려요`);
+  $('guests').innerHTML=L.map(c=>{const ok=S.met.includes(c.no);
+    return `<button class="gcard ${ok?'':'locked'}" data-no="${c.no}" ${ok?'':'aria-disabled="true"'}><div class="pic"><img loading="lazy" src="${sprite(c.no,'n')}" alt=""><span class="no">${pad(c.no)}</span>${c.hidden?'<span class="hid">히든</span>':c.sci||c.companion?'<span class="hid moon">보름달</span>':''}${ok?`<span class="vis">방문 ${S.visits[c.no]||1}번</span>`:''}</div>
+    <div class="meta"><span class="nm">${ok?dn(c):'???'}</span><span class="rl">${ok?c.role:!open?'아직 열리지 않은 시대예요':c.hidden||c.sci?c.hint:'아직 만나지 못했어요'}</span></div></button>`}).join('');
   $('guests').querySelectorAll('.gcard').forEach(b=>b.addEventListener('click',()=>{const n=+b.dataset.no;if(S.met.includes(n))openGview(n)}));
 }
 function storyLines(c,v){
@@ -2990,9 +3037,11 @@ function renderSettings(){
   $('menuSet').querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{S.enabled[i.dataset.k]=i.checked;save()}));
   $('optD').checked=S.showD;
   $('perDay').innerHTML=[3,4,5,6,7,8].map(n=>`<option value="${n}" ${S.perDay===n?'selected':''}>${n}명</option>`).join('');
+  {const P=curPart();$('partOpen').innerHTML=PARTS.map(p=>`<option value="${p.n}" ${p.n===P?'selected':''}>${p.n}부 · ${p.t}${p.n<P?' (지나옴)':p.n===P?' (지금)':''}</option>`).join('')}
   $('pick').innerHTML='<option value="">무작위 (기본)</option>'+C.filter(c=>!c.companion).map(c=>`<option value="${c.no}" ${forced===c.no?'selected':''}>${pad(c.no)} ${c.name} · ${MENUS[c.menu].name}${c.hidden?' · 히든':''}</option>`).join('');
 }
 $('optD').addEventListener('change',e=>{S.showD=e.target.checked;save()});
+$('partOpen').addEventListener('change',e=>{const v=+e.target.value;S.partOpen=Math.max(v,1);if(curPart()>v){S.partOpen=v;toast(`${curPart()}부까지 이미 지나왔어요. 지나온 부는 그대로 열려 있어요`)}save();renderSettings()});
 $('perDay').addEventListener('change',e=>{S.perDay=+e.target.value;stats()});
 $('pick').addEventListener('change',e=>{forced=e.target.value?+e.target.value:null;if(forced&&!S.enabled[byNo(forced).menu]){S.enabled[byNo(forced).menu]=true;save();renderSettings()}});
 function bindReset(){
