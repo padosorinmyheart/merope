@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261115223306">
+<meta name="merope-ver" content="20261115225423">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1234,6 +1234,7 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
       <label><input type="checkbox" id="optD"> 층 쌓기 작업대에서 밀도 바로 보여 주기</label>
       <label><input type="checkbox" id="optM"> 배경 음악</label>
       <label style="display:flex;align-items:center;gap:8px">음악 크기 <input type="range" id="optMV" min="0" max="100" step="5" style="flex:1"></label>
+      <label style="display:flex;align-items:center;gap:8px">곡 <select id="optMT" style="flex:1"><option value="all">세 곡 차례로</option><option value="arch">아치 아래에서</option><option value="warm">따뜻한 이야기</option><option value="adventure">이야기의 모험</option></select></label>
       <label for="perDay" style="gap:10px">하루에 받을 손님 <select id="perDay"></select></label>
       <div style="display:flex;flex-direction:column;gap:6px">
         <label for="partOpen" style="font-weight:600">부 바로 열기</label>
@@ -1278,9 +1279,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261115223306"></script>
-<script src="quiz.js?v=20261115223306"></script>
-<script src="recipes.js?v=20261115223306"></script>
+<script src="data.js?v=20261115225423"></script>
+<script src="quiz.js?v=20261115225423"></script>
+<script src="recipes.js?v=20261115225423"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -3044,14 +3045,19 @@ function renderSettings(){
   const groups=[['추출 작업대',Object.keys(D.EXTRACT)],['층 쌓기 작업대',Object.keys(D.LAYER)],['새 작업대 (녹이기·섞기·탄산·색·빛·거르기·굳히기) · 다시 온 손님이 주문해요',Object.keys(D.LAB)]];
   $('menuSet').innerHTML='<legend>오늘 운영할 메뉴</legend>'+groups.map(([g,ks])=>`<div style="font-size:13px;color:var(--muted);margin-top:4px">${g}</div>`+ks.map(k=>`<label><input type="checkbox" data-k="${k}" ${S.enabled[k]?'checked':''}> ${MENUS[k].name} <span style="color:var(--muted);font-size:12.5px">· ${MENUS[k].station==='lab'?LABK[MENUS[k].kind].st:`손님 ${C.filter(c=>c.menu===k).length}명`}</span></label>`).join('')).join('');
   $('menuSet').querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{S.enabled[i.dataset.k]=i.checked;save()}));
-  $('optD').checked=S.showD;$('optM').checked=S.bgm!==false;$('optMV').value=S.bgmVol??35;
+  $('optD').checked=S.showD;$('optM').checked=S.bgm!==false;$('optMV').value=S.bgmVol??35;$('optMT').value=S.bgmTrack||'all';
   $('perDay').innerHTML=[3,4,5,6,7,8].map(n=>`<option value="${n}" ${S.perDay===n?'selected':''}>${n}명</option>`).join('');
   {const P=curPart();$('partOpen').innerHTML=PARTS.map(p=>`<option value="${p.n}" ${p.n===P?'selected':''}>${p.n}부 · ${p.t}${p.n<P?' (지나옴)':p.n===P?' (지금)':''}</option>`).join('')}
   $('pick').innerHTML='<option value="">무작위 (기본)</option>'+C.filter(c=>!c.companion).map(c=>`<option value="${c.no}" ${forced===c.no?'selected':''}>${pad(c.no)} ${c.name} · ${MENUS[c.menu].name}${c.hidden?' · 히든':''}</option>`).join('');
 }
 $('optD').addEventListener('change',e=>{S.showD=e.target.checked;save()});
 /* 배경 음악: 처음 화면을 한 번 누른 뒤부터 흘러요(브라우저 자동 재생 규칙) */
-const BGM=new Audio('a/bgm/arch.mp3');BGM.loop=true;BGM.preload='none';let bgmArmed=false;
+const BGMS=[['arch','아치 아래에서'],['warm','따뜻한 이야기'],['adventure','이야기의 모험']];
+const BGM=new Audio();BGM.preload='none';let bgmArmed=false,bgmI=0;
+function bgmList(){const k=S.bgmTrack||'all';return k==='all'?BGMS.map(t=>t[0]):[k]}
+function bgmLoad(i){const L=bgmList();bgmI=((i%L.length)+L.length)%L.length;BGM.src=`a/bgm/${L[bgmI]}.mp3`;BGM.loop=L.length===1}
+BGM.addEventListener('ended',()=>{bgmLoad(bgmI+1);bgmSync()});
+bgmLoad(0);
 function bgmSync(){const on=S.bgm!==false;$('bgmBtn').classList.toggle('off',!on);$('bgmBtn').setAttribute('aria-pressed',on);
   BGM.volume=Math.max(0,Math.min(1,(S.bgmVol??35)/100));
   if(on&&bgmArmed&&!document.hidden)BGM.play().catch(()=>{});else BGM.pause()}
@@ -3060,6 +3066,7 @@ document.addEventListener('visibilitychange',bgmSync);
 $('bgmBtn').addEventListener('click',e=>{e.stopPropagation();S.bgm=S.bgm===false;save();bgmArmed=true;bgmSync()});
 $('optM').addEventListener('change',e=>{S.bgm=e.target.checked;save();bgmArmed=true;bgmSync()});
 $('optMV').addEventListener('input',e=>{S.bgmVol=+e.target.value;save();bgmSync()});
+$('optMT').addEventListener('change',e=>{S.bgmTrack=e.target.value;save();BGM.pause();bgmLoad(0);bgmArmed=true;bgmSync()});
 bgmSync();
 $('partOpen').addEventListener('change',e=>{const v=+e.target.value;S.partOpen=Math.max(v,1);if(curPart()>v){S.partOpen=v;toast(`${curPart()}부까지 이미 지나왔어요. 지나온 부는 그대로 열려 있어요`)}save();renderSettings()});
 $('perDay').addEventListener('change',e=>{S.perDay=+e.target.value;stats()});
