@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261115222108">
+<meta name="merope-ver" content="20261115223306">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -60,6 +60,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .ctr.off[data-m=merlin]{opacity:1}.ctr[data-m=merlin] .cclip,.ctr[data-m=merlin] .pmat{opacity:0}
 .world.nocounter[data-m=merlin] .served,.ctr[data-m=merlin] .served{opacity:1!important}
 .ctr[data-m=merlin] .served{left:57%;bottom:calc(100% + 26px);width:calc(var(--mw,30%)*0.4)}
+/* 엘리아스(달빛 문 앞): 카운터가 없으니 앞쪽에 음료만 띄워요 */
+.ctr.off[data-m=elias]{opacity:1}.ctr[data-m=elias] .cclip,.ctr[data-m=elias] .pmat{opacity:0}
+.world.nocounter[data-m=elias] .served,.ctr[data-m=elias] .served{opacity:1!important}
+.ctr[data-m=elias] .served{left:14%;bottom:calc(100% + 18px);width:calc(var(--mw,30%)*0.42);filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
 .world.noactor .actor{opacity:0}
 /* HUD */
 .hud{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:max(10px,env(safe-area-inset-top,0px)) var(--gxr) 0 var(--gx);pointer-events:none}
@@ -1274,9 +1278,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261115222108"></script>
-<script src="quiz.js?v=20261115222108"></script>
-<script src="recipes.js?v=20261115222108"></script>
+<script src="data.js?v=20261115223306"></script>
+<script src="quiz.js?v=20261115223306"></script>
+<script src="recipes.js?v=20261115223306"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
