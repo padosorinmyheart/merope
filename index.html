@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261115230234">
+<meta name="merope-ver" content="20261115230644">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1033,6 +1033,10 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
 .menu button{position:relative;border-radius:10px!important;font-family:var(--display)!important;font-weight:700!important;color:#233D62!important;padding:11px 14px 11px 30px!important}
 .menu button::before{content:"";position:absolute;left:11px;top:50%;width:9px;height:9px;transform:translateY(-50%);background:var(--u-stard) center/contain no-repeat}
 .menu button+button{box-shadow:0 -1px 0 rgba(201,163,101,.35)}
+.menu .mmus{display:flex;gap:5px;padding:6px 6px 8px;border-bottom:1px solid rgba(201,163,101,.35);margin-bottom:2px}
+.menu .mmus button{flex:1;min-width:0;justify-content:center;text-align:center;padding:7px 0!important;border-radius:999px!important;border:1px solid #D2A957!important;box-shadow:none!important;font-size:14px;background:rgba(255,252,244,.7)}
+.menu .mmus button::before{display:none}
+.menu .mmus button[aria-pressed=true]{background:#233D62!important;color:#FFF6DE!important;border-color:#233D62!important}
 .menu button:hover,.menu button:focus-visible{background:rgba(233,214,168,.35)!important}
 .menu button small{color:#A9813E!important}
 /* 장보기 지갑 */
@@ -1137,13 +1141,13 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
       <button class="menubtn" id="menuBtn" aria-label="메뉴 열기"></button></div>
   </div>
   <div class="menu" id="menu" hidden>
+    <div class="mmus" role="group" aria-label="배경 음악"><button data-mu="all" aria-label="세 곡 차례로" title="세 곡 차례로">♫</button><button data-mu="arch" aria-label="1번 곡" title="아치 아래에서">♪1</button><button data-mu="warm" aria-label="2번 곡" title="따뜻한 이야기">♪2</button><button data-mu="adventure" aria-label="3번 곡" title="이야기의 모험">♪3</button><button data-mu="off" aria-label="음악 끄기" title="끄기">✕</button></div>
     <button data-v="market">장보기 · 과학 퀴즈</button>
     <button data-v="shop">룬 상점</button>
     <button id="mJournal">오늘의 영업 일지</button>
     <button data-v="guests">손님 도감 <small id="nGuest"></small></button>
     <button data-v="menu">메뉴 도감</button>
     <button data-v="album">앨범 <small id="nAlbum"></small></button>
-    <button id="mMusic" aria-label="배경 음악 곡 바꾸기">배경 음악 <small id="nMusic"></small></button>
     <button data-v="settings">수업 설정</button>
     <button data-v="title">처음 화면</button>
   </div>
@@ -1280,9 +1284,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261115230234"></script>
-<script src="quiz.js?v=20261115230234"></script>
-<script src="recipes.js?v=20261115230234"></script>
+<script src="data.js?v=20261115230644"></script>
+<script src="quiz.js?v=20261115230644"></script>
+<script src="recipes.js?v=20261115230644"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -3059,7 +3063,7 @@ function bgmList(){const k=S.bgmTrack||'all';return k==='all'?BGMS.map(t=>t[0]):
 function bgmLoad(i){const L=bgmList();bgmI=((i%L.length)+L.length)%L.length;BGM.src=`a/bgm/${L[bgmI]}.mp3`;BGM.loop=L.length===1}
 BGM.addEventListener('ended',()=>{bgmLoad(bgmI+1);bgmSync()});
 bgmLoad(0);
-function bgmSync(){const on=S.bgm!==false;if($('nMusic')&&typeof musicLabel==='function')try{musicLabel()}catch(e){}$('bgmBtn').classList.toggle('off',!on);$('bgmBtn').setAttribute('aria-pressed',on);
+function bgmSync(){const on=S.bgm!==false;try{musicLabel()}catch(e){}$('bgmBtn').classList.toggle('off',!on);$('bgmBtn').setAttribute('aria-pressed',on);
   BGM.volume=Math.max(0,Math.min(1,(S.bgmVol??35)/100));
   if(on&&bgmArmed&&!document.hidden)BGM.play().catch(()=>{});else BGM.pause()}
 document.addEventListener('pointerdown',()=>{if(!bgmArmed){bgmArmed=true;bgmSync()}},true);
@@ -3068,13 +3072,12 @@ $('bgmBtn').addEventListener('click',e=>{e.stopPropagation();S.bgm=S.bgm===false
 $('optM').addEventListener('change',e=>{S.bgm=e.target.checked;save();bgmArmed=true;bgmSync()});
 $('optMV').addEventListener('input',e=>{S.bgmVol=+e.target.value;save();bgmSync()});
 $('optMT').addEventListener('change',e=>{S.bgmTrack=e.target.value;save();BGM.pause();bgmLoad(0);bgmArmed=true;bgmSync()});
-/* ≡ 메뉴에서 바로 곡 바꾸기: 세 곡 차례로 → 한 곡씩 → 끄기 */
-const MUSIC_CY=[['all','세 곡 차례로'],...BGMS,['off','끄기']];
+/* ≡ 메뉴 맨 위 음표 버튼으로 바로 곡 바꾸기 */
 function musicNow(){return S.bgm===false?'off':(S.bgmTrack||'all')}
-function musicLabel(){const k=musicNow();$('nMusic').textContent=(MUSIC_CY.find(x=>x[0]===k)||MUSIC_CY[0])[1]}
-$('mMusic').addEventListener('click',e=>{e.stopPropagation();const i=MUSIC_CY.findIndex(x=>x[0]===musicNow()),k=MUSIC_CY[(i+1)%MUSIC_CY.length][0];
-  if(k==='off')S.bgm=false;else{S.bgm=true;S.bgmTrack=k;BGM.pause();bgmLoad(0)}
-  save();bgmArmed=true;bgmSync();musicLabel();if($('optMT'))$('optMT').value=S.bgmTrack||'all';if($('optM'))$('optM').checked=S.bgm!==false});
+function musicLabel(){const k=musicNow();document.querySelectorAll('.mmus button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mu===k))}
+document.querySelectorAll('.mmus button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const k=b.dataset.mu;
+  if(k==='off')S.bgm=false;else{const ch=S.bgm===false||(S.bgmTrack||'all')!==k;S.bgm=true;if(ch){S.bgmTrack=k;BGM.pause();bgmLoad(0)}}
+  save();bgmArmed=true;bgmSync();musicLabel();if($('optMT'))$('optMT').value=S.bgmTrack||'all';if($('optM'))$('optM').checked=S.bgm!==false}));
 musicLabel();
 bgmSync();
 $('partOpen').addEventListener('change',e=>{const v=+e.target.value;S.partOpen=Math.max(v,1);if(curPart()>v){S.partOpen=v;toast(`${curPart()}부까지 이미 지나왔어요. 지나온 부는 그대로 열려 있어요`)}save();renderSettings()});
