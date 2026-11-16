@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116090137">
+<meta name="merope-ver" content="20261116090847">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1300,9 +1300,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261116090137"></script>
-<script src="quiz.js?v=20261116090137"></script>
-<script src="recipes.js?v=20261116090137"></script>
+<script src="data.js?v=20261116090847"></script>
+<script src="quiz.js?v=20261116090847"></script>
+<script src="recipes.js?v=20261116090847"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -3169,12 +3169,15 @@ function bgmSync(){const on=S.bgm!==false;try{musicLabel()}catch(e){}$('bgmBtn')
   BGM.volume=Math.max(0,Math.min(1,(S.bgmVol??35)/100));
   if(on&&bgmArmed&&!document.hidden)BGM.play().catch(()=>{});else BGM.pause()}
 /* 첫 화면에서 바로: 먼저 그냥 틀어 보고, 브라우저가 막으면 첫 터치·키 입력에 바로 시작 */
-const bgmArm=()=>{if(!bgmArmed){bgmArmed=true;bgmSync()}};
+let bgmArmAt=0;const bgmArm=()=>{if(!bgmArmed){bgmArmed=true;bgmArmAt=Date.now();bgmSync()}};
 ['pointerdown','touchstart','keydown','click'].forEach(t=>document.addEventListener(t,bgmArm,{capture:true,passive:true}));
 BGM.addEventListener('playing',()=>{bgmArmed=true;$('bgmBtn').classList.remove('wait')});
 if(S.bgm!==false&&!document.hidden)BGM.play().then(()=>{bgmArmed=true}).catch(()=>{$('bgmBtn').classList.add('wait')});
 document.addEventListener('visibilitychange',bgmSync);
-$('bgmBtn').addEventListener('click',e=>{e.stopPropagation();S.bgm=S.bgm===false;save();bgmArmed=true;bgmSync()});
+$('bgmBtn').addEventListener('click',e=>{e.stopPropagation();
+  /* 막혀 있던 음악을 이 터치로 막 켠 거라면 끄지 않고 그대로 켜 둬요 */
+  if(Date.now()-bgmArmAt<1000&&S.bgm!==false){bgmArmAt=0;bgmSync();return}
+  S.bgm=S.bgm===false;save();bgmArmed=true;bgmSync()});
 $('optM').addEventListener('change',e=>{S.bgm=e.target.checked;save();bgmArmed=true;bgmSync()});
 $('optMV').addEventListener('input',e=>{S.bgmVol=+e.target.value;save();bgmSync()});
 $('optMT').addEventListener('change',e=>{S.bgmTrack=e.target.value;save();BGM.pause();bgmLoad(0);bgmArmed=true;bgmSync()});
