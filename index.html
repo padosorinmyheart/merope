@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116094710">
+<meta name="merope-ver" content="20261116115418">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -12,6 +12,8 @@
 <meta charset="utf-8">
 <title>카페 메로페</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="author" content="파도소리(Padosori)">
+<meta name="copyright" content="© 2026 파도소리(Padosori). All rights reserved.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=Gaegu:wght@400;700&family=IBM+Plex+Mono:wght@500;600&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap">
 <style>
@@ -1047,6 +1049,7 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
 .menu .msub button::before{display:none!important}
 #bgmBtn.wait{animation:bgmPulse 1.6s ease-in-out infinite}@keyframes bgmPulse{0%,100%{box-shadow:0 0 0 0 rgba(242,213,138,.0)}50%{box-shadow:0 0 0 7px rgba(242,213,138,.45)}}
 @media (prefers-reduced-motion:reduce){#bgmBtn.wait{animation:none}}
+.tcopy{margin:8px 0 -4px;text-align:center;font-size:10px;letter-spacing:.02em;color:rgba(255,246,222,.55)}
 .menu .mmus{display:flex;gap:5px;padding:6px 6px 8px;border-bottom:1px solid rgba(201,163,101,.35);margin-bottom:2px}
 .menu .mmus button{flex:1;min-width:0;justify-content:center;text-align:center;padding:7px 0!important;border-radius:999px!important;border:1px solid #D2A957!important;box-shadow:none!important;font-size:14px;background:rgba(255,252,244,.7)}
 .menu .mmus button::before{display:none}
@@ -1272,7 +1275,7 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
       <p style="margin:0;font-size:14px;color:var(--muted)">매출, 도감, 히든 조건은 이 기기의 브라우저에만 저장돼요. 다른 기기나 선생님에게 자동으로 전달되지 않아요.</p>
       <div id="resetBox"></div>
     </fieldset>
-    <p class="foot">카페 메로페 · 수치는 수업용으로 단순화한 모델이에요</p>
+    <p class="foot">카페 메로페 · 수치는 수업용으로 단순화한 모델이에요<br>© 2026 파도소리(Padosori). All rights reserved. 그림, 이야기, 음악, 코드의 무단 복제·배포·상업적 이용을 금지해요.</p>
   </section>
 
   <!-- 시작 화면 -->
@@ -1295,14 +1298,15 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
           <button data-v="shop"><span class="med"><i class="aic" style="background-size:800% 800%;background-position:28.57142857142857% 85.71428571428571%"></i></span>룬 상점</button>
           <button data-v="market"><span class="med"><img src="a/u/ic_coin.webp" alt=""></span>장보기</button>
         </div>
+        <p class="tcopy">© 2026 파도소리(Padosori). All rights reserved.</p>
       </div>
     </div>
   </section>
 </main>
 
-<script src="data.js?v=20261116094710"></script>
-<script src="quiz.js?v=20261116094710"></script>
-<script src="recipes.js?v=20261116094710"></script>
+<script src="data.js?v=20261116115418"></script>
+<script src="quiz.js?v=20261116115418"></script>
+<script src="recipes.js?v=20261116115418"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -2482,13 +2486,11 @@ function openLayer(m){
     <div id="warn"></div>
     <div class="panel shelf"><h3>재료 선반 <small>병마다 잰 부피와 질량이 달라요</small></h3>
       <div class="bottles" id="bottles"></div>
-      <label class="toggle"><input type="checkbox" id="showD" ${S.showD?'checked':''}> 밀도 보기 (선생님 확인용)</label>
     </div>
   </div>
   <div class="prepov" id="prepov" hidden><div id="prep"></div></div>
   <div class="sticky-act"><button class="btn go big" id="pour" disabled>컵에 붓기</button><button class="btn brass big" id="serveL" disabled>손님께 드리기</button></div>`);
   renderBottles(m);renderSeq(m);drawLayer(m);
-  $('showD').addEventListener('change',e=>{S.showD=e.target.checked;save();renderBottles(m);if(layers)noteLayer(m)});
   $('bottles').addEventListener('click',e=>{const rm=e.target.closest('.remake');if(rm){openPrep(m,rm.dataset.id);return}const b=e.target.closest('.bottle');if(!b)return;const sh=m.shelf.find(x=>x.id===b.dataset.id);
     if(sh.prep&&!made[sh.id]){openPrep(m,sh.id);return}
     if(seq.length>=m.max)return;seq.push(b.dataset.id);
