@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116090847">
+<meta name="merope-ver" content="20261116091456">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1300,9 +1300,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261116090847"></script>
-<script src="quiz.js?v=20261116090847"></script>
-<script src="recipes.js?v=20261116090847"></script>
+<script src="data.js?v=20261116091456"></script>
+<script src="quiz.js?v=20261116091456"></script>
+<script src="recipes.js?v=20261116091456"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1575,10 +1575,13 @@ const dn=c=>c.sci&&!sciDone(c.no)?'???':c.name;
 function partDone(p){return p.n===1?p.reg.every(n=>S.met.includes(n)||!S.enabled[byNo(n).menu]):p.sci.every(n=>sciDone(n))}
 function curPart(){let k=1;while(k<PARTS.length&&partDone(PARTS[k-1]))k++;return Math.max(k,Math.min(PARTS.length,S.partOpen||1))}
 const allSciDone=()=>SCI_ALL.every(n=>sciDone(n));
-function sciNext(){const P=curPart();if(P<2||S.today.length!==S.perDay-1||S.today.some(t=>byNo(t.no).sci))return null;
-  const n=SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k);if(n)return byNo(n[0]);
-  /* 모든 이야기가 끝난 뒤에는 보름달 밤에 반가운 얼굴이 가끔 다시 들러요 */
-  if(allSciDone()&&(S.visits[30]||0)>=2&&Math.random()<.75){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]),R=S.sciRecent||[],F=L.filter(n=>!R.includes(n)),P2=F.length?F:L;if(P2.length)return byNo(P2[Math.floor(Math.random()*P2.length)])}
+function sciNext(){const P=curPart(),n0=S.today.length,last=n0===S.perDay-1,late=n0===S.perDay-2;
+  /* 밤의 마지막 두 자리(해질녘 끝 · 밤)에 하루 두 명까지 */
+  if(P<2||!(last||late)||S.today.filter(t=>byNo(t.no)&&byNo(t.no).sci).length>=2)return null;
+  const seen=no=>S.today.some(t=>t.no===no);
+  const n=SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k&&!seen(no));if(n)return byNo(n[0]);
+  /* 모든 이야기가 끝난 뒤에는 반가운 얼굴이 자주 다시 들러요 */
+  if(allSciDone()&&(S.visits[30]||0)>=2&&Math.random()<(last?.85:.45)){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]&&!seen(n)),R=S.sciRecent||[],F=L.filter(n=>!R.includes(n)),P2=F.length?F:L;if(P2.length)return byNo(P2[Math.floor(Math.random()*P2.length)])}
   return null}
 /* 보름달 손님 다시 오기: 올 때마다 다른 이야기(차례로 돌아가며) */
 const SCI_AGAIN={
