@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116093109">
+<meta name="merope-ver" content="20261116094412">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1300,9 +1300,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261116093109"></script>
-<script src="quiz.js?v=20261116093109"></script>
-<script src="recipes.js?v=20261116093109"></script>
+<script src="data.js?v=20261116094412"></script>
+<script src="quiz.js?v=20261116094412"></script>
+<script src="recipes.js?v=20261116094412"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -2643,7 +2643,7 @@ const ALBUM=[
  ...[['end1','창가의 수상한 고양이',[10,11,12,19]],['end3','전하지 못한 말',[6,21,16]],['end4','교복 주머니 속 비밀',[1,2,3,14]],['end2','금요일의 택배',[22,23,7]]].map(([id,title,g])=>({id,title,who:g[0],spr:g[0],cost:30,big:1,end:1,
    names:g.map(n=>byNo(n).name).join(' · ')+(id==='end1'?' · 멀린':''),ok:()=>g.every(n=>(S.visits[n]||0)>=2),need:`${g.length}명의 이야기를 모두 들으면 열 수 있어요`})),
  ...[25,26,27,28,29,30].map(n=>({id:'h'+n,title:{25:'손톱만큼의 차이',26:'서른 해 늦은 배달',27:'82쪽',28:'오후 세 시의 연구',29:'달이 다 찼다',30:'아빠, 내가 없어도'}[n],who:n,spr:n,cost:25,ok:()=> (S.visits[n]||0)>=2,need:'두 번째 이야기까지 들으면 열 수 있어요'})),
- ...C.filter(c=>c.sci&&!c.companion).map(c=>({id:'s'+c.sci,title:{31:'두 사람의 정원',32:'요정의 불빛',33:'촛불의 과학',34:'스스로 울리는 종',35:'언덕 위의 혜성',36:'비워 둔 칸',37:'숨 쉬는 별',38:'마르지 않는 샘',39:'선반 위의 갈색 병',40:'정원의 새',41:'눈 덮인 숲의 계산'}[c.no],who:c.no,spr:c.no,cost:25,ok:()=>sciDone(c.no),need:'이야기가 끝나면 열 수 있어요'}))];
+ ...C.filter(c=>c.sci&&!c.companion).map(c=>({id:'s'+c.sci,title:{31:'두 사람의 정원',32:'요정의 불빛',33:'촛불의 과학',34:'스스로 울리는 종',35:'언덕 위의 혜성',36:'비워 둔 칸',37:'숨 쉬는 별',38:'마르지 않는 샘',39:'선반 위의 갈색 병',40:'정원의 새',41:'눈 덮인 숲의 계산'}[c.no],who:c.no,spr:c.no,cost:25,ok:()=>sciDone(c.no),need:'이야기가 끝나면 열 수 있어요'})).flatMap(a=>a.who===31?[a,{id:'s01m',title:'붓으로 남긴 실험',who:42,spr:42,cost:25,ok:()=>sciDone(31),need:'라부아지에 부부의 이야기가 끝나면 열 수 있어요'}]:[a])];
 const bank=()=>Math.max(0,S.stars-(S.spent||0));
 function renderAlbum(){const have=S.album||[],n=have.length;
   $('albumSum').innerHTML=`모은 별 <b>★ ${bank()}</b> · 열린 일러스트 ${n}/${ALBUM.length}`;
