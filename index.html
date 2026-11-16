@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116085730">
+<meta name="merope-ver" content="20261116090137">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1045,6 +1045,8 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
 .menu .msub{display:flex;gap:4px;padding:6px 4px 2px;margin-top:2px;border-top:1px solid rgba(201,163,101,.45)}
 .menu .msub button{flex:1;min-width:0;justify-content:center!important;text-align:center;padding:6px 2px!important;font-size:12px!important;box-shadow:none!important;color:#6B5A3A!important;white-space:nowrap}
 .menu .msub button::before{display:none!important}
+#bgmBtn.wait{animation:bgmPulse 1.6s ease-in-out infinite}@keyframes bgmPulse{0%,100%{box-shadow:0 0 0 0 rgba(242,213,138,.0)}50%{box-shadow:0 0 0 7px rgba(242,213,138,.45)}}
+@media (prefers-reduced-motion:reduce){#bgmBtn.wait{animation:none}}
 .menu .mmus{display:flex;gap:5px;padding:6px 6px 8px;border-bottom:1px solid rgba(201,163,101,.35);margin-bottom:2px}
 .menu .mmus button{flex:1;min-width:0;justify-content:center;text-align:center;padding:7px 0!important;border-radius:999px!important;border:1px solid #D2A957!important;box-shadow:none!important;font-size:14px;background:rgba(255,252,244,.7)}
 .menu .mmus button::before{display:none}
@@ -1298,9 +1300,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261116085730"></script>
-<script src="quiz.js?v=20261116085730"></script>
-<script src="recipes.js?v=20261116085730"></script>
+<script src="data.js?v=20261116090137"></script>
+<script src="quiz.js?v=20261116090137"></script>
+<script src="recipes.js?v=20261116090137"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -3158,7 +3160,7 @@ function renderSettings(){
 $('optD').addEventListener('change',e=>{S.showD=e.target.checked;save()});
 /* 배경 음악: 처음 화면을 한 번 누른 뒤부터 흘러요(브라우저 자동 재생 규칙) */
 const BGMS=[['arch','아치 아래에서'],['warm','따뜻한 이야기'],['adventure','이야기의 모험']];
-const BGM=new Audio();BGM.preload='none';let bgmArmed=false,bgmI=0;
+const BGM=new Audio();BGM.preload='auto';let bgmArmed=false,bgmI=0;
 function bgmList(){const k=S.bgmTrack||'all';return k==='all'?BGMS.map(t=>t[0]):[k]}
 function bgmLoad(i){const L=bgmList();bgmI=((i%L.length)+L.length)%L.length;BGM.src=`a/bgm/${L[bgmI]}.mp3`;BGM.loop=L.length===1}
 BGM.addEventListener('ended',()=>{bgmLoad(bgmI+1);bgmSync()});
@@ -3166,7 +3168,11 @@ bgmLoad(0);
 function bgmSync(){const on=S.bgm!==false;try{musicLabel()}catch(e){}$('bgmBtn').classList.toggle('off',!on);$('bgmBtn').setAttribute('aria-pressed',on);
   BGM.volume=Math.max(0,Math.min(1,(S.bgmVol??35)/100));
   if(on&&bgmArmed&&!document.hidden)BGM.play().catch(()=>{});else BGM.pause()}
-document.addEventListener('pointerdown',()=>{if(!bgmArmed){bgmArmed=true;bgmSync()}},true);
+/* 첫 화면에서 바로: 먼저 그냥 틀어 보고, 브라우저가 막으면 첫 터치·키 입력에 바로 시작 */
+const bgmArm=()=>{if(!bgmArmed){bgmArmed=true;bgmSync()}};
+['pointerdown','touchstart','keydown','click'].forEach(t=>document.addEventListener(t,bgmArm,{capture:true,passive:true}));
+BGM.addEventListener('playing',()=>{bgmArmed=true;$('bgmBtn').classList.remove('wait')});
+if(S.bgm!==false&&!document.hidden)BGM.play().then(()=>{bgmArmed=true}).catch(()=>{$('bgmBtn').classList.add('wait')});
 document.addEventListener('visibilitychange',bgmSync);
 $('bgmBtn').addEventListener('click',e=>{e.stopPropagation();S.bgm=S.bgm===false;save();bgmArmed=true;bgmSync()});
 $('optM').addEventListener('change',e=>{S.bgm=e.target.checked;save();bgmArmed=true;bgmSync()});
