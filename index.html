@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116091456">
+<meta name="merope-ver" content="20261116091646">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1300,9 +1300,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261116091456"></script>
-<script src="quiz.js?v=20261116091456"></script>
-<script src="recipes.js?v=20261116091456"></script>
+<script src="data.js?v=20261116091646"></script>
+<script src="quiz.js?v=20261116091646"></script>
+<script src="recipes.js?v=20261116091646"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1581,7 +1581,7 @@ function sciNext(){const P=curPart(),n0=S.today.length,last=n0===S.perDay-1,late
   const seen=no=>S.today.some(t=>t.no===no);
   const n=SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k&&!seen(no));if(n)return byNo(n[0]);
   /* 모든 이야기가 끝난 뒤에는 반가운 얼굴이 자주 다시 들러요 */
-  if(allSciDone()&&(S.visits[30]||0)>=2&&Math.random()<(last?.85:.45)){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]&&!seen(n)),R=S.sciRecent||[],F=L.filter(n=>!R.includes(n)),P2=F.length?F:L;if(P2.length)return byNo(P2[Math.floor(Math.random()*P2.length)])}
+  if(allSciDone()&&(S.visits[30]||0)>=2&&Math.random()<(last?.85:.45)){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]!==false&&!seen(n)),R=S.sciRecent||[],F=L.filter(n=>!R.includes(n)),P2=F.length?F:L;if(P2.length)return byNo(P2[Math.floor(Math.random()*P2.length)])}
   return null}
 /* 보름달 손님 다시 오기: 올 때마다 다른 이야기(차례로 돌아가며) */
 const SCI_AGAIN={
@@ -1676,6 +1676,8 @@ function jo(w,pair){const [a,b]=pair.split('/'),f=batchim(w);if(f===null)return 
 const DEF={owned:[],placed:{},given:[],s5:1,spent:0,album:[],sciDone:[],special:{},pick2:{},coins:50,stock:Object.fromEntries(D.INGS.map(i=>[i.id,10])),quizDay:0,quizCount:0,quizSeen:[],deliveryDay:0,served:0,stars:0,met:[],menuServed:{},appeared:[],oneVar:0,catTurns:[],combos:[],regServed:0,kai:false,turn:0,day:1,today:[],dayOne:0,perDay:5,visits:{},pick:{},
   enabled:Object.fromEntries(Object.keys(MENUS).map(k=>[k,true])),showD:false};
 let S,SAVED={};try{SAVED=JSON.parse(localStorage.getItem('cafestry2')||'{}')||{};S={...structuredClone(DEF),...SAVED}}catch(e){S=structuredClone(DEF)}
+/* 예전 저장본에는 나중에 생긴 메뉴(보름달 음료 등)가 빠져 있어요. 없는 메뉴는 켜진 것으로 채워요 */
+S.enabled=S.enabled||{};Object.keys(MENUS).forEach(k=>{if(S.enabled[k]===undefined)S.enabled[k]=true});
 S.enabled={...DEF.enabled,...S.enabled};if(SAVED.coins!=null&&SAVED.unit!=='rune'){S.coins=Math.round((S.coins||0)/100);(S.today||[]).forEach(x=>x.pay=Math.round(x.pay/100))}S.unit='rune';S.stock={...DEF.stock,...(S.stock||{})};
 if(SAVED.served&&!SAVED.s5)S.stars=Math.max(0,2*S.stars-S.served);
 const save=()=>{try{localStorage.setItem('cafestry2',JSON.stringify(S))}catch(e){}};
