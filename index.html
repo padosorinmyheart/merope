@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116092306">
+<meta name="merope-ver" content="20261116093109">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1300,9 +1300,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261116092306"></script>
-<script src="quiz.js?v=20261116092306"></script>
-<script src="recipes.js?v=20261116092306"></script>
+<script src="data.js?v=20261116093109"></script>
+<script src="quiz.js?v=20261116093109"></script>
+<script src="recipes.js?v=20261116093109"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1570,6 +1570,8 @@ const PART_OF={};PARTS.forEach(p=>[...p.reg,...p.hid,...p.sci].forEach(n=>PART_O
 const partOf=no=>{const c=byNo(no);return PART_OF[c&&c.companion||no]||1};
 const SEQ=PARTS.flatMap(p=>{const L=p.sci,q=[];L.forEach((no,i)=>{q.push([no,0]);if(i>0)q.push([L[i-1],1])});if(L.length)q.push([L[L.length-1],1]);return q});
 const SCI_ALL=PARTS.flatMap(p=>p.sci);
+/* 과학자 이야기 진행도: 실제로 끝까지 본 방문 수(재료 부족·중간에 나가기로 끊긴 방문은 세지 않아요) */
+const sciProg=no=>{const c=byNo(no);return Math.min(2,((S.special||{})[c&&c.sci])||0)};
 const sciDone=no=>{const c=byNo(no);return (S.sciDone||[]).includes(c&&c.companion||no)};
 const dn=c=>c.sci&&!sciDone(c.no)?'???':c.name;
 function partDone(p){return p.n===1?p.reg.every(n=>S.met.includes(n)||!S.enabled[byNo(n).menu]):p.sci.every(n=>sciDone(n))}
@@ -1582,7 +1584,7 @@ function sciNext(){const P=curPart(),n0=S.today.length,per=S.perDay;if(P<2||n0<1
   if(prevSci&&!(n0===per-1&&sciCnt<want-0))return null;
   if(sciCnt>=want)return null;
   const yd=S.yday||[],seen=no=>S.today.some(t=>t.no===no);
-  const n=SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k&&!seen(no)&&!yd.includes(no))||SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k&&!seen(no));
+  const n=SEQ.find(([no,k])=>partOf(no)<=P&&sciProg(no)===k&&!sciDone(no)&&!seen(no)&&!yd.includes(no))||SEQ.find(([no,k])=>partOf(no)<=P&&sciProg(no)===k&&!sciDone(no)&&!seen(no));
   if(n)return byNo(n[0]);
   /* 모든 이야기가 끝난 뒤에는 반가운 얼굴이 다시 들러요(어제·오늘 온 사람, 최근 온 사람은 되도록 빼고) */
   if(allSciDone()){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]!==false&&!seen(n)),R=S.sciRecent||[],F=L.filter(n=>!R.includes(n)&&!yd.includes(n)),F2=L.filter(n=>!yd.includes(n)),P2=F.length?F:F2.length?F2:L;if(P2.length)return byNo(P2[Math.floor(Math.random()*P2.length)])}
@@ -2229,9 +2231,9 @@ function startCustomer(){
   const firstHidden=c.hidden&&!S.appeared.includes(c.no);
   const isNew=!S.met.includes(c.no);
   setTimeout(()=>{
-    cur=c;cur.isNew=isNew;tastes=0;S.turn++;cur.revealed=c.sci?sciDone(c.no):!((S.visits[c.no]||0)===0&&c.ep1.anon);cur.spr=((S.visits[c.no]||0)===1&&c.ep2.sprite)||c.no;
+    cur=c;cur.isNew=isNew;tastes=0;S.turn++;cur.revealed=c.sci?sciDone(c.no):!((S.visits[c.no]||0)===0&&c.ep1.anon);cur.spr=(((c.sci?sciProg(c.no):(S.visits[c.no]||0)))===1&&c.ep2.sprite)||c.no;
     sceneMode(c.sci?'fullmoon':c.no===28?(firstHidden?'merlinEvent':'merlin'):c.no===30?(firstHidden?'eliasEvent':'elias'):slotMode());
-    const v=S.visits[c.no]||0;cur.ep=v===0?'ep1':v===1?'ep2':'again';S.visits[c.no]=v+1;
+    const v=S.visits[c.no]||0,pv=c.sci?(sciDone(c.no)?2:sciProg(c.no)):v;cur.ep=pv===0?'ep1':pv===1?'ep2':'again';S.visits[c.no]=Math.max(v,pv)+1;
     if(c.sci)cur.target=cur.ep==='ep1'?'t1':'t2';
     if(!c.sci&&!c.hidden){S.recentG=[c.no,...(S.recentG||[]).filter(n=>n!==c.no)].slice(0,8)}
     if(c.sci){S.sciRecent=[c.no,...(S.sciRecent||[]).filter(n=>n!==c.no)].slice(0,6)}
