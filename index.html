@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#1E3050">
-<meta name="merope-ver" content="20261116091646">
+<meta name="merope-ver" content="20261116092306">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="a/icon/icon-192.png">
 <link rel="apple-touch-icon" href="a/icon/icon-180.png">
@@ -1300,9 +1300,9 @@ input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90de
   </section>
 </main>
 
-<script src="data.js?v=20261116091646"></script>
-<script src="quiz.js?v=20261116091646"></script>
-<script src="recipes.js?v=20261116091646"></script>
+<script src="data.js?v=20261116092306"></script>
+<script src="quiz.js?v=20261116092306"></script>
+<script src="recipes.js?v=20261116092306"></script>
 <script>
 (()=>{
 const fitVH=()=>{if(!(window.CSS&&CSS.supports('height','100dvh'))){document.documentElement.style.height=innerHeight+'px';document.body.style.height=innerHeight+'px'}};fitVH();addEventListener('resize',fitVH);
@@ -1575,13 +1575,17 @@ const dn=c=>c.sci&&!sciDone(c.no)?'???':c.name;
 function partDone(p){return p.n===1?p.reg.every(n=>S.met.includes(n)||!S.enabled[byNo(n).menu]):p.sci.every(n=>sciDone(n))}
 function curPart(){let k=1;while(k<PARTS.length&&partDone(PARTS[k-1]))k++;return Math.max(k,Math.min(PARTS.length,S.partOpen||1))}
 const allSciDone=()=>SCI_ALL.every(n=>sciDone(n));
-function sciNext(){const P=curPart(),n0=S.today.length,last=n0===S.perDay-1,late=n0===S.perDay-2;
-  /* 밤의 마지막 두 자리(해질녘 끝 · 밤)에 하루 두 명까지 */
-  if(P<2||!(last||late)||S.today.filter(t=>byNo(t.no)&&byNo(t.no).sci).length>=2)return null;
-  const seen=no=>S.today.some(t=>t.no===no);
-  const n=SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k&&!seen(no));if(n)return byNo(n[0]);
-  /* 모든 이야기가 끝난 뒤에는 반가운 얼굴이 자주 다시 들러요 */
-  if(allSciDone()&&(S.visits[30]||0)>=2&&Math.random()<(last?.85:.45)){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]!==false&&!seen(n)),R=S.sciRecent||[],F=L.filter(n=>!R.includes(n)),P2=F.length?F:L;if(P2.length)return byNo(P2[Math.floor(Math.random()*P2.length)])}
+function sciNext(){const P=curPart(),n0=S.today.length,per=S.perDay;if(P<2||n0<1)return null;
+  /* 일반 손님과 과학자가 번갈아: 바로 앞 손님이 일반 손님이면 과학자 차례(하루 첫 손님은 일반 손님) */
+  const prev=S.today[n0-1],prevSci=prev&&byNo(prev.no)&&byNo(prev.no).sci;
+  const sciCnt=S.today.filter(t=>byNo(t.no)&&byNo(t.no).sci).length,want=Math.ceil(per/2);
+  if(prevSci&&!(n0===per-1&&sciCnt<want-0))return null;
+  if(sciCnt>=want)return null;
+  const yd=S.yday||[],seen=no=>S.today.some(t=>t.no===no);
+  const n=SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k&&!seen(no)&&!yd.includes(no))||SEQ.find(([no,k])=>partOf(no)<=P&&(S.visits[no]||0)===k&&!seen(no));
+  if(n)return byNo(n[0]);
+  /* 모든 이야기가 끝난 뒤에는 반가운 얼굴이 다시 들러요(어제·오늘 온 사람, 최근 온 사람은 되도록 빼고) */
+  if(allSciDone()){const L=SCI_ALL.filter(n=>S.enabled[byNo(n).menu]!==false&&!seen(n)),R=S.sciRecent||[],F=L.filter(n=>!R.includes(n)&&!yd.includes(n)),F2=L.filter(n=>!yd.includes(n)),P2=F.length?F:F2.length?F2:L;if(P2.length)return byNo(P2[Math.floor(Math.random()*P2.length)])}
   return null}
 /* 보름달 손님 다시 오기: 올 때마다 다른 이야기(차례로 돌아가며) */
 const SCI_AGAIN={
@@ -1715,6 +1719,7 @@ function pickNext(){
     &&!((S.visits[c.no]||0)===1&&c.ep2After&&!S.met.includes(c.ep2After)&&S.enabled[byNo(c.ep2After).menu]));
   if(!pool.length)return null;
   {const fresh=pool.filter(c=>!S.today.some(t=>t.no===c.no));if(fresh.length){pool.length=0;pool.push(...fresh)}}
+  {const Y=S.yday||[],noY=pool.filter(c=>!Y.includes(c.no));if(noY.length){pool.length=0;pool.push(...noY)}}
   {const R=S.recentG||[],rest=pool.filter(c=>!R.includes(c.no));if(rest.length>=2){pool.length=0;pool.push(...rest)}}
   const unmet=pool.filter(c=>!S.met.includes(c.no)),fresh=unmet.filter(c=>partOf(c.no)===P);
   const story=pool.filter(c=>(S.visits[c.no]||0)===1);
@@ -2320,7 +2325,7 @@ function renderJournal(){
     <div class="jq">${h?'문 닫을 무렵, 창밖에 누군가 서 있었던 것 같다.<br>내일 다시 와 줄까?':avg>=4?'오늘의 기록을 차곡차곡,<br>내일의 한 잔을 더 다정하게.':'오늘의 실패도 차곡차곡,<br>내일은 변인을 하나씩 바꿔 봐야지.'}</div>
     <button class="btn go big jgo" id="nextDay">${S.day+1}일째 장보러 가기 <span aria-hidden="true">→</span></button>
     <button class="jlink" id="jGuests">손님 보기</button></div><button class="jmoon" id="jMoon" aria-label="장보러 가기"></button>`;
-  const goMarket=jMode==='peek'?()=>show('cafe'):()=>{inClose=false;S.day++;S.today=[];S.dayOne=S.oneVar;stats();mTab='buy';show('market');$('mOpen').hidden=false};
+  const goMarket=jMode==='peek'?()=>show('cafe'):()=>{inClose=false;S.day++;S.yday=S.today.map(t=>t.no);S.today=[];S.dayOne=S.oneVar;stats();mTab='buy';show('market');$('mOpen').hidden=false};
   if(jMode==='peek'){$('nextDay').innerHTML='카페로 돌아가기 <span aria-hidden="true">→</span>';$('jMoon').setAttribute('aria-label','카페로 돌아가기')}
   $('nextDay').addEventListener('click',goMarket);$('jMoon').addEventListener('click',goMarket);
   $('jGuests').addEventListener('click',()=>{retV='journal';show('guests')});
