@@ -12,6 +12,6 @@
 
 ## 저작권
 
-© 2026 파도소리(Padosori). All rights reserved.
+© 2026 padosorinmyheart. All rights reserved.
 
 이 저장소의 그림, 이야기, 음악, 코드에 대한 모든 권리는 제작자에게 있어요. 허락 없이 복제·수정·배포하거나 상업적으로 이용할 수 없어요. 수업에서 플레이하는 건 자유롭게 하셔도 돼요.
